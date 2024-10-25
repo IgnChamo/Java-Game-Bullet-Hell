@@ -23,6 +23,7 @@ class Juego {
     this.grid = new Grid(50, this); // Tamaño de celda 50
     this.enemigos = [];
     this.balas = [];
+    this.companions = [];
 
     this.nivel = 1;
 
@@ -32,7 +33,8 @@ class Juego {
 
     this.ponerFondo();
     this.ponerProtagonista();
-    this.ponerCompanion();
+    this.ponerCompanion(0);
+    this.ponerCompanion(1);
     //this.ponerIndicador();
     this.ponerEnemigos(50);
     this.ponerListeners();
@@ -60,12 +62,13 @@ class Juego {
       this
     );
   }
-  ponerCompanion() {
-    this.companion = new Companion(
+  ponerCompanion(nro) {
+    this.companions.push( new Companion(
       window.innerWidth / 2,
       window.innerHeight * 0.9,
-      this
-    );
+      this,
+      nro
+    ));
   }
   ponerIndicador() {
     this.indicador = new Indicador(
@@ -111,7 +114,8 @@ class Juego {
     }
   }
   mouseDownEvent() {
-    this.companion.disparar();
+    this.companions[0].disparar();
+    this.companions[1].disparar();
     this.player.disparar();
   }
 
@@ -160,7 +164,8 @@ class Juego {
     this.contadorDeFrames++;
 
     this.player.update();
-    this.companion.update();
+    this.companions[0].update();
+    this.companions[1].update();
     this.enemigos.forEach((enemigo) => {
       enemigo.update();
     });
