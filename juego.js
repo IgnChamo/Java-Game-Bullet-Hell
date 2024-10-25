@@ -132,6 +132,7 @@ class Juego {
     window.addEventListener("resize", () => {
       this.app.renderer.resize(window.innerWidth, window.innerHeight);
       this.moverHUD();
+      this.hud.actualizarPosicion();
     });
 
     window.addEventListener("keydown", (e) => {

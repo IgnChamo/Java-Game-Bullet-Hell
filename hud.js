@@ -32,4 +32,10 @@ class HUD{
         this.nivel.text = "Nivel " + this.juego.nivel;
         this.asesinatos.text = "Asesinatos " + this.juego.player.asesinatos;
     }
+    actualizarPosicion() {
+        this.puntaje.position.set(this.juego.app.screen.width * 0.05, 50);
+        this.timer.position.set(this.juego.app.screen.width * 0.2, 50);
+        this.nivel.position.set(this.juego.app.screen.width * 0.5, 25);
+        this.asesinatos.position.set(this.juego.app.screen.width * 0.8, 50);
+    }
 }
