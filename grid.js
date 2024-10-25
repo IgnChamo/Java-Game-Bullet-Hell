@@ -62,14 +62,16 @@ class Grid {
       }
     }
   }
-  
+
   obtenerDistanciaEntreCeldas(celda1, celda2) {
     const dx = celda1.x - celda2.x;
     const dy = celda1.y - celda2.y;
     return Math.sqrt(dx * dx + dy * dy);
   }
+
   update(objeto) {
     this.remove(objeto); // Eliminar el objeto de su celda actual
     this.add(objeto); // Volver a agregar el objeto a la celda nueva
   }
+
 }

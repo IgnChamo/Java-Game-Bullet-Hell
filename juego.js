@@ -34,7 +34,7 @@ class Juego {
     this.ponerProtagonista();
     this.ponerCompanion();
     //this.ponerIndicador();
-    this.ponerEnemigos(1);
+    this.ponerEnemigos(50);
     this.ponerListeners();
 
     setTimeout(() => {
@@ -131,6 +131,7 @@ class Juego {
     });
     window.addEventListener("resize", () => {
       this.app.renderer.resize(window.innerWidth, window.innerHeight);
+      this.moverHUD();
     });
 
     window.addEventListener("keydown", (e) => {
@@ -214,6 +215,7 @@ class Juego {
     this.hudContainer.position.set(-this.app.stage.position.x, -this.app.stage.position.y);
     //console.log('HUD Position:', this.hudContainer.position);
   }
+
 }
 
 // Inicializar el juego
