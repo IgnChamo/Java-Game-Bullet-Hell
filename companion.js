@@ -7,7 +7,6 @@ class Companion extends Objeto {
     this.juego.gameContainer.addChild(this.container);
     this.nro = nro;
 
-    this.nro = nro;
 
     this.cargarVariosSpritesAnimados(
       {
@@ -56,8 +55,6 @@ class Companion extends Objeto {
     const radius = 40; // Radio
     const speed = 0.01; //Velocidad
     const sequence = this.nro*180;
-
-    const sequence = this.nro * 180;
     // Calcular la nueva posición usando trigonometría (gracias chatgpt)
     const angle = frames * speed;
     this.container.x = playerPos.x + Math.cos(angle + sequence) * radius;
