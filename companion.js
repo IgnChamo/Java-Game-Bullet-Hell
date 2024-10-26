@@ -5,6 +5,7 @@ class Companion extends Objeto {
     this.juego = juego;
     this.grid = juego.grid;
     this.juego.gameContainer.addChild(this.container);
+    this.nro = nro;
 
     this.nro = nro;
 
@@ -54,6 +55,7 @@ class Companion extends Objeto {
     let playerPos = player;
     const radius = 40; // Radio
     const speed = 0.01; //Velocidad
+    const sequence = this.nro*180;
 
     const sequence = this.nro * 180;
     // Calcular la nueva posición usando trigonometría (gracias chatgpt)

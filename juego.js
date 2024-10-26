@@ -24,8 +24,6 @@ class Juego {
     this.enemigos = [];
     this.balas = [];
 
-    this.companions = [];
-
     this.nivel = 1;
 
     this.keyboard = {};
@@ -63,8 +61,8 @@ class Juego {
       this
     );
   }
-  ponerCompanion(nro) {
-    this.companions.push(new Companion(
+  ponerCompanion() {
+    this.companion = new Companion(
       window.innerWidth / 2,
       window.innerHeight * 0.9,
       this,
@@ -115,9 +113,7 @@ class Juego {
     }
   }
   mouseDownEvent() {
-    //this.companion.disparar();
-    this.companions[0].disparar();
-    this.companions[1].disparar();
+    this.companion.disparar();
     this.player.disparar();
     
   }
@@ -175,9 +171,7 @@ class Juego {
     this.contadorDeFrames++;
 
     this.player.update();
-    this.companions[0].update();
-    this.companions[1].update();
-    //this.companion.update();
+    this.companion.update();
     this.enemigos.forEach((enemigo) => {
       enemigo.update();
     });
