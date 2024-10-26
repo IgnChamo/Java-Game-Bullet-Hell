@@ -9,7 +9,7 @@ class Enemigo extends Objeto {
     this.juego = juego;
     this.grid = juego.grid; // Referencia a la grid
     this.vision = 9999 + Math.floor(Math.random() * 150); //en pixels
-    this.vida = 3;
+    this.vida = 1;
     this.debug = 0;
     this.tiempoPostMorten = 3000;
     

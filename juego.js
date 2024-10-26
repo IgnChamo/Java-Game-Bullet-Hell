@@ -24,6 +24,8 @@ class Juego {
     this.enemigos = [];
     this.balas = [];
 
+    this.companions = [];
+
     this.nivel = 1;
 
     this.keyboard = {};
@@ -32,9 +34,10 @@ class Juego {
 
     this.ponerFondo();
     this.ponerProtagonista();
-    this.ponerCompanion();
+    this.ponerCompanion(0);
+    this.ponerCompanion(1);
     //this.ponerIndicador();
-    this.ponerEnemigos(50);
+    this.ponerEnemigos(0);
     this.ponerListeners();
 
     setTimeout(() => {
@@ -60,12 +63,13 @@ class Juego {
       this
     );
   }
-  ponerCompanion() {
-    this.companion = new Companion(
+  ponerCompanion(nro) {
+    this.companions.push(new Companion(
       window.innerWidth / 2,
       window.innerHeight * 0.9,
-      this
-    );
+      this,
+      nro
+    ));
   }
   ponerIndicador() {
     this.indicador = new Indicador(
@@ -76,7 +80,7 @@ class Juego {
   }
 
   ponerEnemigos(cant) {
-    const distanciaMinima = 300; // Ajusta este valor según lo lejos que quieras que estén los enemigos del jugador
+    const distanciaMinima = 600; // Ajusta este valor según lo lejos que quieras que estén los enemigos del jugador
     const maxIntentos = 10; // Máximo número de intentos para evitar loops infinitos
 
     for (let i = 0; i < cant; i++) {
@@ -111,8 +115,11 @@ class Juego {
     }
   }
   mouseDownEvent() {
-    this.companion.disparar();
+    //this.companion.disparar();
+    this.companions[0].disparar();
+    this.companions[1].disparar();
     this.player.disparar();
+    
   }
 
   ponerListeners() {
@@ -124,6 +131,14 @@ class Juego {
     this.app.view.addEventListener("mouseup", () => {
       (this.mouse || {}).click = false;
     });
+    window.addEventListener("keydown", (e) => {
+      this.keyboard[e.key.toLowerCase()] = true;
+  
+      // Verifica si se presionó la tecla "r"
+      if (e.key.toLowerCase() === 'r') {
+          this.player.recargar(); // Llama a la función que quieres ejecutar
+      }
+  });
 
     this.app.view.addEventListener("mousemove", this.onMouseMove.bind(this));
     this.app.view.addEventListener("mouseleave", () => {
@@ -160,7 +175,9 @@ class Juego {
     this.contadorDeFrames++;
 
     this.player.update();
-    this.companion.update();
+    this.companions[0].update();
+    this.companions[1].update();
+    //this.companion.update();
     this.enemigos.forEach((enemigo) => {
       enemigo.update();
     });

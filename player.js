@@ -7,7 +7,13 @@ class Player extends Objeto {
 
     this.asesinatos = 0;
     this.puntaje = 0;
-    
+    this.balas = 6;
+    this.recargando = false;
+    this.tiempoRecarga = 1000;
+
+    this.delayDisparo = false;
+    this.delayEntreBalas = 500;
+
     this.cargarVariosSpritesAnimados(
       {
         idle: "./img/player_idle.png",
@@ -27,22 +33,42 @@ class Player extends Objeto {
   }
 
   disparar() {
-    let angulo = Math.atan2(
-      this.juego.mouse.x - this.app.stage.x - this.container.x,
-      this.juego.mouse.y - this.app.stage.y - this.container.y
-    );
-    this.juego.balas.push(
-      new Bala(
-        this.container.x,
-        this.container.y - 40,
-        this.juego,
-        Math.sin(angulo),
-        Math.cos(angulo)
-      )
-    );
+    if (this.balas > 0 && !this.recargando && !this.delayDisparo ) {
+      let angulo = Math.atan2(
+        this.juego.mouse.x - this.app.stage.x - this.container.x,
+        this.juego.mouse.y - this.app.stage.y - this.container.y
+      );
+      this.juego.balas.push(
+        new Bala(
+          this.container.x,
+          this.container.y - 40,
+          this.juego,
+          Math.sin(angulo),
+          Math.cos(angulo)
+        )
+      );
 
-    this.velocidad.x = 0;
-    this.velocidad.y = 0;
+      this.velocidad.x = 0;
+      this.velocidad.y = 0;
+      this.balas -= 1;
+      console.log("Menos 1 Bala");
+      this.juego.hud.actualizarBalas();
+      
+      this.delayDisparo = true;
+      setTimeout(() => {
+        this.delayDisparo = false;
+      }, this.delayEntreBalas);
+    }
+  }
+  recargar() {
+    console.log("Recargando Balas")
+    this.recargando = true;
+    setTimeout(() => {
+      this.balas = 6;
+      this.recargando = false;
+      console.log("Completado");
+      this.juego.hud.actualizarBalas();
+    }, this.tiempoRecarga);
   }
 
   update() {

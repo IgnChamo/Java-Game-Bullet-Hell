@@ -24,6 +24,10 @@ class HUD{
         this.asesinatos.position.set(1600, 50,);
         this.container.addChild(this.asesinatos);
 
+        this. balas = new PIXI.Text("Balas",{fontFamily: 'fuente', fontSize: 30, fill: 0x000000});
+        this.balas.position.set(100, 85,);
+        this.container.addChild(this.balas);
+
 
         console.log("Se creo el hud");
     }
@@ -32,10 +36,14 @@ class HUD{
         this.nivel.text = "Nivel " + this.juego.nivel;
         this.asesinatos.text = "Asesinatos " + this.juego.player.asesinatos;
     }
+    actualizarBalas(){
+        this.balas.text = "Balas = " + this.juego.player.balas;
+    }
     actualizarPosicion() {
         this.puntaje.position.set(this.juego.app.screen.width * 0.05, 50);
         this.timer.position.set(this.juego.app.screen.width * 0.2, 50);
         this.nivel.position.set(this.juego.app.screen.width * 0.5, 25);
         this.asesinatos.position.set(this.juego.app.screen.width * 0.8, 50);
+        this.balas.position.set(this.juego.app.screen.width * 0.05, 85,);
     }
 }
