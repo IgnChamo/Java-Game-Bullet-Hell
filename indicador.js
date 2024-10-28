@@ -4,6 +4,7 @@ class Indicador extends Objeto {
     this.velocidadMaximaOriginal = 3;
     this.juego = juego;
     this.grid = juego.grid;
+    this.container.visible = false;
     this.juego.gameContainer.addChild(this.container);
 
     this.cargarVariosSpritesAnimados(
@@ -19,4 +20,5 @@ class Indicador extends Objeto {
       }
     );
   }
+
 }

@@ -40,7 +40,7 @@ class Juego {
     this.ponerCompanion();
     this.ponerCompanion();
     this.ponerIndicador();
-    this.ponerEnemigos(0);
+    this.ponerEnemigos(20);
     this.ponerListeners();
 
     setTimeout(() => {
