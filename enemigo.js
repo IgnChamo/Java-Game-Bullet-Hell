@@ -9,7 +9,7 @@ class Enemigo extends Objeto {
     this.juego = juego;
     this.grid = juego.grid; // Referencia a la grid
     this.vision = 9999 + Math.floor(Math.random() * 150); //en pixels
-    this.vida = 1;
+    this.vida = 4;
     this.debug = 0;
     this.tiempoPostMorten = 3000;
     
@@ -131,6 +131,9 @@ class Enemigo extends Objeto {
     if (this.estado == this.estados.ATACANDO) {
       this.velocidad.x = 0;
       this.velocidad.y = 0;
+      this.juego.player.vidas -= 1;
+      console.log("player vida" + this.juego.player.vidas);
+      this.juego.hud.actualizarHudVida()
       vecAtraccionAlPlayer = this.repulsionAlJugador();
       setTimeout(() => {
         vecAtraccionAlPlayer = this.atraccionAlJugador()
