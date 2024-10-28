@@ -6,6 +6,7 @@ class HUD{
         this.container.zIndex = 99999;
 
         //vida
+        this.asesinato = PIXI.Texture.from('./img/Asesinatos.png');
 
         this.vidas5 = PIXI.Texture.from('./img/Life05.png');
         this.vidas4 = PIXI.Texture.from('./img/Life04.png');
@@ -16,13 +17,21 @@ class HUD{
         //this.juego.hudContainer.addChild(this.container);
         this.juego.hudContainer.addChild(this.container);
 
-        this.puntaje = new PIXI.Text("Puntaje",{fontFamily: 'fuente', fontSize: 30, fill: 0x000000});
-        this.puntaje.position.set(this.juego.app.screen.width * 0.05, 100)
+        this.puntaje = new PIXI.Text("",{fontFamily: 'fuente', fontSize: 30, fill: 0x000000});
+        this.puntaje.position.set(this.juego.app.screen.width * 0.9, 85)
         this.container.addChild(this.puntaje);
+
+        this.punt = PIXI.Sprite.from('./img/Puntaje.png');
+        this.punt.position.set(this.juego.app.screen.width * 0.88, 85);
+        this.container.addChild(this.punt);
     
-        this. asesinatos = new PIXI.Text("Asesinatos",{fontFamily: 'fuente', fontSize: 30, fill: 0x000000});
+        this.asesinatos = new PIXI.Text("",{fontFamily: 'fuente', fontSize: 30, fill: 0x000000});
         this.asesinatos.position.set(this.juego.app.screen.width * 0.9, 50);
         this.container.addChild(this.asesinatos);
+
+        this.asesinato = PIXI.Sprite.from('./img/Asesinatos.png');
+        this.asesinato.position.set(this.juego.app.screen.width * 0.88, 49);
+        this.container.addChild(this.asesinato);
 
         this.nivel = new PIXI.Text("Nivel",{fontFamily: 'fuente', fontSize: 20, fill: 0x000000});
         this.nivel.position.set(this.juego.app.screen.width * 0.5, 25);
@@ -40,9 +49,9 @@ class HUD{
         
     }
     actualizarHud(){
-        this.puntaje.text = "Puntaje: " + this.juego.player.puntaje;
+        this.puntaje.text = this.juego.player.puntaje;
         this.nivel.text = "Nivel " + this.juego.nivel;
-        this.asesinatos.text = "Asesinatos " + this.juego.player.asesinatos;
+        this.asesinatos.text = this.juego.player.asesinatos;
     }
     actualizarHudVida(){
         switch (this.juego.player.vidas) {
@@ -67,10 +76,13 @@ class HUD{
         this.balas.text = "Balas = " + this.juego.player.balas + "/" + this.juego.balasTotales;
     }
     actualizarPosicion() {
-        this.puntaje.position.set(this.juego.app.screen.width * 0.05, 100);
+        this.puntaje.position.set(this.juego.app.screen.width * 0.9, 85);
+        this.punt.position.set(this.juego.app.screen.width * 0.88, 85);
         this.asesinatos.position.set(this.juego.app.screen.width * 0.9, 50);
+        this.asesinato.position.set(this.juego.app.screen.width * 0.88, 49);
         this.nivel.position.set(this.juego.app.screen.width * 0.5, 25);
         this.balas.position.set(this.juego.app.screen.width * 0.05, 75,);
         this.vida.position.set(this.juego.app.screen.width * 0.05, 25);
+        
     }
 }
