@@ -37,7 +37,7 @@ class HUD{
         this.asesinatos.text = "Asesinatos " + this.juego.player.asesinatos;
     }
     actualizarBalas(){
-        this.balas.text = "Balas = " + this.juego.player.balas;
+        this.balas.text = "Balas = " + this.juego.player.balas + "/" + this.juego.balasTotales;
     }
     actualizarPosicion() {
         this.puntaje.position.set(this.juego.app.screen.width * 0.05, 50);

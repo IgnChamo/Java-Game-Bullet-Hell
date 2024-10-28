@@ -23,6 +23,7 @@ class Juego {
     this.grid = new Grid(50, this); // Tamaño de celda 50
     this.enemigos = [];
     this.balas = [];
+    this.balasTotales = 6;
 
     this.companions = [];
 
