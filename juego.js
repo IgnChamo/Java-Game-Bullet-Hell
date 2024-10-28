@@ -35,9 +35,11 @@ class Juego {
 
     this.ponerFondo();
     this.ponerProtagonista();
-    this.ponerCompanion(0);
-    this.ponerCompanion(1);
-    //this.ponerIndicador();
+    this.ponerCompanion();
+    this.ponerCompanion();
+    this.ponerCompanion();
+    this.ponerCompanion();
+    this.ponerIndicador();
     this.ponerEnemigos(0);
     this.ponerListeners();
 
@@ -64,13 +66,14 @@ class Juego {
       this
     );
   }
-  ponerCompanion(nro) {
+  ponerCompanion() {
     this.companions.push(new Companion(
       window.innerWidth / 2,
       window.innerHeight * 0.9,
       this,
-      nro
-    ));
+      this.companions.length+1
+      ),
+    );
   }
   ponerIndicador() {
     this.indicador = new Indicador(
@@ -116,8 +119,9 @@ class Juego {
     }
   }
   mouseDownEvent() {
-    this.companions[0].disparar();
-    this.companions[1].disparar();
+    this.companions.forEach((compa) =>{ 
+      compa.disparar();
+  });
     this.player.disparar();
     
   }
@@ -175,8 +179,9 @@ class Juego {
     this.contadorDeFrames++;
 
     this.player.update();
-    this.companions[0].update();
-    this.companions[1].update();
+    this.companions.forEach((compa) => {
+      compa.update();
+    } )
     this.enemigos.forEach((enemigo) => {
       enemigo.update();
     });

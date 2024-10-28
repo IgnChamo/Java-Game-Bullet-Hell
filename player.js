@@ -14,6 +14,7 @@ class Player extends Objeto {
     this.delayDisparo = false;
     this.delayEntreBalas = 500;
 
+
     this.cargarVariosSpritesAnimados(
       {
         idle: "./img/player_idle.png",

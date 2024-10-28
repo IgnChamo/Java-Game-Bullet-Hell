@@ -52,9 +52,15 @@ class Companion extends Objeto {
   companionBounce(frame, player) { //hace que el compañero gire al rededor del Player
     let frames = frame;
     let playerPos = player;
-    const radius = 40; // Radio
+    const radius = 70; // Radio
     const speed = 0.01; //Velocidad
-    const sequence = this.nro*180;
+    var currentCompanions 
+    var sequence 
+
+    //cmabia el angulo de los compañeros dependiendo de su cantidad
+    currentCompanions=juego.companions.length;
+    sequence=270/currentCompanions*(this.nro);
+    
     // Calcular la nueva posición usando trigonometría (gracias chatgpt)
     const angle = frames * speed;
     this.container.x = playerPos.x + Math.cos(angle + sequence) * radius;

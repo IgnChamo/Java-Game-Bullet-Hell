@@ -81,7 +81,8 @@ class Objeto {
       animatedSprite.animationSpeed = vel;
       animatedSprite.loop = true; // Para que la animación se repita
 
-      animatedSprite.anchor.set(0.5, 1);
+      //animatedSprite.anchor.set(0.5, 1);
+      animatedSprite.anchor.set(0.5);
 
       // Iniciar la animación
       animatedSprite.play();
