@@ -8,6 +8,7 @@ class Player extends Objeto {
     this.asesinatos = 0;
     this.puntaje = 0;
     this.balas = 6;
+    this.balasTotales = 6;
     this.recargando = false;
     this.tiempoRecarga = 1000;
 
@@ -59,23 +60,23 @@ class Player extends Objeto {
       this.velocidad.y = 0;
       this.balas -= 1;
       console.log("Menos 1 Bala");
-      this.juego.hud.actualizarBalas();
       
       this.delayDisparo = true;
       setTimeout(() => {
         this.delayDisparo = false;
       }, this.delayEntreBalas);
+      this.juego.hud.disparar();
     }
   }
   recargar() {
     console.log("Recargando Balas")
     this.recargando = true;
     setTimeout(() => {
-      this.balas = 6;
+      this.balas = this.juego.balasTotales;
       this.recargando = false;
       console.log("Completado");
-      this.juego.hud.actualizarBalas();
     }, this.tiempoRecarga);
+    this.juego.hud.recargar();
   }
 
   update() {

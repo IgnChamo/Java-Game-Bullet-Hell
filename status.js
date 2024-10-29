@@ -39,8 +39,6 @@ class Invincible extends Status{
         super(player);
         this.duration=duration;
     }
-
-    damage(value){
-        
+    damage(value){  
     }
 }

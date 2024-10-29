@@ -43,7 +43,6 @@ class Bala extends Objeto {
       let elEnemigoMasCercano;
       let distMin = 99999;
       let cual = null;
-      //VEO CUAL ES EL ZOMBIE MS CERCANO CUANDO LA BALA LLEGA A UNA CELDA CON ZOMBIES
       for (let i = 0; i < objs.length; i++) {
         let dist = calculoDeDistanciaRapido(
           this.container.x,
@@ -56,7 +55,7 @@ class Bala extends Objeto {
           cual = i;
         }
       } //for
-      //si encontro un zombie
+
       if (cual != null) {
         objs[cual].recibirTiro();
         this.borrar();

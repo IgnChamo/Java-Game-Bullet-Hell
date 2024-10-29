@@ -35,10 +35,10 @@ class Juego {
 
     this.ponerFondo();
     this.ponerProtagonista();
-    this.ponerCompanion();
-    this.ponerCompanion();
-    this.ponerCompanion();
-    this.ponerCompanion();
+    //this.ponerCompanion();
+    //this.ponerCompanion();
+    //this.ponerCompanion();
+    //this.ponerCompanion();
     this.ponerIndicador();
     this.ponerEnemigos(20);
     this.ponerListeners();

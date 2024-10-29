@@ -13,9 +13,17 @@ class HUD{
         this.vidas3 = PIXI.Texture.from('./img/Life03.png');
         this.vidas2 = PIXI.Texture.from('./img/Life02.png');
         this.vidas1 = PIXI.Texture.from('./img/Life01.png');
+        
+        //balas
+        this.balaCargadaTexture = PIXI.Texture.from('./img/BalaCargada.png');
+        this.balaDescargadaTexture = PIXI.Texture.from('./img/BalaDescargada.png');
+        this.pistolaTexture = PIXI.Sprite.from('./img/Pistola.png');
 
         //this.juego.hudContainer.addChild(this.container);
         this.juego.hudContainer.addChild(this.container);
+
+        this.balasSprites = [];
+        this.balasTotales = 6;
 
         this.puntaje = new PIXI.Text("",{fontFamily: 'fuente', fontSize: 30, fill: 0x000000});
         this.puntaje.position.set(this.juego.app.screen.width * 0.9, 85)
@@ -37,17 +45,19 @@ class HUD{
         this.nivel.position.set(this.juego.app.screen.width * 0.5, 25);
         this.container.addChild(this.nivel);
 
-        this. balas = new PIXI.Text("Balas",{fontFamily: 'fuente', fontSize: 30, fill: 0x000000});
-        this.balas.position.set(this.juego.app.screen.width * 0.05, 75,);
-        this.container.addChild(this.balas);
-
         this.vida = new PIXI.Sprite(this.vidas5);
         this.vida.position.set(this.juego.app.screen.width * 0.05, 25);
         this.container.addChild(this.vida);
 
+        this.crearBalas();
+        this.pistolaTexture.position.set(this.juego.app.screen.width * 0.05, 100);
+        this.container.addChild(this.pistolaTexture);
+
         console.log("Se creo el hud");
         
     }
+
+
     actualizarHud(){
         this.puntaje.text = this.juego.player.puntaje;
         this.nivel.text = "Nivel " + this.juego.nivel;
@@ -72,17 +82,51 @@ class HUD{
                 break;
         }
     }
-    actualizarBalas(){
-        this.balas.text = "Balas = " + this.juego.player.balas + "/" + this.juego.balasTotales;
-    }
     actualizarPosicion() {
         this.puntaje.position.set(this.juego.app.screen.width * 0.9, 85);
         this.punt.position.set(this.juego.app.screen.width * 0.88, 85);
         this.asesinatos.position.set(this.juego.app.screen.width * 0.9, 50);
         this.asesinato.position.set(this.juego.app.screen.width * 0.88, 49);
         this.nivel.position.set(this.juego.app.screen.width * 0.5, 25);
-        this.balas.position.set(this.juego.app.screen.width * 0.05, 75,);
-        this.vida.position.set(this.juego.app.screen.width * 0.05, 25);
-        
+        this.vida.position.set(this.juego.app.screen.width * 0.05, 25);  
+
     }
+
+    crearBalas() {
+        // Posicion inicial para las balas
+        let xPos = this.juego.app.screen.width * 0.11;
+        let yPos = 88;
+        
+        // Crear los sprites de las balas en estado cargado
+        for (let i = 0; i < this.balasTotales; i++) {
+            const bala = new PIXI.Sprite(this.balaCargadaTexture);
+            bala.position.set(xPos, yPos);
+            xPos += 40; // Ajusta la separación entre las balas
+            this.container.addChild(bala);
+            this.balasSprites.push(bala);
+        }
+    }
+
+    disparar() {
+        // Encuentra la primera bala cargada y cámbiala a descargada
+        for (let i = this.balasSprites.length - 1; i >= 0; i--) {
+            if (this.balasSprites[i].texture === this.balaCargadaTexture) {
+                this.balasSprites[i].texture = this.balaDescargadaTexture;
+                break;
+            }
+        }
+    }
+
+    recargar() {
+        // Recargar todas las balas
+        for (let i = 0; i < this.balasSprites.length; i++) {
+            this.balasSprites[i].texture = this.balaCargadaTexture;
+        }
+    }
+    actualizarBalasTotales(nuevasBalasTotales) {
+        
+        this.balasTotales = nuevasBalasTotales;
+        this.crearBalas();
+    }
+    //this.juego.hud.actualizarBalasTotales(this.juego.balasTotales += 1);  linea para agregar donde se creen mas balas(PowerUp o lo que sea)
 }

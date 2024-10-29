@@ -51,7 +51,7 @@ class Enemigo extends Objeto {
       this.juego.hud.actualizarHud();
       setTimeout(() => {
         this.desaparecer();
-        }, this.tiempoPostMorten);
+        }, this.tiempoPostMorten); 
       // sprite.animationSpeed=0.001
     } else {
       //let sprite = this.cambiarSprite("recibeTiro", 0, false);
