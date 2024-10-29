@@ -17,11 +17,15 @@ class Player extends Objeto {
 
     this.normal = new Normal(this);
 
-    this.invincible = new Invincible(this, 5000);
+    this.invincible = new Invincible(this, 3000);
 
     this.status = this.normal;
 
-    this.vidas=5;
+    this.vidas = 5;
+
+    this.escudo = new Escudo(this.container.x, this.container.y, this.juego);
+
+
     this.cargarVariosSpritesAnimados(
       {
         idle: "./img/player_idle.png",
@@ -41,7 +45,7 @@ class Player extends Objeto {
   }
 
   disparar() {
-    if (this.balas > 0 && !this.recargando && !this.delayDisparo ) {
+    if (this.balas > 0 && !this.recargando && !this.delayDisparo) {
       let angulo = Math.atan2(
         this.juego.mouse.x - this.app.stage.x - this.container.x,
         this.juego.mouse.y - this.app.stage.y - this.container.y
@@ -60,7 +64,7 @@ class Player extends Objeto {
       this.velocidad.y = 0;
       this.balas -= 1;
       console.log("Menos 1 Bala");
-      
+
       this.delayDisparo = true;
       setTimeout(() => {
         this.delayDisparo = false;
@@ -110,6 +114,15 @@ class Player extends Objeto {
       this.velocidadMax = this.velocidadMaximaOriginal;
     }
 
+
+    //actualizar escudo invencibilidad
+    if (this.status instanceof Invincible) {
+      this.escudo.container.visible = true;
+      this.escudo.actualizarPosicion();
+      this.escudo.cambiarSprite("Activo");
+    } else {
+      this.escudo.container.visible = false;
+    }
     //cambio de animaciones
 
     if (this.velocidad.y < 0) {
@@ -121,6 +134,9 @@ class Player extends Objeto {
     } else {
       this.cambiarSprite("idle");
     }
+
+
+
     super.update();
   }
 
