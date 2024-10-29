@@ -131,7 +131,8 @@ class Enemigo extends Objeto {
     if (this.estado == this.estados.ATACANDO) {
       this.velocidad.x = 0;
       this.velocidad.y = 0;
-      this.juego.player.vidas -= 1;
+      //this.juego.player.vidas -= 1;
+      this.juego.player.status.damage(1);
       console.log("player vida" + this.juego.player.vidas);
       this.juego.hud.actualizarHudVida()
       vecAtraccionAlPlayer = this.repulsionAlJugador();

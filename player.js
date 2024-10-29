@@ -4,8 +4,6 @@ class Player extends Objeto {
     this.velocidadMaximaOriginal = 2;
     this.juego = juego;
     this.grid = juego.grid;
-    
-    this.vidas = 5;
 
     this.asesinatos = 0;
     this.puntaje = 0;
@@ -16,7 +14,13 @@ class Player extends Objeto {
     this.delayDisparo = false;
     this.delayEntreBalas = 500;
 
+    this.normal = new Normal(this);
 
+    this.invincible = new Invincible(this, 5000);
+
+    this.status = this.normal;
+
+    this.vidas=5;
     this.cargarVariosSpritesAnimados(
       {
         idle: "./img/player_idle.png",
