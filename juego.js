@@ -35,12 +35,12 @@ class Juego {
 
     this.ponerFondo();
     this.ponerProtagonista();
-    //this.ponerCompanion();
-    //this.ponerCompanion();
-    //this.ponerCompanion();
-    //this.ponerCompanion();
+    this.ponerCompanion();
+    this.ponerCompanion();
+    this.ponerCompanion();
+    this.ponerCompanion();
     this.ponerIndicador();
-    this.ponerEnemigos(20);
+    this.ponerEnemigos(2);
     this.ponerListeners();
 
     setTimeout(() => {
@@ -182,9 +182,12 @@ class Juego {
     this.companions.forEach((compa) => {
       compa.update();
     } )
+    
     this.enemigos.forEach((enemigo) => {
       enemigo.update();
     });
+    this.updateIndicator();
+    
     this.balas.forEach((bala) => {
       bala.update();
     });
@@ -236,6 +239,39 @@ class Juego {
   moverHUD() {
     this.hudContainer.position.set(-this.app.stage.position.x, -this.app.stage.position.y);
     //console.log('HUD Position:', this.hudContainer.position);
+  }
+
+  updateIndicator() {
+    const { x: playerX, y: playerY } = this.player.container;
+    const { x: enemyX, y: enemyY } = this.enemigos[0].container; // Supongamos que solo tienes un enemigo
+
+    // Calcula si el enemigo está dentro de la cámara
+    const enemyInView = 
+      enemyX > -this.app.stage.position.x &&
+      enemyX < -this.app.stage.position.x + this.app.screen.width &&
+      enemyY > -this.app.stage.position.y &&
+      enemyY < -this.app.stage.position.y + this.app.screen.height;
+
+    if (enemyInView) {
+
+      this.indicador.container.visible = false;
+    } else {
+
+      this.indicador.container.visible = true;
+
+    const dx = enemyX - playerX;
+    const dy = enemyY - playerY;
+    const angle = Math.atan2(dy, dx);
+
+
+    const edgeX = Math.cos(angle) * (this.app.screen.width / 2 - 20);
+    const edgeY = Math.sin(angle) * (this.app.screen.height / 2 - 20);
+
+
+    this.indicador.container.x = playerX + edgeX + this.app.stage.position.x;
+    this.indicador.container.y = playerY + edgeY + this.app.stage.position.y;
+    this.indicador.container.rotation = angle + Math.PI / 2;
+    }
   }
 
 }
