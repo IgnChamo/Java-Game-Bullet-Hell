@@ -24,7 +24,7 @@ class Player extends Objeto {
     this.vidas = 5;
 
     this.escudo = new Escudo(this.container.x, this.container.y, this.juego);
-
+    this.juego.gameContainer.addChild(this.container);
 
     this.cargarVariosSpritesAnimados(
       {
@@ -41,7 +41,6 @@ class Player extends Objeto {
         this.cambiarSprite("idle");
       }
     );
-    // this.juego.app.stage.addChild(this.sprite);
   }
 
   disparar() {
@@ -118,7 +117,9 @@ class Player extends Objeto {
     //actualizar escudo invencibilidad
     if (this.status instanceof Invincible) {
       this.escudo.container.visible = true;
+
       this.escudo.actualizarPosicion();
+      
       this.escudo.cambiarSprite("Activo");
     } else {
       this.escudo.container.visible = false;

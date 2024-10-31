@@ -35,10 +35,10 @@ class Juego {
 
     this.ponerFondo();
     this.ponerProtagonista();
-    this.ponerCompanion();
-    this.ponerCompanion();
-    this.ponerCompanion();
-    this.ponerCompanion();
+    //this.ponerCompanion();
+    //this.ponerCompanion();
+    //this.ponerCompanion();
+    //this.ponerCompanion();
     this.ponerIndicador();
     this.ponerEnemigos(2);
     this.ponerListeners();
@@ -77,8 +77,8 @@ class Juego {
   }
   ponerIndicador() {
     this.indicador = new Indicador(
-      window.innerWidth / 2,
-      window.innerHeight * 0.9,
+      this.player.container.x,
+      this.player.container.y,
       this
     );
   }
@@ -152,7 +152,7 @@ class Juego {
       this.app.renderer.resize(window.innerWidth, window.innerHeight);
       this.moverHUD();
       this.hud.actualizarPosicion();
-      
+
     });
 
     window.addEventListener("keydown", (e) => {
@@ -244,39 +244,47 @@ class Juego {
 
   updateIndicator() {
 
-    if (this.enemigos[0] != undefined) {
+    if (this.enemigos.length > 0) {
       const { x: playerX, y: playerY } = this.player.container;
-      const { x: enemyX, y: enemyY } = this.enemigos[0].container; // Supongamos que solo tienes un enemigo
+      const { x: enemyX, y: enemyY } = this.enemigos[0].container;
 
-      // Calcula si el enemigo está dentro de la cámara
+      // Verifica si el enemigo está fuera de la vista de la cámara
       const enemyInView =
-        enemyX > -this.app.stage.position.x &&
-        enemyX < -this.app.stage.position.x + this.app.screen.width &&
-        enemyY > -this.app.stage.position.y &&
-        enemyY < -this.app.stage.position.y + this.app.screen.height;
+          enemyX > -this.app.stage.position.x &&
+          enemyX < -this.app.stage.position.x + this.app.screen.width &&
+          enemyY > -this.app.stage.position.y &&
+          enemyY < -this.app.stage.position.y + this.app.screen.height;
 
       if (enemyInView) {
-
-        this.indicador.container.visible = false;
+          this.indicador.container.visible = false;
       } else {
+          this.indicador.container.visible = true;
 
-        this.indicador.container.visible = true;
+          // Calcula el ángulo hacia el enemigo
+          const dx = enemyX - playerX;
+          const dy = enemyY - playerY;
 
-        const dx = enemyX - playerX;
-        const dy = enemyY - playerY;
-        const angle = Math.atan2(dy, dx);
+          // Distancia total entre el jugador y el enemigo
+          const distanciaTotal = Math.hypot(dx, dy);
 
+          // Define la distancia deseada para el indicador
+          const distanciaIndicador = 1; // Cambia este valor para ajustar la distancia
 
-        const edgeX = Math.cos(angle) * (this.app.screen.width / 2 - 20);
-        const edgeY = Math.sin(angle) * (this.app.screen.height / 2 - 20);
+          // Calcula la posición del indicador
+          const ratio = distanciaIndicador / distanciaTotal; // Proporción para la posición intermedia
+          const indicadorX = playerX + dx * ratio;
+          const indicadorY = playerY + dy * ratio;
 
+          // Actualiza la posición del indicador
+          this.indicador.container.x = indicadorX + this.app.stage.position.x;
+          this.indicador.container.y = indicadorY + this.app.stage.position.y;
 
-        this.indicador.container.x = playerX + edgeX + this.app.stage.position.x;
-        this.indicador.container.y = playerY + edgeY + this.app.stage.position.y;
-        this.indicador.container.rotation = angle + Math.PI / 2;
+          // Rotación del indicador
+          const angle = Math.atan2(dy, dx);
+          this.indicador.container.rotation = angle + Math.PI / 2;
       }
-    }
   }
+}
 }
 
 

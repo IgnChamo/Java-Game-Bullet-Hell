@@ -35,6 +35,7 @@ class Enemigo extends Objeto {
     this.estados = { IDLE: 0, YENDO_AL_PLAYER: 1, ATACANDO: 2 };
     this.estado = this.estados.IDLE;
 
+    //this.juego.app.stage.addChild(this.container);
     this.juego.gameContainer.addChild(this.container);
   }
 
