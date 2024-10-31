@@ -24,20 +24,20 @@ class HUD {
         this.balasSprites = [];
         this.balasTotales = 6;
 
-        this.puntaje = new PIXI.Text("", { fontFamily: 'fuente', fontSize: 30, fill: 0x000000 });
-        this.puntaje.position.set(this.juego.app.screen.width * 0.9, 85)
+        this.puntaje = new PIXI.Text("", { fontFamily: 'fuente', fontSize: 50,padding: 20, fill: 0x000000 });
+        this.puntaje.position.set(this.juego.app.screen.width * 0.92, 88)
         this.container.addChild(this.puntaje);
 
         this.punt = PIXI.Sprite.from('./img/Puntaje.png');
         this.punt.position.set(this.juego.app.screen.width * 0.88, 85);
         this.container.addChild(this.punt);
 
-        this.asesinatos = new PIXI.Text("", { fontFamily: 'fuente', fontSize: 30, fill: 0x000000 });
-        this.asesinatos.position.set(this.juego.app.screen.width * 0.9, 50);
+        this.asesinatos = new PIXI.Text("", { fontFamily: 'fuente', fontSize: 50 ,padding: 20 , fill: 0x000000 });
+        this.asesinatos.position.set(this.juego.app.screen.width * 0.92, 25);
         this.container.addChild(this.asesinatos);
 
         this.asesinato = PIXI.Sprite.from('./img/Asesinatos.png');
-        this.asesinato.position.set(this.juego.app.screen.width * 0.88, 49);
+        this.asesinato.position.set(this.juego.app.screen.width * 0.88, 10);
         this.container.addChild(this.asesinato);
 
         this.nivel = new PIXI.Text("Nivel", { fontFamily: 'fuente', fontSize: 20, fill: 0x000000 });
@@ -46,7 +46,6 @@ class HUD {
 
         this.vida = new PIXI.Sprite(this.vidas5);
         this.vida.position.set(this.juego.app.screen.width * 0.05, 25);
-        this.vida.scale.set(1.5,1.5);
         this.container.addChild(this.vida);
 
         this.crearBalas();
@@ -86,10 +85,10 @@ class HUD {
     }
 
     actualizarPosicion() {
-        this.puntaje.position.set(this.juego.app.screen.width * 0.9, 85);
+        this.puntaje.position.set(this.juego.app.screen.width * 0.92, 88);
         this.punt.position.set(this.juego.app.screen.width * 0.88, 85);
-        this.asesinatos.position.set(this.juego.app.screen.width * 0.9, 50);
-        this.asesinato.position.set(this.juego.app.screen.width * 0.88, 49);
+        this.asesinatos.position.set(this.juego.app.screen.width * 0.92, 25);
+        this.asesinato.position.set(this.juego.app.screen.width * 0.88, 10);
         this.nivel.position.set(this.juego.app.screen.width * 0.5, 25);
         this.vida.position.set(this.juego.app.screen.width * 0.05, 25);
         this.pistolaTexture.position.set(this.juego.app.screen.width * 0.05, 100);
