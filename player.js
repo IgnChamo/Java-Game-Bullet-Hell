@@ -52,7 +52,7 @@ class Player extends Objeto {
       this.juego.balas.push(
         new Bala(
           this.container.x,
-          this.container.y - 40,
+          this.container.y + 10,
           this.juego,
           Math.sin(angulo),
           Math.cos(angulo)

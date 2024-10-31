@@ -7,7 +7,7 @@ class Indicador extends Objeto {
     this.container.visible = false;
     this.container.x = x;
     this.container.y = y;
-    this.juego.gameContainer.addChild(this.container);
+    this.juego.hudContainer.addChild(this.container);
 
     this.cargarVariosSpritesAnimados(
       {

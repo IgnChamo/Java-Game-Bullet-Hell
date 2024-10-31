@@ -43,7 +43,6 @@ class Enemigo extends Objeto {
     this.vida -= 1;
     if (this.vida <= 0) {
       this.juego.enemigos = this.juego.enemigos.filter((k) => k != this);
-      //this.aumentarRangoEnemigos();
       //this.juego.hud.actualizarHud();
       this.grid.remove(this);
       let sprite = this.cambiarSprite("morir", 0, false);
@@ -52,6 +51,7 @@ class Enemigo extends Objeto {
       this.juego.player.asesinatos += 1;
       this.juego.player.puntaje += 2;
       this.juego.hud.actualizarHud();
+      this.juego.hud.actualizarBalas();
       setTimeout(() => {
         this.desaparecer();
         }, this.tiempoPostMorten); 
@@ -125,6 +125,7 @@ class Enemigo extends Objeto {
       sumaDeVectores.y += (vecAlineacion || {}).y || 0;
       sumaDeVectores.y += (vecCohesion || {}).y || 0;
       sumaDeVectores.y += (vecAtraccionAlPlayer || {}).y || 0;
+      sumaDeVectores.x += (bordes || {}).x || 0;
       sumaDeVectores.y += (bordes || {}).y || 0;
 
 
@@ -289,26 +290,28 @@ class Enemigo extends Objeto {
 
     return vecPromedio;
   }
+
   ajustarPorBordes() {
     let fuerza = new PIXI.Point(0, 0);
+    const margen = 50;
 
-    if (this.container.x < 50) {
-      this.container.x = 0;
-      fuerza.x = 0;
+   
+    if (this.container.x < margen) {
+        this.container.x = margen;
+        fuerza.x = 1;
     }
-    if (this.container.x > this.juego.canvaswidth - 50) {
-      this.container.x = this.juego.canvaswidth;
-      fuerza.x = 0;
+    if (this.container.x > this.juego.canvaswidth - margen) {
+        this.container.x = this.juego.canvaswidth - margen;
+        fuerza.x = -1;
     }
 
-    // Limita la posición del enemigo en el eje Y
-    if (this.container.y < 200) {
-      this.container.y = 0;
-      fuerza.y = 0;
+    if (this.container.y < margen) {
+        this.container.y = margen;
+        fuerza.y = 1;
     }
-    if (this.container.y > this.juego.canvasHeight - 50) {
-      this.container.y = this.juego.canvasHeight;
-      fuerza.y = 0;
+    if (this.container.y > this.juego.canvasHeight - margen) {
+        this.container.y = this.juego.canvasHeight - margen; 
+        fuerza.y = -1; 
     }
 
     return fuerza;

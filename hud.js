@@ -22,7 +22,7 @@ class HUD {
         this.juego.hudContainer.addChild(this.container);
 
         this.balasSprites = [];
-        this.balasTotales = 6;
+        this.balasTotales = 7;
 
         this.puntaje = new PIXI.Text("", { fontFamily: 'fuente', fontSize: 50,padding: 20, fill: 0x000000 });
         this.puntaje.position.set(this.juego.app.screen.width * 0.92, 88)
@@ -137,6 +137,13 @@ class HUD {
     actualizarBalasTotales(nuevasBalasTotales) {
         this.balasTotales = nuevasBalasTotales;
         this.crearBalas();
+    }
+    actualizarBalas(){
+        this.juego.player.balasTotales += 1;
+        this.juego.balasTotales = this.juego.player.balasTotales;
+        this.juego.player.balas = this.juego.player.balasTotales;
+        this.actualizarBalasTotales(this.juego.player.balasTotales);
+
     }
 
     //this.juego.hud.actualizarBalasTotales(this.juego.balasTotales += 1);  linea para agregar donde se creen mas balas(PowerUp o lo que sea)

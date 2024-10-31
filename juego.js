@@ -35,12 +35,12 @@ class Juego {
 
     this.ponerFondo();
     this.ponerProtagonista();
-    //this.ponerCompanion();
-    //this.ponerCompanion();
-    //this.ponerCompanion();
-    //this.ponerCompanion();
+    this.ponerCompanion();
+    this.ponerCompanion();
+    this.ponerCompanion();
+    this.ponerCompanion();
     this.ponerIndicador();
-    this.ponerEnemigos(2);
+    this.ponerEnemigos(20);
     this.ponerListeners();
 
     setTimeout(() => {
@@ -277,7 +277,7 @@ class Juego {
 
           // Actualiza la posición del indicador
           this.indicador.container.x = indicadorX + this.app.stage.position.x;
-          this.indicador.container.y = indicadorY + this.app.stage.position.y;
+          this.indicador.container.y = indicadorY + this.app.stage.position.y -40;
 
           // Rotación del indicador
           const angle = Math.atan2(dy, dx);
