@@ -71,8 +71,8 @@ class Juego {
       window.innerWidth / 2,
       window.innerHeight * 0.9,
       this,
-      this.companions.length+1
-      ),
+      this.companions.length + 1
+    ),
     );
   }
   ponerIndicador() {
@@ -119,11 +119,11 @@ class Juego {
     }
   }
   mouseDownEvent() {
-    this.companions.forEach((compa) =>{ 
+    this.companions.forEach((compa) => {
       compa.disparar();
-  });
+    });
     this.player.disparar();
-    
+
   }
 
   ponerListeners() {
@@ -137,12 +137,12 @@ class Juego {
     });
     window.addEventListener("keydown", (e) => {
       this.keyboard[e.key.toLowerCase()] = true;
-  
+
       // Verifica si se presionó la tecla "r"
       if (e.key.toLowerCase() === 'r') {
-          this.player.recargar(); // Llama a la función que quieres ejecutar
+        this.player.recargar(); // Llama a la función que quieres ejecutar
       }
-  });
+    });
 
     this.app.view.addEventListener("mousemove", this.onMouseMove.bind(this));
     this.app.view.addEventListener("mouseleave", () => {
@@ -152,6 +152,7 @@ class Juego {
       this.app.renderer.resize(window.innerWidth, window.innerHeight);
       this.moverHUD();
       this.hud.actualizarPosicion();
+      
     });
 
     window.addEventListener("keydown", (e) => {
@@ -176,18 +177,18 @@ class Juego {
 
   actualizar() {
     if (this.pausa) return;
+    this.updateIndicator();
     this.contadorDeFrames++;
 
     this.player.update();
     this.companions.forEach((compa) => {
       compa.update();
-    } )
-    
+    })
+
     this.enemigos.forEach((enemigo) => {
       enemigo.update();
     });
-    this.updateIndicator();
-    
+
     this.balas.forEach((bala) => {
       bala.update();
     });
@@ -242,39 +243,42 @@ class Juego {
   }
 
   updateIndicator() {
-    const { x: playerX, y: playerY } = this.player.container;
-    const { x: enemyX, y: enemyY } = this.enemigos[0].container; // Supongamos que solo tienes un enemigo
 
-    // Calcula si el enemigo está dentro de la cámara
-    const enemyInView = 
-      enemyX > -this.app.stage.position.x &&
-      enemyX < -this.app.stage.position.x + this.app.screen.width &&
-      enemyY > -this.app.stage.position.y &&
-      enemyY < -this.app.stage.position.y + this.app.screen.height;
+    if (this.enemigos[0] != undefined) {
+      const { x: playerX, y: playerY } = this.player.container;
+      const { x: enemyX, y: enemyY } = this.enemigos[0].container; // Supongamos que solo tienes un enemigo
 
-    if (enemyInView) {
+      // Calcula si el enemigo está dentro de la cámara
+      const enemyInView =
+        enemyX > -this.app.stage.position.x &&
+        enemyX < -this.app.stage.position.x + this.app.screen.width &&
+        enemyY > -this.app.stage.position.y &&
+        enemyY < -this.app.stage.position.y + this.app.screen.height;
 
-      this.indicador.container.visible = false;
-    } else {
+      if (enemyInView) {
 
-      this.indicador.container.visible = true;
+        this.indicador.container.visible = false;
+      } else {
 
-    const dx = enemyX - playerX;
-    const dy = enemyY - playerY;
-    const angle = Math.atan2(dy, dx);
+        this.indicador.container.visible = true;
 
-
-    const edgeX = Math.cos(angle) * (this.app.screen.width / 2 - 20);
-    const edgeY = Math.sin(angle) * (this.app.screen.height / 2 - 20);
+        const dx = enemyX - playerX;
+        const dy = enemyY - playerY;
+        const angle = Math.atan2(dy, dx);
 
 
-    this.indicador.container.x = playerX + edgeX + this.app.stage.position.x;
-    this.indicador.container.y = playerY + edgeY + this.app.stage.position.y;
-    this.indicador.container.rotation = angle + Math.PI / 2;
+        const edgeX = Math.cos(angle) * (this.app.screen.width / 2 - 20);
+        const edgeY = Math.sin(angle) * (this.app.screen.height / 2 - 20);
+
+
+        this.indicador.container.x = playerX + edgeX + this.app.stage.position.x;
+        this.indicador.container.y = playerY + edgeY + this.app.stage.position.y;
+        this.indicador.container.rotation = angle + Math.PI / 2;
+      }
     }
   }
-
 }
+
 
 // Inicializar el juego
 let juego = new Juego();
