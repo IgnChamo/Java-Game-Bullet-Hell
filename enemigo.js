@@ -3,7 +3,7 @@
 // Asegúrate de que el archivo utils.js esté incluido en tu index.html antes de este script
 
 class Enemigo extends Objeto {
-  constructor(x, y, velocidad, juego) {
+  constructor(x, y, velocidad, juego ) {
     super(x, y, velocidad, juego);
     this.equipoParaUpdate = Math.floor(Math.random() * 9) + 1;
     this.juego = juego;
@@ -316,19 +316,4 @@ class Enemigo extends Objeto {
 
     return fuerza;
   }
-
-  /*ajustarPorBordes() {
-    let fuerza = new PIXI.Point(0, 0);
-
-    if (this.container.x < 0) fuerza.x = -this.container.x;
-    if (this.container.y < 0) fuerza.y = -this.container.y;
-    if (this.container.x > this.juego.canvaswidth)
-      fuerza.x = -(this.container.x - this.juego.canvaswidth);
-    if (this.container.y > this.juego.canvasHeight)
-      fuerza.y = -(this.container.y - this.juego.canvasHeight);
-
-    // if(this.debug)console.log(fuerza)
-    return fuerza;
-  }*/
-
 }

@@ -25,19 +25,23 @@ class HUD {
         this.balasTotales = 7;
 
         this.puntaje = new PIXI.Text("", { fontFamily: 'fuente', fontSize: 50,padding: 20, fill: 0x000000 });
-        this.puntaje.position.set(this.juego.app.screen.width * 0.92, 88)
+        this.puntaje.position.set(this.juego.app.screen.width * 0.92, 90)
+        this.puntaje.scale.set(0.5,0.5);
         this.container.addChild(this.puntaje);
 
         this.punt = PIXI.Sprite.from('./img/Puntaje.png');
-        this.punt.position.set(this.juego.app.screen.width * 0.88, 85);
+        this.punt.position.set(this.juego.app.screen.width * 0.895, 85);
+        this.punt.scale.set(0.7,0.7);
         this.container.addChild(this.punt);
 
         this.asesinatos = new PIXI.Text("", { fontFamily: 'fuente', fontSize: 50 ,padding: 20 , fill: 0x000000 });
         this.asesinatos.position.set(this.juego.app.screen.width * 0.92, 25);
+        this.asesinatos.scale.set(0.5,0.5);
         this.container.addChild(this.asesinatos);
 
         this.asesinato = PIXI.Sprite.from('./img/Asesinatos.png');
-        this.asesinato.position.set(this.juego.app.screen.width * 0.88, 10);
+        this.asesinato.position.set(this.juego.app.screen.width * 0.895, 10);
+        this.asesinato.scale.set(0.7,0.7);
         this.container.addChild(this.asesinato);
 
         this.nivel = new PIXI.Text("Nivel", { fontFamily: 'fuente', fontSize: 20, fill: 0x000000 });
@@ -46,11 +50,13 @@ class HUD {
 
         this.vida = new PIXI.Sprite(this.vidas5);
         this.vida.position.set(this.juego.app.screen.width * 0.05, 25);
+        this.vida.scale.set(0.7,0.7);
         this.container.addChild(this.vida);
 
         this.crearBalas();
         this.pistolaTexture = PIXI.Sprite.from('./img/Pistola.png');
         this.pistolaTexture.position.set(this.juego.app.screen.width * 0.05, 100);
+        this.pistolaTexture.scale.set(0.7,0.7);
         this.container.addChild(this.pistolaTexture);
 
         console.log("Se creo el hud");
@@ -86,9 +92,9 @@ class HUD {
 
     actualizarPosicion() {
         this.puntaje.position.set(this.juego.app.screen.width * 0.92, 88);
-        this.punt.position.set(this.juego.app.screen.width * 0.88, 85);
+        this.punt.position.set(this.juego.app.screen.width * 0.9, 85);
         this.asesinatos.position.set(this.juego.app.screen.width * 0.92, 25);
-        this.asesinato.position.set(this.juego.app.screen.width * 0.88, 10);
+        this.asesinato.position.set(this.juego.app.screen.width * 0.9, 10);
         this.nivel.position.set(this.juego.app.screen.width * 0.5, 25);
         this.vida.position.set(this.juego.app.screen.width * 0.05, 25);
         this.pistolaTexture.position.set(this.juego.app.screen.width * 0.05, 100);
@@ -104,14 +110,15 @@ class HUD {
 
     crearBalas() {
         // Posicion inicial para las balas
-        let xPos = this.juego.app.screen.width * 0.11;
+        let xPos = this.juego.app.screen.width * 0.09;
         let yPos = 88;
 
         // Crear los sprites de las balas en estado cargado
         for (let i = 0; i < this.balasTotales; i++) {
             const bala = new PIXI.Sprite(this.balaCargadaTexture);
+            bala.scale.set(0.7,0.7);
             bala.position.set(xPos, yPos);
-            xPos += 40; // Ajusta la separación entre las balas
+            xPos += 30; // Ajusta la separación entre las balas
             this.container.addChild(bala);
             this.balasSprites.push(bala);
         }
