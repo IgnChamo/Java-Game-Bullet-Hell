@@ -87,6 +87,8 @@ class Juego {
     const distanciaMinima = 600; // Ajusta este valor según lo lejos que quieras que estén los enemigos del jugador
     const maxIntentos = 10; // Máximo número de intentos para evitar loops infinitos
 
+    const tiposDeEnemigos = ['tipo1','tipo2','tipo3'];
+
     for (let i = 0; i < cant; i++) {
       let enemigo;
       let intentos = 0;
@@ -105,8 +107,9 @@ class Juego {
 
         // Si la distancia es suficiente, crea el enemigo en esa posición
         if (distanciaAlJugador >= distanciaMinima) {
-          let velocidad = Math.random() * 0.2 + 0.5;
-          enemigo = new Enemigo(posX, posY, velocidad, this);
+          const tipoAleatorio = tiposDeEnemigos[Math.floor(Math.random() * tiposDeEnemigos.length)];
+          //let velocidad = Math.random() * 0.2 + 0.5;
+          enemigo = new Enemigo(posX, posY, 1 , this, `enemigo_${i}`, tipoAleatorio);
           this.enemigos.push(enemigo);
           this.grid.add(enemigo);
           break;

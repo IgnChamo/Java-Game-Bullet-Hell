@@ -1,43 +1,68 @@
-// Enemigo.js
+const configuracionEnemigos = {
+  tipo1: {
+    vida: 4,
+    velocidad: 0.7,
+    velocidadSprite: 1,
+    sprites: {
+      idle: "./img/isacc_idle.png",
+      morir: "./img/isacc_muerte.png",
+    },
+  },
+  tipo2: {
+    vida: 6,
+    velocidad: 1,
+    velocidadSprite: 1,
+    sprites: {
+      idle: "./img/isacc_idle.png",
+      morir: "./img/isacc_muerte.png",
+    },
+  },
+  tipo3: {
+    vida: 3,
+    velocidad: 0.4,
+    velocidadSprite: 1,
+    sprites: {
+      idle: "./img/isacc_idle.png",
+      morir: "./img/isacc_muerte.png",
+    },
+  },
+};
 
-// Asegúrate de que el archivo utils.js esté incluido en tu index.html antes de este script
+ class Enemigo extends Objeto {
+    constructor(x, y, velocidad, juego, id, tipo) {
+      const config = configuracionEnemigos[tipo];
+      super(x, y, config.velocidad, juego);
+      this.equipoParaUpdate = Math.floor(Math.random() * 9) + 1;
+      this.juego = juego;
+      this.grid = juego.grid;
+      this.vision = 9999 + Math.floor(Math.random() * 150);
+      this.vida = config.vida;
+      this.debug = 0;
+      this.tiempoPostMorten = 3000;
+      this.nombre = id;
+      this.tipo = tipo;
 
-class Enemigo extends Objeto {
-  constructor(x, y, velocidad, juego ) {
-    super(x, y, velocidad, juego);
-    this.equipoParaUpdate = Math.floor(Math.random() * 9) + 1;
-    this.juego = juego;
-    this.grid = juego.grid; // Referencia a la grid
-    this.vision = 9999 + Math.floor(Math.random() * 150); //en pixels
-    this.vida = 4;
-    this.debug = 0;
-    this.tiempoPostMorten = 3000;
-    
 
-    this.cargarVariosSpritesAnimados(
-      {
-        idle: "./img/isacc_idle.png",
-        //ataque1: "./img/zombie_attack_1.png",
-        //ataque2: "./img/zombie_attack_2.png",
-        //ataque3: "./img/zombie_attack_3.png",
-        morir: "./img/isacc_muerte.png",
-        //recibeTiro: "./img/zombie_hurt.png",
-      },
-      32,
-      32,
-      velocidad * 0.5,
-      (e) => {
-        this.listo = true;
-        this.cambiarSprite("idle");
-      }
-    );
-
-    this.estados = { IDLE: 0, YENDO_AL_PLAYER: 1, ATACANDO: 2 };
-    this.estado = this.estados.IDLE;
-
-    //this.juego.app.stage.addChild(this.container);
-    this.juego.gameContainer.addChild(this.container);
-  }
+      console.log('Velocidad inicial:', config.velocidad);
+      this.cargarVariosSpritesAnimados(
+        {
+          idle: config.sprites.idle,
+          morir: config.sprites.morir,
+        },
+        32,
+        32,
+        config.velocidadSprite * 0.1,
+        (e) => {
+          this.listo = true;
+          this.cambiarSprite("idle");
+        }
+      );
+  
+      this.estados = { IDLE: 0, YENDO_AL_PLAYER: 1, ATACANDO: 2 };
+      this.estado = this.estados.IDLE;
+  
+      this.juego.gameContainer.addChild(this.container);
+    }
 
   recibirTiro() {
     this.vida -= 1;
@@ -127,7 +152,6 @@ class Enemigo extends Objeto {
       sumaDeVectores.y += (vecAtraccionAlPlayer || {}).y || 0;
       sumaDeVectores.x += (bordes || {}).x || 0;
       sumaDeVectores.y += (bordes || {}).y || 0;
-
 
       this.aplicarFuerza(sumaDeVectores);
     }
