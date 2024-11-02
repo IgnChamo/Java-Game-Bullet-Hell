@@ -3,26 +3,32 @@ const configuracionEnemigos = {
     vida: 4,
     velocidad: 0.7,
     velocidadSprite: 1,
+    spriteX: 32,
+    spriteY: 32,
     sprites: {
       idle: "./img/isacc_idle.png",
       morir: "./img/isacc_muerte.png",
     },
   },
   tipo2: {
-    vida: 6,
-    velocidad: 1,
+    vida: 2,
+    velocidad: 2,
     velocidadSprite: 1,
+    spriteX: 32,
+    spriteY: 32,
     sprites: {
-      idle: "./img/isacc_idle.png",
+      idle: "./img/perrito_run.png",
       morir: "./img/isacc_muerte.png",
     },
   },
   tipo3: {
-    vida: 3,
+    vida: 6,
     velocidad: 0.4,
     velocidadSprite: 1,
+    spriteX: 32,
+    spriteY: 32,
     sprites: {
-      idle: "./img/isacc_idle.png",
+      idle: "./img/cabezon_run.png",
       morir: "./img/isacc_muerte.png",
     },
   },
@@ -49,15 +55,16 @@ const configuracionEnemigos = {
           idle: config.sprites.idle,
           morir: config.sprites.morir,
         },
-        32,
-        32,
+        config.spriteX,
+        config.spriteY,
         config.velocidadSprite * 0.1,
         (e) => {
           this.listo = true;
           this.cambiarSprite("idle");
+          
         }
       );
-  
+      
       this.estados = { IDLE: 0, YENDO_AL_PLAYER: 1, ATACANDO: 2 };
       this.estado = this.estados.IDLE;
   
