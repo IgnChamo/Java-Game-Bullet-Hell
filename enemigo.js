@@ -14,22 +14,22 @@ const configuracionEnemigos = {
     vida: 2,
     velocidad: 2,
     velocidadSprite: 1,
-    spriteX: 32,
-    spriteY: 32,
+    spriteX: 64,
+    spriteY: 64,
     sprites: {
       idle: "./img/perrito_run.png",
-      morir: "./img/isacc_muerte.png",
+      morir: "./img/isacc_muerte_64.png",
     },
   },
   tipo3: {
     vida: 6,
     velocidad: 0.4,
     velocidadSprite: 1,
-    spriteX: 32,
-    spriteY: 32,
+    spriteX: 64,
+    spriteY: 64,
     sprites: {
       idle: "./img/cabezon_run.png",
-      morir: "./img/isacc_muerte.png",
+      morir: "./img/isacc_muerte_64.png",
     },
   },
 };
