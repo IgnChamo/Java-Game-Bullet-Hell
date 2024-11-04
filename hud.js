@@ -24,28 +24,28 @@ class HUD {
         this.balasSprites = [];
         this.balasTotales = 7;
 
-        this.puntaje = new PIXI.Text("", { fontFamily: 'fuente', fontSize: 50,padding: 20, fill: 0x000000 });
-        this.puntaje.position.set(this.juego.app.screen.width * 0.92, 90)
+        this.puntaje = new PIXI.Text("", { fontFamily: 'Press Start 2P', fontSize: 50,padding: 20, fill: 0x000000 });
+        this.puntaje.position.set(this.juego.app.screen.width * 0.92, 95)
         this.puntaje.scale.set(0.5,0.5);
         this.container.addChild(this.puntaje);
 
         this.punt = PIXI.Sprite.from('./img/Puntaje.png');
-        this.punt.position.set(this.juego.app.screen.width * 0.895, 85);
+        this.punt.position.set(this.juego.app.screen.width * 0.892, 85);
         this.punt.scale.set(0.7,0.7);
         this.container.addChild(this.punt);
 
-        this.asesinatos = new PIXI.Text("", { fontFamily: 'fuente', fontSize: 50 ,padding: 20 , fill: 0x000000 });
-        this.asesinatos.position.set(this.juego.app.screen.width * 0.92, 25);
+        this.asesinatos = new PIXI.Text("", { fontFamily: 'Press Start 2P', fontSize: 50 ,padding: 20 , fill: 0x000000 });
+        this.asesinatos.position.set(this.juego.app.screen.width * 0.92, 26);
         this.asesinatos.scale.set(0.5,0.5);
         this.container.addChild(this.asesinatos);
 
         this.asesinato = PIXI.Sprite.from('./img/Asesinatos.png');
-        this.asesinato.position.set(this.juego.app.screen.width * 0.895, 10);
+        this.asesinato.position.set(this.juego.app.screen.width * 0.892, 10);
         this.asesinato.scale.set(0.7,0.7);
         this.container.addChild(this.asesinato);
 
-        this.nivel = new PIXI.Text("Nivel", { fontFamily: 'fuente', fontSize: 20, fill: 0x000000 });
-        this.nivel.position.set(this.juego.app.screen.width * 0.5, 25);
+        this.nivel = new PIXI.Text("Nivel ", { fontFamily: 'Press Start 2P', fontSize: 20, fill: 0x000000 });
+        this.nivel.position.set(this.juego.app.screen.width * 0.5, 26);
         this.container.addChild(this.nivel);
 
         this.vida = new PIXI.Sprite(this.vidas5);
