@@ -17,7 +17,6 @@ class Indicador extends Objeto {
       16,
       0.2,
       (e) => {
-        this.listo = true;
         this.cambiarSprite("idle");
       }
     );

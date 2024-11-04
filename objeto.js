@@ -18,6 +18,9 @@ class Objeto {
     // this.container.anchor.set(0.5,1); // Pivote en el centro
 
     this.spritesAnimados = {};
+
+    this.texturasCargadas = {};
+
   }
 
   cambiarSprite(cual, numero, loop = true) {
@@ -50,11 +53,26 @@ class Objeto {
     }
   }
 
+  limpiarCache(url){
+    if (PIXI.utils.TextureCache[url]) {
+      delete PIXI.utils.TextureCache[url]; // Elimina la textura de la caché
+    }
+    if (PIXI.utils.BaseTextureCache[url]) {
+      delete PIXI.utils.BaseTextureCache[url]; // Elimina el baseTexture de la caché
+    }
+  }
   cargarSpriteAnimado(url, frameWidth, frameHeight, vel, cb) {
-    let texture = PIXI.Texture.from(url);
-    texture.baseTexture.on("loaded", () => {
-      let width = texture.baseTexture.width;
-      let height = texture.baseTexture.height;
+    // Usar el loader
+
+   this.limpiarCache(url);
+    const loader = new PIXI.Loader();
+    loader.add(url); // Agrega la URL de la imagen
+    loader.load((loader, resources) => {
+      const texture = resources[url].texture; // Obtiene la textura cargada
+      this.texturasCargadas[url] = texture;
+
+      let width = texture.width;
+      let height = texture.height;
       let cantFramesX = width / frameWidth;
       let cantFramesY = height / frameHeight;
 
@@ -69,25 +87,18 @@ class Objeto {
             frameHeight
           );
           const frame = new PIXI.Texture(texture.baseTexture, rectangle);
-          // frame.anchor.set(0.5,1)
-          
           frames.push(frame);
         }
-      } //for
+      }
 
       const animatedSprite = new PIXI.AnimatedSprite(frames);
-
-      // Configurar la animación
       animatedSprite.animationSpeed = vel;
-      animatedSprite.loop = true; // Para que la animación se repita
-
-      //animatedSprite.anchor.set(0.5, 1);
+      animatedSprite.loop = true;
       animatedSprite.anchor.set(0.5);
-
-      // Iniciar la animación
       animatedSprite.play();
 
       if (cb) cb(animatedSprite);
+      console.log("se cargo");
     });
   }
 

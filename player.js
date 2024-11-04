@@ -25,7 +25,7 @@ class Player extends Objeto {
 
     this.escudo = new Escudo(this.container.x, this.container.y, this.juego);
     this.juego.gameContainer.addChild(this.container);
-
+    
     this.cargarVariosSpritesAnimados(
       {
         idle: "./img/player_idle.png",

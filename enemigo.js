@@ -1,3 +1,4 @@
+
 const configuracionEnemigos = {
   tipo1: {
     vida: 4,
@@ -5,6 +6,7 @@ const configuracionEnemigos = {
     velocidadSprite: 1,
     spriteX: 32,
     spriteY: 32,
+    scale: (1,1),
     sprites: {
       idle: "./img/isacc_idle.png",
       morir: "./img/isacc_muerte.png",
@@ -16,9 +18,10 @@ const configuracionEnemigos = {
     velocidadSprite: 1,
     spriteX: 64,
     spriteY: 64,
+    scale: (0.1,0.8),
     sprites: {
       idle: "./img/perrito_run.png",
-      morir: "./img/isacc_muerte_64.png",
+      morir: "./img/perrito_muerte.png",
     },
   },
   tipo3: {
@@ -27,9 +30,10 @@ const configuracionEnemigos = {
     velocidadSprite: 1,
     spriteX: 64,
     spriteY: 64,
+    scale: (1,1),
     sprites: {
       idle: "./img/cabezon_run.png",
-      morir: "./img/isacc_muerte_64.png",
+      morir: "./img/cabezon_muerte.png",
     },
   },
 };
@@ -37,6 +41,7 @@ const configuracionEnemigos = {
  class Enemigo extends Objeto {
     constructor(x, y, velocidad, juego, id, tipo) {
       const config = configuracionEnemigos[tipo];
+      console.log(config);
       super(x, y, config.velocidad, juego);
       this.equipoParaUpdate = Math.floor(Math.random() * 9) + 1;
       this.juego = juego;
@@ -47,7 +52,7 @@ const configuracionEnemigos = {
       this.tiempoPostMorten = 3000;
       this.nombre = id;
       this.tipo = tipo;
-
+      this.container.scale.set(config.scale); 
 
       console.log('Velocidad inicial:', config.velocidad);
       this.cargarVariosSpritesAnimados(
@@ -58,13 +63,14 @@ const configuracionEnemigos = {
         config.spriteX,
         config.spriteY,
         config.velocidadSprite * 0.1,
+
         (e) => {
+          console.log("Sprites cargados para", this.nombre);
           this.listo = true;
           this.cambiarSprite("idle");
-          
         }
-      );
-      
+        
+      );   
       this.estados = { IDLE: 0, YENDO_AL_PLAYER: 1, ATACANDO: 2 };
       this.estado = this.estados.IDLE;
   
@@ -83,11 +89,15 @@ const configuracionEnemigos = {
       this.juego.player.asesinatos += 1;
       this.juego.player.puntaje += 2;
       this.juego.hud.actualizarHud();
-      this.juego.hud.actualizarBalas();
+
+      this.juego.ponerEnemigos(Math.floor(Math.random() * 10) + 1);
+      
+      //this.juego.hud.actualizarBalas();
       setTimeout(() => {
         this.desaparecer();
-        }, this.tiempoPostMorten); 
+      }, this.tiempoPostMorten); 
       // sprite.animationSpeed=0.001
+
     } else {
       //let sprite = this.cambiarSprite("recibeTiro", 0, false);
     }

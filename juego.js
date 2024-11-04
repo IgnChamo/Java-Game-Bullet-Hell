@@ -35,14 +35,10 @@ class Juego {
 
     this.ponerFondo();
     this.ponerProtagonista();
-    this.ponerCompanion();
-    this.ponerCompanion();
-    this.ponerCompanion();
-    this.ponerCompanion();
     this.ponerIndicador();
-    this.ponerEnemigos(20);
+    this.ponerEnemigos(3);
     this.ponerListeners();
-
+    
     setTimeout(() => {
       this.app.ticker.add(this.actualizar.bind(this));
       window.__PIXI_APP__ = this.app;
@@ -84,20 +80,21 @@ class Juego {
   }
 
   ponerEnemigos(cant) {
+
     const distanciaMinima = 600; // Ajusta este valor según lo lejos que quieras que estén los enemigos del jugador
-    const maxIntentos = 10; // Máximo número de intentos para evitar loops infinitos
-
+    const maxIntentos = 999; // Máximo número de intentos para evitar loops infinitos
+   
     const tiposDeEnemigos = ['tipo1','tipo2','tipo3'];
-
     for (let i = 0; i < cant; i++) {
       let enemigo;
       let intentos = 0;
       let distanciaAlJugador = 0;
 
+      
       do {
         // Generar una posición aleatoria
-        const posX = 50 + Math.random() * (this.canvasWidth - 100);
-        const posY = 200 + Math.random() * (this.canvasHeight - 250);
+        const posX = 50 + Math.random() * (this.canvasWidth - 300);
+        const posY = 200 + Math.random() * (this.canvasHeight - 500);
 
         // Calcular la distancia entre la posición aleatoria y la posición del jugador
         distanciaAlJugador = Math.hypot(
@@ -110,6 +107,7 @@ class Juego {
           const tipoAleatorio = tiposDeEnemigos[Math.floor(Math.random() * tiposDeEnemigos.length)];
           //let velocidad = Math.random() * 0.2 + 0.5;
           enemigo = new Enemigo(posX, posY, 1 , this, `enemigo_${i}`, tipoAleatorio);
+          console.log(`Creado enemigo ${enemigo.nombre} en posición (${posX}, ${posY})`);
           this.enemigos.push(enemigo);
           this.grid.add(enemigo);
           break;
@@ -118,9 +116,11 @@ class Juego {
         intentos++;
       } while (intentos < maxIntentos);
 
+
       // Si no logró encontrar una posición adecuada en los intentos permitidos, ignora ese enemigo.
     }
   }
+  
   mouseDownEvent() {
     this.companions.forEach((compa) => {
       compa.disparar();
@@ -195,11 +195,6 @@ class Juego {
     this.balas.forEach((bala) => {
       bala.update();
     });
-
-    // //CADA 5 FRAMES ACTUALIZO LA GRILLA
-    // if (this.contadorDeFrames % 5 == 0) {
-    //   this.grid.actualizarCantidadSiLasCeldasSonPasablesONo();
-    // }
 
     this.moverCamara();
     this.moverHUD();
