@@ -87,7 +87,7 @@ const configuracionEnemigos = {
       this.juego.player.puntaje += 2;
       this.juego.hud.actualizarHud();
 
-      this.juego.ponerEnemigos(Math.floor(Math.random() * 1) + 1);
+      this.juego.ponerEnemigos(Math.floor(Math.random() * 3) + 1);
       
       //this.juego.hud.actualizarBalas();
       setTimeout(() => {

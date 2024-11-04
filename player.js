@@ -24,6 +24,7 @@ class Player extends Objeto {
     this.vidas = 5;
 
     this.escudo = new Escudo(this.container.x, this.container.y, this.juego);
+    this.recarga = new Recarga(this.container.x, this.container.y, this.juego);
     this.juego.gameContainer.addChild(this.container);
     
     this.cargarVariosSpritesAnimados(
@@ -121,7 +122,18 @@ class Player extends Objeto {
     } else {
       this.escudo.container.visible = false;
     }
+
+    //recarga
+
+    if(this.balas < 1){
+      this.recarga.container.visible = true;
+      this.recarga.actualizarPosicion();
+    }else{
+      this.recarga.container.visible = false;
+    }
     //cambio de animaciones
+
+
 
     if (this.velocidad.y < 0) {
       this.cambiarSprite("subir");

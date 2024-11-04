@@ -80,13 +80,14 @@ class Juego {
     );
   }
   iniciarEnemigos() {
-    if(this.start){
-    this.ponerEnemigos(1);
-    setTimeout(() => {
-      this.ponerEnemigos(4);
-    }, 3000);
-    this.start = false;
-  }
+    if (this.start) {
+      this.start = false;
+      this.ponerEnemigos(1);
+      setTimeout(() => {
+        this.ponerEnemigos(4);
+      }, 3000);
+
+    }
 
   }
   ponerEnemigos(cant) {
@@ -106,8 +107,8 @@ class Juego {
       } else if (asesinatos == 30) {
         tiposDeEnemigos = ['tipo3'];
         cant = 1;
-      } else if(asesinatos > 30){
-        tiposDeEnemigos = ['tipo1', 'tipo2','tipo3'];
+      } else if (asesinatos > 30) {
+        tiposDeEnemigos = ['tipo1', 'tipo2', 'tipo3'];
       }
       for (let i = 0; i < cant; i++) {
         let enemigo;
@@ -170,7 +171,7 @@ class Juego {
       if (e.key.toLowerCase() === 'r') {
         this.player.recargar(); // Llama a la función que quieres ejecutar
       }
-      if(e.key.toLowerCase() === 'enter'){
+      if (e.key.toLowerCase() === 'enter') {
         this.iniciarEnemigos();
         this.hud.borrarDelHud(this.hud.pressStart);
       }
