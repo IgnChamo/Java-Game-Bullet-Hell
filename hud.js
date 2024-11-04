@@ -103,7 +103,9 @@ class HUD {
         this.nivel.position.set(this.juego.app.screen.width * 0.5, 25);
         this.vida.position.set(this.juego.app.screen.width * 0.05, 25);
         this.pistolaTexture.position.set(this.juego.app.screen.width * 0.05, 100);
+        if(this.pressStart != null){
         this.pressStart.position.set(this.juego.app.screen.width * 0.25, 750);
+        }
 
         let xPos = this.juego.app.screen.width * 0.11;
         const yPos = 88;
@@ -116,7 +118,7 @@ class HUD {
 
     crearBalas() {
         // Posicion inicial para las balas
-        let xPos = this.juego.app.screen.width * 0.09;
+        let xPos = this.juego.app.screen.width * 0.11;
         let yPos = 88;
 
         // Crear los sprites de las balas en estado cargado
