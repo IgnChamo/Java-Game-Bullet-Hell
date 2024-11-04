@@ -25,11 +25,11 @@ class Normal extends Status{
         //super(value);
         this.player.vidas = Math.max(0, this.player.vidas-value);
         this.changeStatus(this.player.invincible)
-        console.log("Daño: ", value, "Vida: ", this.player.vidas)
-        console.log("Become untochable")
+        //console.log("Daño: ", value, "Vida: ", this.player.vidas)
+        //console.log("Become untochable")
         setTimeout(() => {
             this.changeStatus(this.player.normal)
-            console.log("back to normal")
+            //console.log("back to normal")
         }, this.player.invincible.duration);
     }
 }

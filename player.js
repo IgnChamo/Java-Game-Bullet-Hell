@@ -62,7 +62,6 @@ class Player extends Objeto {
       this.velocidad.x = 0;
       this.velocidad.y = 0;
       this.balas -= 1;
-      console.log("Menos 1 Bala");
 
       this.delayDisparo = true;
       setTimeout(() => {
@@ -72,12 +71,10 @@ class Player extends Objeto {
     }
   }
   recargar() {
-    console.log("Recargando Balas")
     this.recargando = true;
     setTimeout(() => {
       this.balas = this.juego.balasTotales;
       this.recargando = false;
-      console.log("Completado");
     }, this.tiempoRecarga);
     this.juego.hud.recargar();
   }

@@ -1,7 +1,7 @@
-
+//Setear enemigos nuevos una sola vez en instancias especificas para que precargue los datos.
 const configuracionEnemigos = {
   tipo1: {
-    vida: 4,
+    vida: 1,
     velocidad: 0.7,
     velocidadSprite: 1,
     spriteX: 32,
@@ -13,7 +13,7 @@ const configuracionEnemigos = {
     },
   },
   tipo2: {
-    vida: 2,
+    vida: 1,
     velocidad: 2,
     velocidadSprite: 1,
     spriteX: 64,
@@ -41,7 +41,6 @@ const configuracionEnemigos = {
  class Enemigo extends Objeto {
     constructor(x, y, velocidad, juego, id, tipo) {
       const config = configuracionEnemigos[tipo];
-      console.log(config);
       super(x, y, config.velocidad, juego);
       this.equipoParaUpdate = Math.floor(Math.random() * 9) + 1;
       this.juego = juego;
@@ -54,7 +53,6 @@ const configuracionEnemigos = {
       this.tipo = tipo;
       this.container.scale.set(config.scale); 
 
-      console.log('Velocidad inicial:', config.velocidad);
       this.cargarVariosSpritesAnimados(
         {
           idle: config.sprites.idle,
@@ -65,7 +63,6 @@ const configuracionEnemigos = {
         config.velocidadSprite * 0.1,
 
         (e) => {
-          console.log("Sprites cargados para", this.nombre);
           this.listo = true;
           this.cambiarSprite("idle");
         }
@@ -90,7 +87,7 @@ const configuracionEnemigos = {
       this.juego.player.puntaje += 2;
       this.juego.hud.actualizarHud();
 
-      this.juego.ponerEnemigos(Math.floor(Math.random() * 10) + 1);
+      this.juego.ponerEnemigos(Math.floor(Math.random() * 3) + 1);
       
       //this.juego.hud.actualizarBalas();
       setTimeout(() => {
@@ -178,7 +175,6 @@ const configuracionEnemigos = {
       this.velocidad.y = 0;
       //this.juego.player.vidas -= 1;
       this.juego.player.status.damage(1);
-      console.log("player vida" + this.juego.player.vidas);
       this.juego.hud.actualizarHudVida()
       vecAtraccionAlPlayer = this.repulsionAlJugador();
       setTimeout(() => {

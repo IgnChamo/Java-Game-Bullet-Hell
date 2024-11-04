@@ -36,9 +36,13 @@ class Juego {
     this.ponerFondo();
     this.ponerProtagonista();
     this.ponerIndicador();
-    this.ponerEnemigos(3);
+    this.ponerEnemigos(1);
+    setTimeout(() => {
+      this.ponerEnemigos(4);
+    }, 3000);
+
     this.ponerListeners();
-    
+
     setTimeout(() => {
       this.app.ticker.add(this.actualizar.bind(this));
       window.__PIXI_APP__ = this.app;
@@ -83,14 +87,27 @@ class Juego {
 
     const distanciaMinima = 600; // Ajusta este valor según lo lejos que quieras que estén los enemigos del jugador
     const maxIntentos = 999; // Máximo número de intentos para evitar loops infinitos
-   
-    const tiposDeEnemigos = ['tipo1','tipo2','tipo3'];
+    var tiposDeEnemigos = [];
+    var asesinatos = this.player.asesinatos;
+    if (asesinatos < 20) {
+      tiposDeEnemigos = ['tipo1'];
+    } else if (asesinatos == 20) {
+      tiposDeEnemigos = ['tipo2'];
+      cant = 1;
+    } else if (asesinatos > 20 <= 30) {
+      tiposDeEnemigos = ['tipo1', 'tipo2'];
+    } else if (asesinatos == 30) {
+      tiposDeEnemigos = ['tipo3'];
+      cant = 1;
+    } else {
+      tiposDeEnemigos = ['tipo1', 'tipo2', 'tipo3'];
+    }
     for (let i = 0; i < cant; i++) {
       let enemigo;
       let intentos = 0;
       let distanciaAlJugador = 0;
 
-      
+
       do {
         // Generar una posición aleatoria
         const posX = 50 + Math.random() * (this.canvasWidth - 300);
@@ -106,8 +123,7 @@ class Juego {
         if (distanciaAlJugador >= distanciaMinima) {
           const tipoAleatorio = tiposDeEnemigos[Math.floor(Math.random() * tiposDeEnemigos.length)];
           //let velocidad = Math.random() * 0.2 + 0.5;
-          enemigo = new Enemigo(posX, posY, 1 , this, `enemigo_${i}`, tipoAleatorio);
-          console.log(`Creado enemigo ${enemigo.nombre} en posición (${posX}, ${posY})`);
+          enemigo = new Enemigo(posX, posY, 1, this, `enemigo_${i}`, tipoAleatorio);
           this.enemigos.push(enemigo);
           this.grid.add(enemigo);
           break;
@@ -120,7 +136,7 @@ class Juego {
       // Si no logró encontrar una posición adecuada en los intentos permitidos, ignora ese enemigo.
     }
   }
-  
+
   mouseDownEvent() {
     this.companions.forEach((compa) => {
       compa.disparar();
@@ -248,41 +264,41 @@ class Juego {
 
       // Verifica si el enemigo está fuera de la vista de la cámara
       const enemyInView =
-          enemyX > -this.app.stage.position.x &&
-          enemyX < -this.app.stage.position.x + this.app.screen.width &&
-          enemyY > -this.app.stage.position.y &&
-          enemyY < -this.app.stage.position.y + this.app.screen.height;
+        enemyX > -this.app.stage.position.x &&
+        enemyX < -this.app.stage.position.x + this.app.screen.width &&
+        enemyY > -this.app.stage.position.y &&
+        enemyY < -this.app.stage.position.y + this.app.screen.height;
 
       if (enemyInView) {
-          this.indicador.container.visible = false;
+        this.indicador.container.visible = false;
       } else {
-          this.indicador.container.visible = true;
+        this.indicador.container.visible = true;
 
-          // Calcula el ángulo hacia el enemigo
-          const dx = enemyX - playerX;
-          const dy = enemyY - playerY;
+        // Calcula el ángulo hacia el enemigo
+        const dx = enemyX - playerX;
+        const dy = enemyY - playerY;
 
-          // Distancia total entre el jugador y el enemigo
-          const distanciaTotal = Math.hypot(dx, dy);
+        // Distancia total entre el jugador y el enemigo
+        const distanciaTotal = Math.hypot(dx, dy);
 
-          // Define la distancia deseada para el indicador
-          const distanciaIndicador = 1; // Cambia este valor para ajustar la distancia
+        // Define la distancia deseada para el indicador
+        const distanciaIndicador = 1; // Cambia este valor para ajustar la distancia
 
-          // Calcula la posición del indicador
-          const ratio = distanciaIndicador / distanciaTotal; // Proporción para la posición intermedia
-          const indicadorX = playerX + dx * ratio;
-          const indicadorY = playerY + dy * ratio;
+        // Calcula la posición del indicador
+        const ratio = distanciaIndicador / distanciaTotal; // Proporción para la posición intermedia
+        const indicadorX = playerX + dx * ratio;
+        const indicadorY = playerY + dy * ratio;
 
-          // Actualiza la posición del indicador
-          this.indicador.container.x = indicadorX + this.app.stage.position.x;
-          this.indicador.container.y = indicadorY + this.app.stage.position.y -40;
+        // Actualiza la posición del indicador
+        this.indicador.container.x = indicadorX + this.app.stage.position.x;
+        this.indicador.container.y = indicadorY + this.app.stage.position.y - 40;
 
-          // Rotación del indicador
-          const angle = Math.atan2(dy, dx);
-          this.indicador.container.rotation = angle + Math.PI / 2;
+        // Rotación del indicador
+        const angle = Math.atan2(dy, dx);
+        this.indicador.container.rotation = angle + Math.PI / 2;
       }
+    }
   }
-}
 }
 
 

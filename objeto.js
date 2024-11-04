@@ -1,5 +1,6 @@
 // Clase base Objeto
 class Objeto {
+  static texturasCargadas = {};
   constructor(x, y, velocidadMax, juego) {
     this.id = generarID();
     this.grid = juego.grid;
@@ -19,7 +20,6 @@ class Objeto {
 
     this.spritesAnimados = {};
 
-    this.texturasCargadas = {};
 
   }
 
@@ -62,45 +62,51 @@ class Objeto {
     }
   }
   cargarSpriteAnimado(url, frameWidth, frameHeight, vel, cb) {
-    // Usar el loader
+    this.limpiarCache(url);
 
-   this.limpiarCache(url);
-    const loader = new PIXI.Loader();
-    loader.add(url); // Agrega la URL de la imagen
-    loader.load((loader, resources) => {
-      const texture = resources[url].texture; // Obtiene la textura cargada
-      this.texturasCargadas[url] = texture;
+    // Comprobar si la textura ya está cargada
+    if (Objeto.texturasCargadas[url]) {
+        const texture = Objeto.texturasCargadas[url];
+        this.crearFrames(texture, frameWidth, frameHeight, vel, cb);
+    } else {
+        const loader = new PIXI.Loader();
+        loader.add(url);
+        loader.load((loader, resources) => {
+            const texture = resources[url].texture;
+            Objeto.texturasCargadas[url] = texture; // Almacenar textura en la propiedad estática
 
-      let width = texture.width;
-      let height = texture.height;
-      let cantFramesX = width / frameWidth;
-      let cantFramesY = height / frameHeight;
+            this.crearFrames(texture, frameWidth, frameHeight, vel, cb);
+        });
+    }
+}
+  crearFrames(texture, frameWidth, frameHeight, vel, cb) {
+    let width = texture.width;
+    let height = texture.height;
+    let cantFramesX = width / frameWidth;
+    let cantFramesY = height / frameHeight;
 
-      const frames = [];
-
-      for (let i = 0; i < cantFramesX; i++) {
+    const frames = [];
+    for (let i = 0; i < cantFramesX; i++) {
         for (let j = 0; j < cantFramesY; j++) {
-          const rectangle = new PIXI.Rectangle(
-            i * frameWidth,
-            j * frameHeight,
-            frameWidth,
-            frameHeight
-          );
-          const frame = new PIXI.Texture(texture.baseTexture, rectangle);
-          frames.push(frame);
+            const rectangle = new PIXI.Rectangle(
+                i * frameWidth,
+                j * frameHeight,
+                frameWidth,
+                frameHeight
+            );
+            const frame = new PIXI.Texture(texture.baseTexture, rectangle);
+            frames.push(frame);
         }
-      }
+    }
 
-      const animatedSprite = new PIXI.AnimatedSprite(frames);
-      animatedSprite.animationSpeed = vel;
-      animatedSprite.loop = true;
-      animatedSprite.anchor.set(0.5);
-      animatedSprite.play();
+    const animatedSprite = new PIXI.AnimatedSprite(frames);
+    animatedSprite.animationSpeed = vel;
+    animatedSprite.loop = true;
+    animatedSprite.anchor.set(0.5);
+    animatedSprite.play();
 
-      if (cb) cb(animatedSprite);
-      console.log("se cargo");
-    });
-  }
+    if (cb) cb(animatedSprite);
+}
 
   borrar() {
     this.juego.app.stage.removeChild(this.container);
