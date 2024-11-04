@@ -26,8 +26,9 @@ class Juego {
     this.balasTotales = 6;
 
     this.companions = [];
-
+    this.start = true;
     this.nivel = 1;
+    this.boss = false; // Se pondra en True cuando aparezca el boss, esto no dejara que se sigan creando enemigos en esa etapa.
 
     this.keyboard = {};
 
@@ -36,11 +37,7 @@ class Juego {
     this.ponerFondo();
     this.ponerProtagonista();
     this.ponerIndicador();
-    this.ponerEnemigos(1);
-    setTimeout(() => {
-      this.ponerEnemigos(4);
-    }, 3000);
-
+    //this.iniciarEnemigos();
     this.ponerListeners();
 
     setTimeout(() => {
@@ -82,58 +79,70 @@ class Juego {
       this
     );
   }
+  iniciarEnemigos() {
+    if(this.start){
+    this.ponerEnemigos(1);
+    setTimeout(() => {
+      this.ponerEnemigos(4);
+    }, 3000);
+    this.start = false;
+  }
 
+  }
   ponerEnemigos(cant) {
-
-    const distanciaMinima = 600; // Ajusta este valor según lo lejos que quieras que estén los enemigos del jugador
-    const maxIntentos = 999; // Máximo número de intentos para evitar loops infinitos
-    var tiposDeEnemigos = [];
-    var asesinatos = this.player.asesinatos;
-    if (asesinatos < 20) {
-      tiposDeEnemigos = ['tipo1'];
-    } else if (asesinatos == 20) {
-      tiposDeEnemigos = ['tipo2'];
-      cant = 1;
-    } else if (asesinatos > 20 <= 30) {
-      tiposDeEnemigos = ['tipo1', 'tipo2'];
-    } else if (asesinatos == 30) {
-      tiposDeEnemigos = ['tipo3'];
-      cant = 1;
-    } else {
-      tiposDeEnemigos = ['tipo1', 'tipo2', 'tipo3'];
-    }
-    for (let i = 0; i < cant; i++) {
-      let enemigo;
-      let intentos = 0;
-      let distanciaAlJugador = 0;
-
-
-      do {
-        // Generar una posición aleatoria
-        const posX = 50 + Math.random() * (this.canvasWidth - 300);
-        const posY = 200 + Math.random() * (this.canvasHeight - 500);
-
-        // Calcular la distancia entre la posición aleatoria y la posición del jugador
-        distanciaAlJugador = Math.hypot(
-          posX - this.player.container.x,
-          posY - this.player.container.y
-        );
-
-        // Si la distancia es suficiente, crea el enemigo en esa posición
-        if (distanciaAlJugador >= distanciaMinima) {
-          const tipoAleatorio = tiposDeEnemigos[Math.floor(Math.random() * tiposDeEnemigos.length)];
-          //let velocidad = Math.random() * 0.2 + 0.5;
-          enemigo = new Enemigo(posX, posY, 1, this, `enemigo_${i}`, tipoAleatorio);
-          this.enemigos.push(enemigo);
-          this.grid.add(enemigo);
-          break;
-        }
-
-        intentos++;
-      } while (intentos < maxIntentos);
+    if (!this.boss) {
+      console.log("Se crearon " + cant + " enemigos");
+      const distanciaMinima = 600; // Ajusta este valor según lo lejos que quieras que estén los enemigos del jugador
+      const maxIntentos = 999; // Máximo número de intentos para evitar loops infinitos
+      var tiposDeEnemigos = [];
+      var asesinatos = this.player.asesinatos;
+      if (asesinatos < 20) {
+        tiposDeEnemigos = ['tipo1'];
+      } else if (asesinatos == 20) {
+        tiposDeEnemigos = ['tipo2'];
+        cant = 1;
+      } else if (asesinatos > 20 && asesinatos < 30) {
+        tiposDeEnemigos = ['tipo1', 'tipo2'];
+      } else if (asesinatos == 30) {
+        tiposDeEnemigos = ['tipo3'];
+        cant = 1;
+      } else if(asesinatos > 30){
+        tiposDeEnemigos = ['tipo1', 'tipo2','tipo3'];
+      }
+      for (let i = 0; i < cant; i++) {
+        let enemigo;
+        let intentos = 0;
+        let distanciaAlJugador = 0;
 
 
-      // Si no logró encontrar una posición adecuada en los intentos permitidos, ignora ese enemigo.
+        do {
+          // Generar una posición aleatoria
+          const posX = 50 + Math.random() * (this.canvasWidth - 300);
+          const posY = 200 + Math.random() * (this.canvasHeight - 500);
+
+          // Calcular la distancia entre la posición aleatoria y la posición del jugador
+          distanciaAlJugador = Math.hypot(
+            posX - this.player.container.x,
+            posY - this.player.container.y
+          );
+
+          // Si la distancia es suficiente, crea el enemigo en esa posición
+          if (distanciaAlJugador >= distanciaMinima) {
+            const tipoAleatorio = tiposDeEnemigos[Math.floor(Math.random() * tiposDeEnemigos.length)];
+            console.log(tipoAleatorio);
+            //let velocidad = Math.random() * 0.2 + 0.5;
+            enemigo = new Enemigo(posX, posY, 1, this, `enemigo_${i}`, tipoAleatorio);
+            this.enemigos.push(enemigo);
+            this.grid.add(enemigo);
+            break;
+          }
+
+          intentos++;
+        } while (intentos < maxIntentos);
+
+
+        // Si no logró encontrar una posición adecuada en los intentos permitidos, ignora ese enemigo.
+      }
     }
   }
 
@@ -160,6 +169,10 @@ class Juego {
       // Verifica si se presionó la tecla "r"
       if (e.key.toLowerCase() === 'r') {
         this.player.recargar(); // Llama a la función que quieres ejecutar
+      }
+      if(e.key.toLowerCase() === 'enter'){
+        this.iniciarEnemigos();
+        this.hud.borrarDelHud(this.hud.pressStart);
       }
     });
 

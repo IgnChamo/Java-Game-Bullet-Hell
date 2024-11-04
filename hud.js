@@ -6,6 +6,7 @@ class HUD {
         this.container.zIndex = 99999;
 
         //vida
+        
         this.asesinato = PIXI.Texture.from('./img/Asesinatos.png');
 
         this.vidas5 = PIXI.Texture.from('./img/Life05.png');
@@ -22,7 +23,7 @@ class HUD {
         this.juego.hudContainer.addChild(this.container);
 
         this.balasSprites = [];
-        this.balasTotales = 7;
+        this.balasTotales = 6;
 
         this.puntaje = new PIXI.Text("", { fontFamily: 'Press Start 2P', fontSize: 50,padding: 20, fill: 0x000000 });
         this.puntaje.position.set(this.juego.app.screen.width * 0.92, 95)
@@ -58,6 +59,10 @@ class HUD {
         this.pistolaTexture.position.set(this.juego.app.screen.width * 0.05, 100);
         this.pistolaTexture.scale.set(0.7,0.7);
         this.container.addChild(this.pistolaTexture);
+
+        this.pressStart = new PIXI.Text("Press ENTER to Start ", { fontFamily: 'Press Start 2P', fontSize: 50, fill: 0x000000 });
+        this.pressStart.position.set(this.juego.app.screen.width * 0.25, 750);
+        this.container.addChild(this.pressStart);
 
         console.log("Se creo el hud");
 
@@ -98,6 +103,7 @@ class HUD {
         this.nivel.position.set(this.juego.app.screen.width * 0.5, 25);
         this.vida.position.set(this.juego.app.screen.width * 0.05, 25);
         this.pistolaTexture.position.set(this.juego.app.screen.width * 0.05, 100);
+        this.pressStart.position.set(this.juego.app.screen.width * 0.25, 750);
 
         let xPos = this.juego.app.screen.width * 0.11;
         const yPos = 88;
@@ -151,6 +157,14 @@ class HUD {
         this.juego.player.balas = this.juego.player.balasTotales;
         this.actualizarBalasTotales(this.juego.player.balasTotales);
 
+    }
+
+    borrarDelHud(variable){
+        if (variable) {
+            this.container.removeChild(variable);
+            variable.destroy();
+            variable = null;
+        }
     }
 
     //this.juego.hud.actualizarBalasTotales(this.juego.balasTotales += 1);  linea para agregar donde se creen mas balas(PowerUp o lo que sea)
