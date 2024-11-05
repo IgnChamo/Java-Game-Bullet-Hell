@@ -76,8 +76,9 @@ class Player extends Objeto {
     setTimeout(() => {
       this.balas = this.juego.balasTotales;
       this.recargando = false;
+      this.juego.hud.recargar();
     }, this.tiempoRecarga);
-    this.juego.hud.recargar();
+    this.recarga.recarga();
   }
 
   update() {

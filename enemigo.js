@@ -6,10 +6,15 @@ const configuracionEnemigos = {
     velocidadSprite: 1,
     spriteX: 32,
     spriteY: 32,
-    scale: (1,1),
+    scale: (1, 1),
     sprites: {
       idle: "./img/isacc_idle.png",
       morir: "./img/isacc_muerte.png",
+    },
+    habilidadSprint: {
+      duracion: 0,
+      velocidadSprint: 0,
+      distanciaSprint: 0,
     },
   },
   tipo2: {
@@ -18,10 +23,15 @@ const configuracionEnemigos = {
     velocidadSprite: 1,
     spriteX: 64,
     spriteY: 64,
-    scale: (0.1,0.8),
+    scale: (0.1, 0.8),
     sprites: {
       idle: "./img/perrito_run.png",
       morir: "./img/perrito_muerte.png",
+    },
+    habilidadSprint: {
+      duracion: 0,
+      velocidadSprint: 0,
+      distanciaSprint: 0,
     },
   },
   tipo3: {
@@ -30,49 +40,79 @@ const configuracionEnemigos = {
     velocidadSprite: 1,
     spriteX: 64,
     spriteY: 64,
-    scale: (1,1),
+    scale: (1, 1),
     sprites: {
       idle: "./img/cabezon_run.png",
       morir: "./img/cabezon_muerte.png",
     },
+    habilidadSprint: {
+      duracion: 0,
+      velocidadSprint: 0,
+      distanciaSprint: 0,
+    },
+  },
+  tipo4: {
+    vida: 6,
+    velocidad: 0.9,
+    velocidadSprite: 1,
+    spriteX: 32,
+    spriteY: 56,
+    scale: (1, 1),
+    sprites: {
+      idle: "./img/miniboss2_run.png",
+      morir: "./img/miniboss2_habilidad.png",
+    },
+    habilidadSprint: {
+      duracion: 0,
+      velocidadSprint: 0,
+      distanciaSprint: 600,
+    },
   },
 };
 
- class Enemigo extends Objeto {
-    constructor(x, y, velocidad, juego, id, tipo) {
-      const config = configuracionEnemigos[tipo];
-      super(x, y, config.velocidad, juego);
-      this.equipoParaUpdate = Math.floor(Math.random() * 9) + 1;
-      this.juego = juego;
-      this.grid = juego.grid;
-      this.vision = 9999 + Math.floor(Math.random() * 150);
-      this.vida = config.vida;
-      this.debug = 0;
-      this.tiempoPostMorten = 3000;
-      this.nombre = id;
-      this.tipo = tipo;
-      this.container.scale.set(config.scale); 
+class Enemigo extends Objeto {
+  constructor(x, y, velocidad, juego, id, tipo) {
+    const config = configuracionEnemigos[tipo];
+    super(x, y, config.velocidad, juego);
+    this.equipoParaUpdate = Math.floor(Math.random() * 9) + 1;
+    this.velocidadConfig = config.velocidad;
+    this.juego = juego;
+    this.grid = juego.grid;
+    this.vision = 9999 + Math.floor(Math.random() * 150);
+    this.vida = config.vida;
+    this.debug = 0;
+    this.tiempoPostMorten = 3000;
+    this.nombre = id;
+    this.tipo = tipo;
+    this.container.scale.set(config.scale);
+    //variables miniboss
+    this.duracionPowerUp = 2; //FRAMES
+    this.potenciaPowerUp = 2;
+    this.timer = this.duracionPowerUp;
+    this.habilidadSprintActivo = false;
 
-      this.cargarVariosSpritesAnimados(
-        {
-          idle: config.sprites.idle,
-          morir: config.sprites.morir,
-        },
-        config.spriteX,
-        config.spriteY,
-        config.velocidadSprite * 0.1,
+    
 
-        (e) => {
-          this.listo = true;
-          this.cambiarSprite("idle");
-        }
-        
-      );   
-      this.estados = { IDLE: 0, YENDO_AL_PLAYER: 1, ATACANDO: 2 };
-      this.estado = this.estados.IDLE;
-  
-      this.juego.gameContainer.addChild(this.container);
-    }
+    this.cargarVariosSpritesAnimados(
+      {
+        idle: config.sprites.idle,
+        morir: config.sprites.morir,
+      },
+      config.spriteX,
+      config.spriteY,
+      config.velocidadSprite * 0.1,
+
+      (e) => {
+        this.listo = true;
+        this.cambiarSprite("idle");
+      }
+
+    );
+    this.estados = { IDLE: 0, YENDO_AL_PLAYER: 1, ATACANDO: 2,SPRINTANDO: 3 };
+    this.estado = this.estados.IDLE;
+
+    this.juego.gameContainer.addChild(this.container);
+  }
 
   recibirTiro() {
     this.vida -= 1;
@@ -86,13 +126,19 @@ const configuracionEnemigos = {
       this.juego.player.asesinatos += 1;
       this.juego.player.puntaje += 2;
       this.juego.hud.actualizarHud();
-
+      console.log("el miniboss es "+ this.juego.miniBossCreado)
+      if(this.juego.miniBossCreado){
+        this.juego.ponerEnemigos(1);
+      }else{
       this.juego.ponerEnemigos(Math.floor(Math.random() * 3) + 1);
-      
+      }
+      if(this.tipo === 'tipo4'){
+        this.juego.miniBossCreado = false;
+      }
       //this.juego.hud.actualizarBalas();
       setTimeout(() => {
         this.desaparecer();
-      }, this.tiempoPostMorten); 
+      }, this.tiempoPostMorten);
       // sprite.animationSpeed=0.001
 
     } else {
@@ -126,6 +172,21 @@ const configuracionEnemigos = {
     }
   }
 
+  activarSprint() {
+    if (this.tipo === "tipo4" && !this.habilidadSprintActivo) {
+      const config = configuracionEnemigos[this.tipo].habilidadSprint;
+      this.habilidadSprintActivo = true;
+      console.log("habilidadActiva " +  this.habilidadSprintActivo);
+      this.velocidadSprint = config.velocidadSprint;
+      this.estado = this.estados.SPRINTANDO;
+      this.sprintStartTime = Date.now();
+      setTimeout(() => {
+        this.habilidadSprintActivo = false;
+        console.log("habilidadActiva " +  this.habilidadSprintActivo);
+      }, 2000);
+    }
+  }
+
   hacerCosasSegunEstado() {
     let vecAtraccionAlPlayer,
       vecSeparacion,
@@ -137,6 +198,23 @@ const configuracionEnemigos = {
 
     bordes = this.ajustarPorBordes();
 
+    const distanciaAlPlayer = calculoDeDistanciaRapido(
+      this.container.x,
+      this.container.y,
+      this.juego.player.container.x,
+      this.juego.player.container.y
+    );
+
+    // Si la distancia al jugador es menor que el umbral de activación de sprint
+    const distanciaSprint = configuracionEnemigos[this.tipo].habilidadSprint.distanciaSprint;
+    
+    if (distanciaAlPlayer < distanciaSprint
+
+    ) {
+      this.activarSprint();
+      console.log("Se activo Sprint");
+    }
+
     if (this.estado == this.estados.YENDO_AL_PLAYER) {
       vecAtraccionAlPlayer = this.atraccionAlJugador();
       this.cambiarSprite("idle");
@@ -145,11 +223,24 @@ const configuracionEnemigos = {
       vecCohesion = this.cohesion(this.vecinos);
 
       this.cambiarSprite("idle");
+    } else if (this.estado === this.estados.SPRINTANDO) {
+      this.velocidadMax = this.potenciaPowerUp;
+      this.timer--;
+      console.log(this.timer);
+      // Si se acaba el timer, cambiamos el estado a NORMAL.
+      if (this.timer == 0) {
+        this.timer = this.duracionPowerUp;
+        this.estado = this.estado.IDLE;
+        this.velocidadMax = this.velocidadConfig;
+        console.log("Se acabo power up!");
+        return;
+      }
+    
     }
-
     if (
       this.estado == this.estados.IDLE ||
-      this.estado == this.estados.YENDO_AL_PLAYER
+      this.estado == this.estados.YENDO_AL_PLAYER ||
+      this.estado === this.estados.SPRINTANDO
     ) {
       vecSeparacion = this.separacion(this.vecinos);
 
@@ -183,7 +274,7 @@ const configuracionEnemigos = {
       //this.atacar();
     }
   }
-  
+
   update() {
     if (!this.listo) return;
     if (this.juego.contadorDeFrames % this.equipoParaUpdate == 0) {
@@ -244,7 +335,7 @@ const configuracionEnemigos = {
     vecDistancia.y = vecNormalizado.y;
     return vecDistancia;
   }
-  repulsionAlJugador(){
+  repulsionAlJugador() {
     const vecDistancia = new PIXI.Point(
       this.juego.player.container.x - this.container.x,
       this.juego.player.container.y - this.container.y
@@ -332,23 +423,23 @@ const configuracionEnemigos = {
     let fuerza = new PIXI.Point(0, 0);
     const margen = 50;
 
-   
+
     if (this.container.x < margen) {
-        this.container.x = margen;
-        fuerza.x = 1;
+      this.container.x = margen;
+      fuerza.x = 1;
     }
     if (this.container.x > this.juego.canvaswidth - margen) {
-        this.container.x = this.juego.canvaswidth - margen;
-        fuerza.x = -1;
+      this.container.x = this.juego.canvaswidth - margen;
+      fuerza.x = -1;
     }
 
     if (this.container.y < margen) {
-        this.container.y = margen;
-        fuerza.y = 1;
+      this.container.y = margen;
+      fuerza.y = 1;
     }
     if (this.container.y > this.juego.canvasHeight - margen) {
-        this.container.y = this.juego.canvasHeight - margen; 
-        fuerza.y = -1; 
+      this.container.y = this.juego.canvasHeight - margen;
+      fuerza.y = -1;
     }
 
     return fuerza;

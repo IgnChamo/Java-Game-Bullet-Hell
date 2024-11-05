@@ -5,10 +5,11 @@ class Recarga {
         this.cargarVariosSpritesAnimados(
             {
                 Activo: "./img/recargar.png",
+                Recargando: "./img/recargando.png",
             },
             64,
             64,
-            0.05,
+            0.09,
             (e) => {
                 this.listo = true;
                 this.cambiarSprite("Activo");
@@ -20,7 +21,15 @@ class Recarga {
         this.container.visible = true;
 
     }
-
+    recarga(){
+        this.cambiarSprite("Recargando");
+        let spriteRecarga = this.spritesAnimados["Recargando"];
+        spriteRecarga.gotoAndPlay(0);
+        spriteRecarga.loop = false;  
+        setTimeout(() => {
+            this.cambiarSprite("Activo");
+          }, this.juego.player.tiempoRecarga);
+    }
     actualizarPosicion() {
 
         this.container.x = this.juego.player.container.x;

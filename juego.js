@@ -28,7 +28,9 @@ class Juego {
     this.companions = [];
     this.start = true;
     this.nivel = 1;
+    this.miniBossCreado = false;
     this.boss = false; // Se pondra en True cuando aparezca el boss, esto no dejara que se sigan creando enemigos en esa etapa.
+
 
     this.keyboard = {};
 
@@ -62,6 +64,7 @@ class Juego {
       window.innerHeight * 0.9,
       this
     );
+    this.hud.actualizarHud();
   }
   ponerCompanion() {
     this.companions.push(new Companion(
@@ -95,26 +98,30 @@ class Juego {
       console.log("Se crearon " + cant + " enemigos");
       const distanciaMinima = 600; // Ajusta este valor según lo lejos que quieras que estén los enemigos del jugador
       const maxIntentos = 999; // Máximo número de intentos para evitar loops infinitos
-      var tiposDeEnemigos = [];
-      var asesinatos = this.player.asesinatos;
-      if (asesinatos < 20) {
-        tiposDeEnemigos = ['tipo1'];
-      } else if (asesinatos == 20) {
-        tiposDeEnemigos = ['tipo2'];
-        cant = 1;
-      } else if (asesinatos > 20 && asesinatos < 30) {
-        tiposDeEnemigos = ['tipo1', 'tipo2'];
-      } else if (asesinatos == 30) {
-        tiposDeEnemigos = ['tipo3'];
-        cant = 1;
-      } else if (asesinatos > 30) {
-        tiposDeEnemigos = ['tipo1', 'tipo2', 'tipo3'];
-      }
+      
+
       for (let i = 0; i < cant; i++) {
         let enemigo;
         let intentos = 0;
         let distanciaAlJugador = 0;
-
+        var tiposDeEnemigos = [];
+        var asesinatos = this.player.asesinatos;
+        if((asesinatos == 3 ) && !this.miniBossCreado){
+          tiposDeEnemigos = ['tipo4'];
+        }
+        else if (asesinatos < 20) {
+          tiposDeEnemigos = ['tipo1'];
+        } else if (asesinatos == 20) {
+          tiposDeEnemigos = ['tipo2'];
+          cant = 1;
+        } else if (asesinatos > 20 && asesinatos < 30) {
+          tiposDeEnemigos = ['tipo1', 'tipo2'];
+        } else if (asesinatos == 30) {
+          tiposDeEnemigos = ['tipo3'];
+          cant = 1;
+        } else if (asesinatos > 30) {
+          tiposDeEnemigos = ['tipo1', 'tipo2', 'tipo3'];
+        }
 
         do {
           // Generar una posición aleatoria
@@ -131,18 +138,21 @@ class Juego {
           if (distanciaAlJugador >= distanciaMinima) {
             const tipoAleatorio = tiposDeEnemigos[Math.floor(Math.random() * tiposDeEnemigos.length)];
             console.log(tipoAleatorio);
+
+            if (tipoAleatorio === 'tipo4') {
+              this.miniBossCreado = true; 
+            }
             //let velocidad = Math.random() * 0.2 + 0.5;
             enemigo = new Enemigo(posX, posY, 1, this, `enemigo_${i}`, tipoAleatorio);
             this.enemigos.push(enemigo);
             this.grid.add(enemigo);
             break;
           }
-
+          
           intentos++;
         } while (intentos < maxIntentos);
-
-
-        // Si no logró encontrar una posición adecuada en los intentos permitidos, ignora ese enemigo.
+        
+        
       }
     }
   }
