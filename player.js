@@ -145,7 +145,10 @@ class Player extends Objeto {
     } else {
       this.cambiarSprite("idle");
     }
-
+    if(this.vidas === 0){
+      this.juego.perdiste = true;
+      this.juego.hud.derrota.visible = true;
+    }
 
 
     super.update();

@@ -46,7 +46,7 @@ class HUD {
         this.container.addChild(this.asesinato);
 
         this.nivel = new PIXI.Text("Nivel ", { fontFamily: 'Press Start 2P', fontSize: 20, fill: 0x000000 });
-        this.nivel.position.set(this.juego.app.screen.width * 0.5, 26);
+        this.nivel.position.set(this.juego.app.screen.width * 0.46, 26);
         this.container.addChild(this.nivel);
 
         this.vida = new PIXI.Sprite(this.vidas5);
@@ -63,6 +63,11 @@ class HUD {
         this.pressStart = new PIXI.Text("Press ENTER to Start ", { fontFamily: 'Press Start 2P', fontSize: 50, fill: 0x000000 });
         this.pressStart.position.set(this.juego.app.screen.width * 0.25, 750);
         this.container.addChild(this.pressStart);
+
+        this.derrota = new PIXI.Text("YOU DIED", { fontFamily: 'Press Start 2P', fontSize: 50, fill: 0x000000 });
+        this.derrota.position.set(this.juego.app.screen.width * 0.4, this.juego.app.screen.height * 0.5);
+        this.derrota.visible = false;
+        this.container.addChild(this.derrota);
 
         console.log("Se creo el hud");
 
@@ -100,7 +105,7 @@ class HUD {
         this.punt.position.set(this.juego.app.screen.width * 0.9, 85);
         this.asesinatos.position.set(this.juego.app.screen.width * 0.92, 25);
         this.asesinato.position.set(this.juego.app.screen.width * 0.9, 10);
-        this.nivel.position.set(this.juego.app.screen.width * 0.5, 25);
+        this.nivel.position.set(this.juego.app.screen.width * 0.46, 25);
         this.vida.position.set(this.juego.app.screen.width * 0.05, 25);
         this.pistolaTexture.position.set(this.juego.app.screen.width * 0.05, 100);
         if(this.juego.start){
@@ -113,6 +118,8 @@ class HUD {
             this.balasSprites[i].position.set(xPos, yPos);
             xPos += 40;
         }
+
+        this.derrota.position.set(this.juego.app.screen.width * 0.4, this.juego.app.screen.height * 0.5);
     }
 
     crearBalas() {

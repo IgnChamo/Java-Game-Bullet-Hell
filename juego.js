@@ -30,6 +30,7 @@ class Juego {
     this.nivel = 1;
     this.miniBossCreado = false;
     this.boss = false; // Se pondra en True cuando aparezca el boss, esto no dejara que se sigan creando enemigos en esa etapa.
+    this.perdiste = false;
 
 
     this.keyboard = {};
@@ -98,7 +99,7 @@ class Juego {
       console.log("Se crearon " + cant + " enemigos");
       const distanciaMinima = 600; // Ajusta este valor según lo lejos que quieras que estén los enemigos del jugador
       const maxIntentos = 999; // Máximo número de intentos para evitar loops infinitos
-      
+
 
       for (let i = 0; i < cant; i++) {
         let enemigo;
@@ -106,7 +107,7 @@ class Juego {
         let distanciaAlJugador = 0;
         var tiposDeEnemigos = [];
         var asesinatos = this.player.asesinatos;
-        if((asesinatos == 3 ) && !this.miniBossCreado){
+        if ((asesinatos == 3) && !this.miniBossCreado) {
           tiposDeEnemigos = ['tipo4'];
         }
         else if (asesinatos < 20) {
@@ -140,7 +141,7 @@ class Juego {
             console.log(tipoAleatorio);
 
             if (tipoAleatorio === 'tipo4') {
-              this.miniBossCreado = true; 
+              this.miniBossCreado = true;
             }
             //let velocidad = Math.random() * 0.2 + 0.5;
             enemigo = new Enemigo(posX, posY, 1, this, `enemigo_${i}`, tipoAleatorio);
@@ -148,11 +149,11 @@ class Juego {
             this.grid.add(enemigo);
             break;
           }
-          
+
           intentos++;
         } while (intentos < maxIntentos);
-        
-        
+
+
       }
     }
   }
@@ -219,24 +220,26 @@ class Juego {
   }
 
   actualizar() {
-    if (this.pausa) return;
-    this.updateIndicator();
-    this.contadorDeFrames++;
+    if (!this.perdiste) {
+      if (this.pausa) return;
+      this.updateIndicator();
+      this.contadorDeFrames++;
 
-    this.player.update();
-    this.companions.forEach((compa) => {
-      compa.update();
-    })
+      this.player.update();
+      this.companions.forEach((compa) => {
+        compa.update();
+      })
 
-    this.enemigos.forEach((enemigo) => {
-      enemigo.update();
-    });
+      this.enemigos.forEach((enemigo) => {
+        enemigo.update();
+      });
 
-    this.balas.forEach((bala) => {
-      bala.update();
-    });
+      this.balas.forEach((bala) => {
+        bala.update();
+      });
 
-    this.moverCamara();
+      this.moverCamara();
+    }
     this.moverHUD();
   }
 
@@ -283,8 +286,15 @@ class Juego {
   updateIndicator() {
 
     if (this.enemigos.length > 0) {
+
+      const enemigoTipo4 = this.enemigos.find(enemigo => enemigo.tipo === 'tipo4');
+      if (!enemigoTipo4) {
+        this.indicador.container.visible = false;
+        return;
+      }
+
       const { x: playerX, y: playerY } = this.player.container;
-      const { x: enemyX, y: enemyY } = this.enemigos[0].container;
+      const { x: enemyX, y: enemyY } = enemigoTipo4.container;
 
       // Verifica si el enemigo está fuera de la vista de la cámara
       const enemyInView =
