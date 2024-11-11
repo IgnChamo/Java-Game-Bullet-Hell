@@ -126,7 +126,9 @@ class Juego {
           tiposDeEnemigos = ['tipo1', 'tipo2', 'tipo3'];
         }
 
-        do {
+
+
+        /*do {
           // Generar una posición aleatoria
           const posX = 50 + Math.random() * (this.canvasWidth - 300);
           const posY = 200 + Math.random() * (this.canvasHeight - 500);
@@ -153,13 +155,32 @@ class Juego {
           }
 
           intentos++;
-        } while (intentos < maxIntentos);
+        } while (intentos < maxIntentos);*/
 
 
       }
     }
   }
 
+  crearEnemigo(tipo,i){
+    // Generar una posición aleatoria
+    const posX = 50 + Math.random() * (this.canvasWidth - 300);
+    const posY = 200 + Math.random() * (this.canvasHeight - 500);
+
+    // Calcular la distancia entre la posición aleatoria y la posición del jugador
+    distanciaAlJugador = Math.hypot(
+      posX - this.player.container.x,
+      posY - this.player.container.y
+    );
+
+    // Si la distancia es suficiente, crea el enemigo en esa posición
+    if (distanciaAlJugador >= distanciaMinima) {
+      //let velocidad = Math.random() * 0.2 + 0.5;
+      enemigo = new Enemigo(posX, posY, 1, this, `enemigo_${i}`, tipo);
+      this.enemigos.push(enemigo);
+      this.grid.add(enemigo);
+    }
+  }
   mouseDownEvent() {
     this.companions.forEach((compa) => {
       compa.disparar();

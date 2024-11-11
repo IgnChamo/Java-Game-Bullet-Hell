@@ -36,7 +36,7 @@ const configuracionEnemigos = {
       morir: "./img/cabezon_muerte.png",
     },
   },
-  tipo4: {
+  tipo4: { // sprinter
     vida: 6,
     velocidad: 0.9,
     velocidadSprite: 1,
@@ -47,13 +47,13 @@ const configuracionEnemigos = {
       idle: "./img/miniboss2_run.png",
       morir: "./img/miniboss2_habilidad.png",
     },
-    habilidadSprint: {
+    habilidad: {
       duracion: 0,
       velocidadSprint: 0,
-      distanciaSprint: 600,
+      rango: 600,
     },
   },
-  tipo5: {
+  tipo5: { // shooter
     vida: 5,
     velocidad: 1,
     velocidadSprite: 1,
@@ -64,7 +64,7 @@ const configuracionEnemigos = {
       idle: "./img/miniboss2_run.png",
       morir: "./img/miniboss2_habilidad.png",
     },
-    habilidadDisparo: {
+    habilidad: {
       cantidad: 6, // Número de balas a disparar
       rango: 400,  // Distancia máxima de disparo
       velocidad: 2  // Velocidad de las balas
@@ -120,27 +120,7 @@ class Enemigo extends Objeto {
     this.juego.gameContainer.addChild(this.container);
   }
 
-  disparar() {
-    const config = configuracionEnemigos[this.tipo].habilidadDisparo;
-    const cantidad = config.cantidad;
-    const rango = config.rango;
-    const velocidad = config.velocidad;
-
-    if (!this.juego) {
-      console.error("Error: this.juego no está definido.");
-      return;
-    }
-
-    // Disparar balas en 6 direcciones
-    for (let i = 0; i < cantidad; i++) {
-      const angulo = (Math.PI * 2 / cantidad) * i;
-      const velocidadX = Math.cos(angulo) * velocidad;
-      const velocidadY = Math.sin(angulo) * velocidad;
-
-      const bala = new BalaEnemigo(this.container.x, this.container.y, this.juego, velocidadX, velocidadY, rango);
-      this.juego.balasEnemigos.push(bala);
-    }
-  }
+  
 
   recibirTiro() {
     this.vida -= 1;
@@ -200,7 +180,7 @@ class Enemigo extends Objeto {
     }
   }
 
-  habilidad() {
+  /*habilidad() {
     //tipo 4 sprint
     if (this.tipo === "tipo4" && !this.habilidadActivo) {
       const config = configuracionEnemigos[this.tipo].habilidadSprint;
@@ -226,7 +206,7 @@ class Enemigo extends Objeto {
         console.log("Habilidad de disparo desactivada");
       }, this.duracionDisparo);
     }
-  }
+  }*/
 
   hacerCosasSegunEstado() {
     let vecAtraccionAlPlayer,
@@ -247,7 +227,7 @@ class Enemigo extends Objeto {
     );
 
     // Si la distancia al jugador es menor que el umbral de activación de sprint
-    if (this.tipo === 'tipo4') {
+    /*if (this.tipo === 'tipo4') {
       const distanciaSprint = configuracionEnemigos[this.tipo].habilidadSprint.distanciaSprint;
       if (distanciaAlPlayer < distanciaSprint) {
         this.habilidad();
@@ -260,6 +240,10 @@ class Enemigo extends Objeto {
         this.habilidad();
         console.log("Se activo Disparo");
       }
+    }*/
+    const distanciaHabilidad = configuracionEnemigos[this.tipo].habilidad.rango;
+    if(distanciaAlPlayer<distanciaHabilidad){
+      this.habilidad();
     }
     
 
@@ -341,6 +325,10 @@ class Enemigo extends Objeto {
     } else {
       this.estado = this.estados.IDLE;
     }
+  }
+
+  habilidad(){
+    //hacer que el enemigo base gruña con un sonido agregar despues
   }
 
   atacar() {
@@ -492,4 +480,84 @@ class Enemigo extends Objeto {
 
     return fuerza;
   }
+}
+
+class MiniBossSprinter extends Enemigo{
+  constructor(x, y, velocidad, juego, id, tipo) {
+    super(x,y, velocidad,juego,id,tipo);
+    this.duracionPowerUp = 2; //FRAMES
+    this.potenciaPowerUp = 2;
+    this.timer = this.duracionPowerUp;
+    this.habilidadActivo = false;
+
+  }
+
+ 
+  habilidad(){
+    if (!this.habilidadActivo) {
+      const config = configuracionEnemigos[this.tipo].habilidadSprint;
+      this.habilidadActivo = true;
+      console.log("habilidadActiva " + this.habilidadActivo);
+      this.velocidadSprint = config.velocidadSprint;
+      this.estado = this.estados.SPRINTANDO;
+      this.sprintStartTime = Date.now();
+      setTimeout(() => {
+        this.habilidadActivo = false;
+        console.log("habilidadActiva " + this.habilidadActivo);
+      }, 2000);
+    }
+  }
+  
+}
+
+class MiniBossShooter extends Enemigo{
+  constructor(x, y, velocidad, juego, id, tipo) {
+    super(x,y, velocidad,juego,id,tipo);
+    this.duracionPowerUp = 2; //FRAMES
+    this.potenciaPowerUp = 2;
+    this.timer = this.duracionPowerUp;
+    this.habilidadActivo = false;
+
+    //disparo
+    this.timerDisparo = 0;
+    this.duracionDisparo = 1750;
+  }
+
+  habilidad(){
+    if(!this.habilidadActivo){
+      this.habilidadActivo = true;
+      this.estado = this.estados.DISPARANDO;
+
+      this.disparar();
+
+      setTimeout(() => {
+        this.habilidadActivo = false;
+        this.estado = this.estados.IDLE; 
+        console.log("Habilidad de disparo desactivada");
+      }, this.duracionDisparo);
+    }
+  }
+
+  disparar() {
+    const config = configuracionEnemigos[this.tipo].habilidadDisparo;
+    const cantidad = config.cantidad;
+    const rango = config.rango;
+    const velocidad = config.velocidad;
+
+    if (!this.juego) {
+      console.error("Error: this.juego no está definido.");
+      return;
+    }
+
+    // Disparar balas en 6 direcciones
+    for (let i = 0; i < cantidad; i++) {
+      const angulo = (Math.PI * 2 / cantidad) * i;
+      const velocidadX = Math.cos(angulo) * velocidad;
+      const velocidadY = Math.sin(angulo) * velocidad;
+
+      const bala = new BalaEnemigo(this.container.x, this.container.y, this.juego, velocidadX, velocidadY, rango);
+      this.juego.balasEnemigos.push(bala);
+    }
+  }
+
 }
