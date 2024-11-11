@@ -60,6 +60,71 @@ class Bala extends Objeto {
         objs[cual].recibirTiro();
         this.borrar();
       }
-    } //objs.length
-  } //update
+    } 
+  } 
+}
+
+
+class BalaEnemigo extends Objeto {
+  constructor(x, y, juego, velX, velY) {
+    super(x, y, 20, juego);
+    this.velocidad.x = velX;
+    this.velocidad.y = velY;
+
+    this.juego = juego;
+    this.grid = juego.grid; // Referencia a la grid
+    this.vision = 2;
+    // Cargar la textura del sprite desde el <img>
+    this.sprite = new PIXI.Sprite();
+    this.sprite.texture = PIXI.Texture.from("./bala.png");
+    this.container.addChild(this.sprite);
+
+    // Asegurarse de que el tamaño sea 25x25
+    this.sprite.width = 10;
+    this.sprite.height = 10;
+    this.debug = 0;
+
+    this.juego.app.stage.addChild(this.container);
+  }
+
+  update() {
+    super.update();
+
+    if (
+      this.container.x < 0 ||
+      this.container.y > this.juego.canvasHeight ||
+      this.container.y < 0 ||
+      this.container.x > this.juego.canvasWidth 
+    ) {
+      this.borrar();
+    }
+
+    let objs = Object.values(
+      (this.miCeldaActual || {}).objetosAca || {}
+    ).filter((k) => k instanceof Player);
+    if (objs.length > 0) {
+      let elEnemigoMasCercano;
+      let distMin = 99999;
+      let cual = null;
+      for (let i = 0; i < objs.length; i++) {
+        let dist = calculoDeDistanciaRapido(
+          this.container.x,
+          this.container.y,
+          objs[i].container.x,
+          objs[i].container.y
+        );
+        if (dist < distMin) {
+          distMin = dist;
+          cual = i;
+        }
+      } //for
+
+      if (cual != null && this.juego.player.status != this.juego.player.invincible) {
+        console.log("entro daño bala");
+        objs[cual].status.damage(1);
+        this.juego.hud.actualizarHudVida();
+        this.borrar();
+      }
+    } 
+  } 
 }

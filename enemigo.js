@@ -11,11 +11,6 @@ const configuracionEnemigos = {
       idle: "./img/isacc_idle.png",
       morir: "./img/isacc_muerte.png",
     },
-    habilidadSprint: {
-      duracion: 0,
-      velocidadSprint: 0,
-      distanciaSprint: 0,
-    },
   },
   tipo2: {
     vida: 1,
@@ -28,11 +23,6 @@ const configuracionEnemigos = {
       idle: "./img/perrito_run.png",
       morir: "./img/perrito_muerte.png",
     },
-    habilidadSprint: {
-      duracion: 0,
-      velocidadSprint: 0,
-      distanciaSprint: 0,
-    },
   },
   tipo3: {
     vida: 6,
@@ -44,11 +34,6 @@ const configuracionEnemigos = {
     sprites: {
       idle: "./img/cabezon_run.png",
       morir: "./img/cabezon_muerte.png",
-    },
-    habilidadSprint: {
-      duracion: 0,
-      velocidadSprint: 0,
-      distanciaSprint: 0,
     },
   },
   tipo4: {
@@ -68,6 +53,23 @@ const configuracionEnemigos = {
       distanciaSprint: 600,
     },
   },
+  tipo5: {
+    vida: 5,
+    velocidad: 1,
+    velocidadSprite: 1,
+    spriteX: 32,
+    spriteY: 56,
+    scale: (1, 1),
+    sprites: {
+      idle: "./img/miniboss2_run.png",
+      morir: "./img/miniboss2_habilidad.png",
+    },
+    habilidadDisparo: {
+      cantidad: 6, // Número de balas a disparar
+      rango: 400,  // Distancia máxima de disparo
+      velocidad: 2  // Velocidad de las balas
+    },
+  }
 };
 
 class Enemigo extends Objeto {
@@ -89,9 +91,13 @@ class Enemigo extends Objeto {
     this.duracionPowerUp = 2; //FRAMES
     this.potenciaPowerUp = 2;
     this.timer = this.duracionPowerUp;
-    this.habilidadSprintActivo = false;
+    this.habilidadActivo = false;
 
-    
+    //disparo
+    this.timerDisparo = 0;
+    this.duracionDisparo = 1750;
+
+
 
     this.cargarVariosSpritesAnimados(
       {
@@ -108,10 +114,32 @@ class Enemigo extends Objeto {
       }
 
     );
-    this.estados = { IDLE: 0, YENDO_AL_PLAYER: 1, ATACANDO: 2,SPRINTANDO: 3 };
+    this.estados = { IDLE: 0, YENDO_AL_PLAYER: 1, ATACANDO: 2, SPRINTANDO: 3 };
     this.estado = this.estados.IDLE;
 
     this.juego.gameContainer.addChild(this.container);
+  }
+
+  disparar() {
+    const config = configuracionEnemigos[this.tipo].habilidadDisparo;
+    const cantidad = config.cantidad;
+    const rango = config.rango;
+    const velocidad = config.velocidad;
+
+    if (!this.juego) {
+      console.error("Error: this.juego no está definido.");
+      return;
+    }
+
+    // Disparar balas en 6 direcciones
+    for (let i = 0; i < cantidad; i++) {
+      const angulo = (Math.PI * 2 / cantidad) * i;
+      const velocidadX = Math.cos(angulo) * velocidad;
+      const velocidadY = Math.sin(angulo) * velocidad;
+
+      const bala = new BalaEnemigo(this.container.x, this.container.y, this.juego, velocidadX, velocidadY, rango);
+      this.juego.balasEnemigos.push(bala);
+    }
   }
 
   recibirTiro() {
@@ -126,13 +154,13 @@ class Enemigo extends Objeto {
       this.juego.player.asesinatos += 1;
       this.juego.player.puntaje += 2;
       this.juego.hud.actualizarHud();
-      console.log("el miniboss es "+ this.juego.miniBossCreado)
-      if(this.juego.miniBossCreado){
+      console.log("el miniboss es " + this.juego.miniBossCreado)
+      if (this.juego.miniBossCreado) {
         this.juego.ponerEnemigos(1);
-      }else{
-      this.juego.ponerEnemigos(Math.floor(Math.random() * 3) + 1);
+      } else {
+        this.juego.ponerEnemigos(Math.floor(Math.random() * 3) + 1);
       }
-      if(this.tipo === 'tipo4'){
+      if (this.tipo === 'tipo5') {
         this.juego.miniBossCreado = false;
       }
       //this.juego.hud.actualizarBalas();
@@ -172,18 +200,31 @@ class Enemigo extends Objeto {
     }
   }
 
-  activarSprint() {
-    if (this.tipo === "tipo4" && !this.habilidadSprintActivo) {
+  habilidad() {
+    //tipo 4 sprint
+    if (this.tipo === "tipo4" && !this.habilidadActivo) {
       const config = configuracionEnemigos[this.tipo].habilidadSprint;
-      this.habilidadSprintActivo = true;
-      console.log("habilidadActiva " +  this.habilidadSprintActivo);
+      this.habilidadActivo = true;
+      console.log("habilidadActiva " + this.habilidadActivo);
       this.velocidadSprint = config.velocidadSprint;
       this.estado = this.estados.SPRINTANDO;
       this.sprintStartTime = Date.now();
       setTimeout(() => {
-        this.habilidadSprintActivo = false;
-        console.log("habilidadActiva " +  this.habilidadSprintActivo);
+        this.habilidadActivo = false;
+        console.log("habilidadActiva " + this.habilidadActivo);
       }, 2000);
+    }
+    if(this.tipo === "tipo5" && !this.habilidadActivo){
+      this.habilidadActivo = true;
+      this.estado = this.estados.DISPARANDO;
+
+      this.disparar();
+
+      setTimeout(() => {
+        this.habilidadActivo = false;
+        this.estado = this.estados.IDLE; 
+        console.log("Habilidad de disparo desactivada");
+      }, this.duracionDisparo);
     }
   }
 
@@ -206,14 +247,21 @@ class Enemigo extends Objeto {
     );
 
     // Si la distancia al jugador es menor que el umbral de activación de sprint
-    const distanciaSprint = configuracionEnemigos[this.tipo].habilidadSprint.distanciaSprint;
-    
-    if (distanciaAlPlayer < distanciaSprint
-
-    ) {
-      this.activarSprint();
-      console.log("Se activo Sprint");
+    if (this.tipo === 'tipo4') {
+      const distanciaSprint = configuracionEnemigos[this.tipo].habilidadSprint.distanciaSprint;
+      if (distanciaAlPlayer < distanciaSprint) {
+        this.habilidad();
+        console.log("Se activo Sprint");
+      }
     }
+    if(this.tipo === 'tipo5'){
+      const distanciaDisparo = configuracionEnemigos[this.tipo].habilidadDisparo.rango;
+      if (distanciaAlPlayer < distanciaDisparo) {
+        this.habilidad();
+        console.log("Se activo Disparo");
+      }
+    }
+    
 
     if (this.estado == this.estados.YENDO_AL_PLAYER) {
       vecAtraccionAlPlayer = this.atraccionAlJugador();
@@ -235,7 +283,7 @@ class Enemigo extends Objeto {
         console.log("Se acabo power up!");
         return;
       }
-    
+
     }
     if (
       this.estado == this.estados.IDLE ||
@@ -266,7 +314,7 @@ class Enemigo extends Objeto {
       this.velocidad.y = 0;
       //this.juego.player.vidas -= 1;
       this.juego.player.status.damage(1);
-      this.juego.hud.actualizarHudVida()
+      this.juego.hud.actualizarHudVida();
       vecAtraccionAlPlayer = this.repulsionAlJugador();
       setTimeout(() => {
         vecAtraccionAlPlayer = this.atraccionAlJugador()

@@ -25,6 +25,8 @@ class Juego {
     this.balas = [];
     this.balasTotales = 6;
 
+    this.balasEnemigos = [];
+
     this.companions = [];
     this.start = true;
     this.nivel = 1;
@@ -108,7 +110,7 @@ class Juego {
         var tiposDeEnemigos = [];
         var asesinatos = this.player.asesinatos;
         if ((asesinatos == 3) && !this.miniBossCreado) {
-          tiposDeEnemigos = ['tipo4'];
+          tiposDeEnemigos = ['tipo5'];
         }
         else if (asesinatos < 20) {
           tiposDeEnemigos = ['tipo1'];
@@ -140,7 +142,7 @@ class Juego {
             const tipoAleatorio = tiposDeEnemigos[Math.floor(Math.random() * tiposDeEnemigos.length)];
             console.log(tipoAleatorio);
 
-            if (tipoAleatorio === 'tipo4') {
+            if (tipoAleatorio === 'tipo5') {
               this.miniBossCreado = true;
             }
             //let velocidad = Math.random() * 0.2 + 0.5;
@@ -237,6 +239,9 @@ class Juego {
       this.balas.forEach((bala) => {
         bala.update();
       });
+      this.balasEnemigos.forEach((bala) => {
+        bala.update();
+      })
 
       this.moverCamara();
     }
