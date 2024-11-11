@@ -45,7 +45,7 @@ class HUD {
         this.asesinato.scale.set(0.7,0.7);
         this.container.addChild(this.asesinato);
 
-        this.nivel = new PIXI.Text("Nivel ", { fontFamily: 'Press Start 2P', fontSize: 20, fill: 0x000000 });
+        this.nivel = new PIXI.Text("Level ", { fontFamily: 'Press Start 2P', fontSize: 20, fill: 0x000000 });
         this.nivel.position.set(this.juego.app.screen.width * 0.46, 26);
         this.container.addChild(this.nivel);
 
