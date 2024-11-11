@@ -11,6 +11,9 @@ const configuracionEnemigos = {
       idle: "./img/isacc_idle.png",
       morir: "./img/isacc_muerte.png",
     },
+    habilidad:{
+      rango: 99999,
+    },
   },
   tipo2: {
     vida: 1,
@@ -23,6 +26,9 @@ const configuracionEnemigos = {
       idle: "./img/perrito_run.png",
       morir: "./img/perrito_muerte.png",
     },
+    habilidad:{
+      rango: 99999,
+    },
   },
   tipo3: {
     vida: 6,
@@ -34,6 +40,9 @@ const configuracionEnemigos = {
     sprites: {
       idle: "./img/cabezon_run.png",
       morir: "./img/cabezon_muerte.png",
+    },
+    habilidad:{
+      rango: 99999,
     },
   },
   tipo4: { // sprinter
@@ -120,7 +129,7 @@ class Enemigo extends Objeto {
     this.juego.gameContainer.addChild(this.container);
   }
 
-  
+
 
   recibirTiro() {
     this.vida -= 1;
@@ -242,10 +251,11 @@ class Enemigo extends Objeto {
       }
     }*/
     const distanciaHabilidad = configuracionEnemigos[this.tipo].habilidad.rango;
-    if(distanciaAlPlayer<distanciaHabilidad){
+    if (distanciaAlPlayer < distanciaHabilidad) {
       this.habilidad();
     }
-    
+
+
 
     if (this.estado == this.estados.YENDO_AL_PLAYER) {
       vecAtraccionAlPlayer = this.atraccionAlJugador();
@@ -327,7 +337,7 @@ class Enemigo extends Objeto {
     }
   }
 
-  habilidad(){
+  habilidad() {
     //hacer que el enemigo base gruña con un sonido agregar despues
   }
 
@@ -482,9 +492,9 @@ class Enemigo extends Objeto {
   }
 }
 
-class MiniBossSprinter extends Enemigo{
+class MiniBossSprinter extends Enemigo {
   constructor(x, y, velocidad, juego, id, tipo) {
-    super(x,y, velocidad,juego,id,tipo);
+    super(x, y, velocidad, juego, id, tipo);
     this.duracionPowerUp = 2; //FRAMES
     this.potenciaPowerUp = 2;
     this.timer = this.duracionPowerUp;
@@ -492,10 +502,10 @@ class MiniBossSprinter extends Enemigo{
 
   }
 
- 
-  habilidad(){
+
+  habilidad() {
     if (!this.habilidadActivo) {
-      const config = configuracionEnemigos[this.tipo].habilidadSprint;
+      const config = configuracionEnemigos[this.tipo].habilidad;
       this.habilidadActivo = true;
       console.log("habilidadActiva " + this.habilidadActivo);
       this.velocidadSprint = config.velocidadSprint;
@@ -507,12 +517,12 @@ class MiniBossSprinter extends Enemigo{
       }, 2000);
     }
   }
-  
+
 }
 
-class MiniBossShooter extends Enemigo{
+class MiniBossShooter extends Enemigo {
   constructor(x, y, velocidad, juego, id, tipo) {
-    super(x,y, velocidad,juego,id,tipo);
+    super(x, y, velocidad, juego, id, tipo);
     this.duracionPowerUp = 2; //FRAMES
     this.potenciaPowerUp = 2;
     this.timer = this.duracionPowerUp;
@@ -523,8 +533,8 @@ class MiniBossShooter extends Enemigo{
     this.duracionDisparo = 1750;
   }
 
-  habilidad(){
-    if(!this.habilidadActivo){
+  habilidad() {
+    if (!this.habilidadActivo) {
       this.habilidadActivo = true;
       this.estado = this.estados.DISPARANDO;
 
@@ -532,14 +542,14 @@ class MiniBossShooter extends Enemigo{
 
       setTimeout(() => {
         this.habilidadActivo = false;
-        this.estado = this.estados.IDLE; 
+        this.estado = this.estados.IDLE;
         console.log("Habilidad de disparo desactivada");
       }, this.duracionDisparo);
     }
   }
 
   disparar() {
-    const config = configuracionEnemigos[this.tipo].habilidadDisparo;
+    const config = configuracionEnemigos[this.tipo].habilidad;
     const cantidad = config.cantidad;
     const rango = config.rango;
     const velocidad = config.velocidad;

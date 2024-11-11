@@ -42,6 +42,7 @@ class Juego {
     this.ponerFondo();
     this.ponerProtagonista();
     this.ponerIndicador();
+
     //this.iniciarEnemigos();
     this.ponerListeners();
 
@@ -128,7 +129,7 @@ class Juego {
 
 
 
-        /*do {
+        do {
           // Generar una posición aleatoria
           const posX = 50 + Math.random() * (this.canvasWidth - 300);
           const posY = 200 + Math.random() * (this.canvasHeight - 500);
@@ -144,18 +145,28 @@ class Juego {
             const tipoAleatorio = tiposDeEnemigos[Math.floor(Math.random() * tiposDeEnemigos.length)];
             console.log(tipoAleatorio);
 
+            switch(tipoAleatorio){
+              case 'tipo4':
+                enemigo = new MiniBossSprinter(posX, posY, 1, this, `enemigo_${i}`, tipoAleatorio);
+                break;
+              case 'tipo5':
+                enemigo = new MiniBossShooter(posX, posY, 1, this, `enemigo_${i}`, tipoAleatorio);
+                break;
+              default:
+                enemigo = new Enemigo(posX, posY, 1, this, `enemigo_${i}`, tipoAleatorio);
+                break;
+            }
             if (tipoAleatorio === 'tipo5') {
               this.miniBossCreado = true;
             }
             //let velocidad = Math.random() * 0.2 + 0.5;
-            enemigo = new Enemigo(posX, posY, 1, this, `enemigo_${i}`, tipoAleatorio);
             this.enemigos.push(enemigo);
             this.grid.add(enemigo);
             break;
           }
 
           intentos++;
-        } while (intentos < maxIntentos);*/
+        } while (intentos < maxIntentos);
 
 
       }
