@@ -87,17 +87,37 @@ class Player extends Objeto {
     this.vecinos = this.obtenerVecinos();
 
     if (this.juego.keyboard.a && this.container.x > 50) {
-      this.velocidad.x = -1;
+      if(this.juego.keyboard.w || this.juego.keyboard.s){
+        this.velocidad.x=-0.5;
+      }
+      else {
+        this.velocidad.x = -1;
+      }
     } else if (this.juego.keyboard.d && this.container.x < this.juego.canvasWidth - 50) {
-      this.velocidad.x = 1;
+      if(this.juego.keyboard.w || this.juego.keyboard.s){
+        this.velocidad.x=0.5;
+      }
+      else {
+        this.velocidad.x = 1;
+      }
     } else {
       this.velocidad.x = 0;
     }
 
     if (this.juego.keyboard.w && this.container.y > 200) {
-      this.velocidad.y = -1;
+      if(this.juego.keyboard.a || this.juego.keyboard.d){
+        this.velocidad.y=-0.5;
+      }
+      else {
+        this.velocidad.y = -1;
+      }
     } else if (this.juego.keyboard.s && this.container.y < this.juego.canvasHeight - 50) {
-      this.velocidad.y = 1;
+      if(this.juego.keyboard.a || this.juego.keyboard.d){
+        this.velocidad.y=0.5;
+      }
+      else {
+        this.velocidad.y = 1;
+      }
     } else {
       this.velocidad.y = 0;
     }
