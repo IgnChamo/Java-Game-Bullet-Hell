@@ -18,10 +18,11 @@ class Recarga {
         );
         this.container.x = x;
         this.container.y = y - 55;
-        this.container.visible = true;
+        this.container.visible = false;
 
     }
     recarga(){
+        this.container.visible = true;
         this.cambiarSprite("Recargando");
         let spriteRecarga = this.spritesAnimados["Recargando"];
         spriteRecarga.gotoAndPlay(0);
@@ -31,7 +32,6 @@ class Recarga {
           }, this.juego.player.tiempoRecarga);
     }
     actualizarPosicion() {
-
         this.container.x = this.juego.player.container.x;
         this.container.y = this.juego.player.container.y - 55;
     }

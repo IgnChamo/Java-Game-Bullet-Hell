@@ -77,6 +77,7 @@ class Player extends Objeto {
       this.balas = this.juego.balasTotales;
       this.recargando = false;
       this.juego.hud.recargar();
+      this.recarga.container.visible = false;
     }, this.tiempoRecarga);
     this.recarga.recarga();
   }
@@ -126,11 +127,8 @@ class Player extends Objeto {
 
     //recarga
 
-    if(this.balas < 1){
+    if(this.balas < 2){
       this.recarga.container.visible = true;
-      this.recarga.actualizarPosicion();
-    }else{
-      this.recarga.container.visible = false;
     }
     //cambio de animaciones
 
@@ -149,7 +147,8 @@ class Player extends Objeto {
       this.juego.perdiste = true;
       this.juego.hud.derrota.visible = true;
     }
-
+  
+    this.recarga.actualizarPosicion();
 
     super.update();
   }

@@ -67,10 +67,10 @@ class Bala extends Objeto {
 
 class BalaEnemigo extends Objeto {
   constructor(x, y, juego, velX, velY) {
-    super(x, y, 20, juego);
+    super(x, y, 5, juego);
     this.velocidad.x = velX;
     this.velocidad.y = velY;
-
+    
     this.juego = juego;
     this.grid = juego.grid; // Referencia a la grid
     this.vision = 2;
@@ -78,16 +78,18 @@ class BalaEnemigo extends Objeto {
     this.sprite = new PIXI.Sprite();
     this.sprite.texture = PIXI.Texture.from("./bala.png");
     this.container.addChild(this.sprite);
-
+    
     // Asegurarse de que el tamaño sea 25x25
     this.sprite.width = 10;
     this.sprite.height = 10;
     this.debug = 0;
-
+    
     this.juego.app.stage.addChild(this.container);
   }
 
   update() {
+    this.velocidad.x *= 0.5;
+    this.velocidad.y *= 0.5;
     super.update();
 
     if (

@@ -11,7 +11,7 @@ const configuracionEnemigos = {
       idle: "./img/isacc_idle.png",
       morir: "./img/isacc_muerte.png",
     },
-    habilidad:{
+    habilidad: {
       rango: 99999,
     },
   },
@@ -26,7 +26,7 @@ const configuracionEnemigos = {
       idle: "./img/perrito_run.png",
       morir: "./img/perrito_muerte.png",
     },
-    habilidad:{
+    habilidad: {
       rango: 99999,
     },
   },
@@ -41,7 +41,7 @@ const configuracionEnemigos = {
       idle: "./img/cabezon_run.png",
       morir: "./img/cabezon_muerte.png",
     },
-    habilidad:{
+    habilidad: {
       rango: 99999,
     },
   },
@@ -76,7 +76,24 @@ const configuracionEnemigos = {
     habilidad: {
       cantidad: 8, // Número de balas a disparar
       rango: 400,  // Distancia máxima de disparo
-      velocidad: 2  // Velocidad de las balas
+      velocidad: 1  // Velocidad de las balas
+    },
+  },
+  tipo6: { // shooter
+    vida: 5,
+    velocidad: 1,
+    velocidadSprite: 1,
+    spriteX: 32,
+    spriteY: 56,
+    scale: (1, 1),
+    sprites: {
+      idle: "./img/miniboss2_run.png",
+      morir: "./img/miniboss2_habilidad.png",
+    },
+    habilidad: {
+      cantidad: 4, // Número de balas a disparar
+      rango: 400,  // Distancia máxima de disparo
+      velocidad: 1  // Velocidad de las balas
     },
   }
 };
@@ -130,7 +147,11 @@ class Enemigo extends Objeto {
   }
 
 
-
+  habilitarHabilidad() {
+    setTimeout(() => {
+      this.habilidadActivo = false;
+    }, 1000);
+  }
   recibirTiro() {
     this.vida -= 1;
     if (this.vida <= 0) {
@@ -149,7 +170,7 @@ class Enemigo extends Objeto {
       } else {
         this.juego.ponerEnemigos(Math.floor(Math.random() * 3) + 1);
       }
-      if (this.tipo === 'tipo5') {
+      if (this.tipo === 'tipo4' || this.tipo === 'tipo5' || this.tipo === 'tipo6') {
         this.juego.miniBossCreado = false;
       }
       //this.juego.hud.actualizarBalas();
@@ -189,34 +210,6 @@ class Enemigo extends Objeto {
     }
   }
 
-  /*habilidad() {
-    //tipo 4 sprint
-    if (this.tipo === "tipo4" && !this.habilidadActivo) {
-      const config = configuracionEnemigos[this.tipo].habilidadSprint;
-      this.habilidadActivo = true;
-      console.log("habilidadActiva " + this.habilidadActivo);
-      this.velocidadSprint = config.velocidadSprint;
-      this.estado = this.estados.SPRINTANDO;
-      this.sprintStartTime = Date.now();
-      setTimeout(() => {
-        this.habilidadActivo = false;
-        console.log("habilidadActiva " + this.habilidadActivo);
-      }, 2000);
-    }
-    if(this.tipo === "tipo5" && !this.habilidadActivo){
-      this.habilidadActivo = true;
-      this.estado = this.estados.DISPARANDO;
-
-      this.disparar();
-
-      setTimeout(() => {
-        this.habilidadActivo = false;
-        this.estado = this.estados.IDLE; 
-        console.log("Habilidad de disparo desactivada");
-      }, this.duracionDisparo);
-    }
-  }*/
-
   hacerCosasSegunEstado() {
     let vecAtraccionAlPlayer,
       vecSeparacion,
@@ -235,23 +228,9 @@ class Enemigo extends Objeto {
       this.juego.player.container.y
     );
 
-    // Si la distancia al jugador es menor que el umbral de activación de sprint
-    /*if (this.tipo === 'tipo4') {
-      const distanciaSprint = configuracionEnemigos[this.tipo].habilidadSprint.distanciaSprint;
-      if (distanciaAlPlayer < distanciaSprint) {
-        this.habilidad();
-        console.log("Se activo Sprint");
-      }
-    }
-    if(this.tipo === 'tipo5'){
-      const distanciaDisparo = configuracionEnemigos[this.tipo].habilidadDisparo.rango;
-      if (distanciaAlPlayer < distanciaDisparo) {
-        this.habilidad();
-        console.log("Se activo Disparo");
-      }
-    }*/
     const distanciaHabilidad = configuracionEnemigos[this.tipo].habilidad.rango;
     if (distanciaAlPlayer < distanciaHabilidad) {
+      this.velocidadMax = this.velocidadConfig;
       this.habilidad();
     }
 
@@ -541,7 +520,7 @@ class MiniBossShooter extends Enemigo {
       this.disparar();
 
       setTimeout(() => {
-        this.habilidadActivo = false;
+        this.habilitarHabilidad();
         this.estado = this.estados.IDLE;
         console.log("Habilidad de disparo desactivada");
       }, this.duracionDisparo);
@@ -570,5 +549,62 @@ class MiniBossShooter extends Enemigo {
       this.juego.balasEnemigos.push(bala);
     }
   }
+}
+class MiniBossShooterX extends Enemigo {
+  constructor(x, y, velocidad, juego, id, tipo) {
+    super(x, y, velocidad, juego, id, tipo);
+    this.duracionPowerUp = 2; //FRAMES
+    this.potenciaPowerUp = 2;
+    this.timer = this.duracionPowerUp;
+    this.habilidadActivo = false;
 
+    //disparo
+    this.timerDisparo = 0;
+    this.duracionDisparo = 1750;
+
+  }
+
+  habilidad() {
+    if (!this.habilidadActivo) {
+      this.habilidadActivo = true;
+      this.estado = this.estados.DISPARANDO;
+
+      this.disparar();
+
+      setTimeout(() => {
+        this.estado = this.estados.IDLE;
+        console.log("Habilidad de disparo desactivada");
+      }, this.duracionDisparo);
+    }
+  }
+
+  disparar() {
+    const config = configuracionEnemigos[this.tipo].habilidad;
+    const cantidad = config.cantidad;
+    const rango = config.rango;
+    const velocidad = config.velocidad;
+
+    if (!this.juego) {
+      console.error("Error: this.juego no está definido.");
+      return;
+    }
+
+    this.disparaBala(0, cantidad, rango, velocidad);
+    setTimeout(() => {
+      this.disparaBala(40, cantidad, rango, velocidad);
+      this.habilitarHabilidad();
+    }, 1000);
+  }
+
+  disparaBala(x, cantidad, rango, velocidad) {
+    for (let i = 0; i < cantidad; i++) {
+      const angulo = (Math.PI * 2 / cantidad) * i;
+      //angulo + 40 = x , angulo sin sumar = +
+      const velocidadX = Math.cos(angulo + x) * velocidad;
+      const velocidadY = Math.sin(angulo + x) * velocidad;
+
+      const bala = new BalaEnemigo(this.container.x, this.container.y, this.juego, velocidadX, velocidadY, rango);
+      this.juego.balasEnemigos.push(bala);
+    }
+  }
 }

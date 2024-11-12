@@ -111,7 +111,7 @@ class Juego {
         var tiposDeEnemigos = [];
         var asesinatos = this.player.asesinatos;
         if ((asesinatos == 3) && !this.miniBossCreado) {
-          tiposDeEnemigos = ['tipo5'];
+          tiposDeEnemigos = ['tipo6'];
         }
         else if (asesinatos < 20) {
           tiposDeEnemigos = ['tipo1'];
@@ -152,11 +152,14 @@ class Juego {
               case 'tipo5':
                 enemigo = new MiniBossShooter(posX, posY, 1, this, `enemigo_${i}`, tipoAleatorio);
                 break;
+              case 'tipo6':
+                enemigo = new MiniBossShooterX(posX, posY, 1, this, `enemigo_${i}`, tipoAleatorio);
+                break;
               default:
                 enemigo = new Enemigo(posX, posY, 1, this, `enemigo_${i}`, tipoAleatorio);
                 break;
             }
-            if (tipoAleatorio === 'tipo5') {
+            if (tipoAleatorio === 'tipo4'|| tipoAleatorio === 'tipo5'|| tipoAleatorio === 'tipo6') {
               this.miniBossCreado = true;
             }
             //let velocidad = Math.random() * 0.2 + 0.5;
@@ -214,6 +217,7 @@ class Juego {
 
       // Verifica si se presionó la tecla "r"
       if (e.key.toLowerCase() === 'r') {
+        this.player.recarga.container.visible = true;
         this.player.recargar(); // Llama a la función que quieres ejecutar
       }
       if (e.key.toLowerCase() === 'enter') {
