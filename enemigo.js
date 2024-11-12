@@ -74,7 +74,7 @@ const configuracionEnemigos = {
       morir: "./img/miniboss2_habilidad.png",
     },
     habilidad: {
-      cantidad: 6, // Número de balas a disparar
+      cantidad: 8, // Número de balas a disparar
       rango: 400,  // Distancia máxima de disparo
       velocidad: 2  // Velocidad de las balas
     },
@@ -562,6 +562,7 @@ class MiniBossShooter extends Enemigo {
     // Disparar balas en 6 direcciones
     for (let i = 0; i < cantidad; i++) {
       const angulo = (Math.PI * 2 / cantidad) * i;
+      //angulo + 40 = x , angulo sin sumar = +
       const velocidadX = Math.cos(angulo) * velocidad;
       const velocidadY = Math.sin(angulo) * velocidad;
 
