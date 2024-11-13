@@ -113,7 +113,7 @@ class Juego {
         var tiposDeEnemigos = [];
         var asesinatos = this.player.asesinatos;
         if ((asesinatos == 3) && !this.miniBossCreado) {
-          tiposDeEnemigos = ['tipo5'];
+          tiposDeEnemigos = ['tipo6'];
         }
         else if (asesinatos < 20) {
           tiposDeEnemigos = ['tipo1'];

@@ -83,6 +83,27 @@ const configuracionEnemigos = {
     vida: 5,
     velocidad: 1,
     velocidadSprite: 0.7,
+    /*spriteX: 48,
+    spriteY: 64,*/
+    spriteX: 147,
+    spriteY: 140,
+    scale: (1, 1),
+    sprites: {
+      /*idle: "./img/miniboss3_run.png",
+      morir: "./img/miniboss3_muerte.png",*/
+      idle: "./img/boss_run.png",
+      morir:"./img/boss_habilidad.png",
+    },
+    habilidad: {
+      cantidad: 4, // Número de balas a disparar
+      rango: 400,  // Distancia máxima de disparo
+      velocidad: 1  // Velocidad de las balas
+    },
+  },
+  tipo7: { // Boss
+    vida: 5,
+    velocidad: 1,
+    velocidadSprite: 0.7,
     spriteX: 48,
     spriteY: 64,
     scale: (1, 1),
