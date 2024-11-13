@@ -363,7 +363,7 @@ class Juego {
 
     if (this.enemigos.length > 0) {
 
-      const enemigoTipo4 = this.enemigos.find(enemigo => enemigo.tipo === 'tipo4');
+      const enemigoTipo4 = this.enemigos.find(enemigo => enemigo.tipo === 'tipo4' || enemigo.tipo === 'tipo5' || enemigo.tipo === 'tipo6');
       if (!enemigoTipo4) {
         this.indicador.container.visible = false;
         return;
@@ -401,7 +401,7 @@ class Juego {
 
         // Actualiza la posición del indicador
         this.indicador.container.x = indicadorX + this.app.stage.position.x;
-        this.indicador.container.y = indicadorY + this.app.stage.position.y - 40;
+        this.indicador.container.y = indicadorY + this.app.stage.position.y - 100;
 
         // Rotación del indicador
         const angle = Math.atan2(dy, dx);

@@ -48,9 +48,9 @@ const configuracionEnemigos = {
   tipo4: { // sprinter
     vida: 6,
     velocidad: 0.9,
-    velocidadSprite: 1,
-    spriteX: 32,
-    spriteY: 56,
+    velocidadSprite: 0.7,
+    spriteX: 64,
+    spriteY: 112,
     scale: (1, 1),
     sprites: {
       idle: "./img/miniboss2_run.png",
@@ -65,13 +65,13 @@ const configuracionEnemigos = {
   tipo5: { // shooter
     vida: 5,
     velocidad: 1,
-    velocidadSprite: 1,
-    spriteX: 32,
-    spriteY: 56,
+    velocidadSprite: 0.7,
+    spriteX: 96,
+    spriteY: 104,
     scale: (1, 1),
     sprites: {
-      idle: "./img/miniboss2_run.png",
-      morir: "./img/miniboss2_habilidad.png",
+      idle: "./img/miniboss1_run.png",
+      morir: "./img/miniboss1_muerte.png",
     },
     habilidad: {
       cantidad: 8, // Número de balas a disparar
@@ -82,13 +82,34 @@ const configuracionEnemigos = {
   tipo6: { // shooter
     vida: 5,
     velocidad: 1,
-    velocidadSprite: 1,
-    spriteX: 32,
-    spriteY: 56,
+    velocidadSprite: 0.7,
+    /*spriteX: 48,
+    spriteY: 64,*/
+    spriteX: 147,
+    spriteY: 140,
     scale: (1, 1),
     sprites: {
-      idle: "./img/miniboss2_run.png",
-      morir: "./img/miniboss2_habilidad.png",
+      /*idle: "./img/miniboss3_run.png",
+      morir: "./img/miniboss3_muerte.png",*/
+      idle: "./img/boss_run.png",
+      morir:"./img/boss_habilidad.png",
+    },
+    habilidad: {
+      cantidad: 4, // Número de balas a disparar
+      rango: 400,  // Distancia máxima de disparo
+      velocidad: 1  // Velocidad de las balas
+    },
+  },
+  tipo7: { // Boss
+    vida: 5,
+    velocidad: 1,
+    velocidadSprite: 0.7,
+    spriteX: 48,
+    spriteY: 64,
+    scale: (1, 1),
+    sprites: {
+      idle: "./img/miniboss3_run.png",
+      morir: "./img/miniboss3_muerte.png",
     },
     habilidad: {
       cantidad: 4, // Número de balas a disparar
@@ -504,6 +525,34 @@ class MiniBossSprinter extends Enemigo {
       }, 2000);
     }
   }
+  recibirTiro() {
+    this.vida -= 1;
+    if (this.vida <= 0) {
+      this.juego.enemigos = this.juego.enemigos.filter((k) => k != this);
+      //this.juego.hud.actualizarHud();
+      this.grid.remove(this);
+      let sprite = this.cambiarSprite("morir", 0, false);
+      this.velocidad.x = 0;
+      this.velocidad.y = 0;
+      this.juego.player.asesinatos += 1;
+      this.juego.player.puntaje += 2;
+      this.juego.hud.actualizarHud();
+      console.log("el miniboss es " + this.juego.miniBossCreado)
+      if (this.juego.miniBossCreado) {
+        this.juego.ponerEnemigos(1);
+      } else {
+        this.juego.ponerEnemigos(Math.floor(Math.random() * 3) + 1);
+      }
+      if (this.tipo === 'tipo4' || this.tipo === 'tipo5' || this.tipo === 'tipo6') {
+        this.juego.miniBossCreado = false;
+      }
+      //this.juego.hud.actualizarBalas();
+      setTimeout(() => {
+        this.desaparecer();
+      }, this.tiempoPostMorten);
+    }
+  }
+
 
   recibirTiro() {
     this.vida -= 1;
@@ -532,13 +581,14 @@ class MiniBossSprinter extends Enemigo {
       }, this.tiempoPostMorten);
 
       //this.juego.player.ponerCompanion();
+
       this.crearPowerUp();
       // sprite.animationSpeed=0.001
 
     } else {
       //let sprite = this.cambiarSprite("recibeTiro", 0, false);
     }
-    
+  
   }
 
 }
@@ -621,6 +671,7 @@ class MiniBossShooter extends Enemigo {
       }, this.tiempoPostMorten);
 
       //this.juego.player.ponerCompanion();
+
       this.crearPowerUp();
       // sprite.animationSpeed=0.001
 
@@ -714,7 +765,6 @@ class MiniBossShooterX extends Enemigo {
         this.desaparecer();
       }, this.tiempoPostMorten);
 
-      //this.juego.ponerCompanion();
       this.crearPowerUp();
       // sprite.animationSpeed=0.001
 

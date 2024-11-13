@@ -20,6 +20,8 @@ class Bala extends Objeto {
     this.sprite.width = 10;
     this.sprite.height = 10;
     this.debug = 0;
+    this.perforacion = false;
+    this.perforados = 0;
 
     this.juego.app.stage.addChild(this.container);
   }
@@ -35,7 +37,10 @@ class Bala extends Objeto {
     ) {
       this.borrar();
     }
-
+      this.colision();
+    
+  } 
+  colision(){
     let objs = Object.values(
       (this.miCeldaActual || {}).objetosAca || {}
     ).filter((k) => k instanceof Enemigo);
@@ -57,11 +62,17 @@ class Bala extends Objeto {
       } //for
 
       if (cual != null) {
+        console.log(objs[cual]);
         objs[cual].recibirTiro();
+        this.perforados ++;
+        if(this.perforados > 1 && this.perforacion){
         this.borrar();
+        }else if(!this.perforacion){
+          this.borrar();
+        }
       }
     } 
-  } 
+  }
 }
 
 
