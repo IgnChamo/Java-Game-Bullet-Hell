@@ -2,8 +2,8 @@
 class Juego {
   constructor() {
     this.pausa = false;
-    this.canvasWidth = window.innerWidth * 2;
-    this.canvasHeight = window.innerHeight * 2;
+    this.canvasWidth = window.innerWidth * 4;
+    this.canvasHeight = window.innerHeight * 4;
     this.app = new PIXI.Application({
       width: this.canvasWidth,
       height: this.canvasHeight,
@@ -28,6 +28,8 @@ class Juego {
     this.balasEnemigos = [];
 
     this.companions = [];
+    
+    this.powerUps = [];
     this.start = true;
     this.nivel = 1;
     this.miniBossCreado = false;
@@ -111,7 +113,7 @@ class Juego {
         var tiposDeEnemigos = [];
         var asesinatos = this.player.asesinatos;
         if ((asesinatos == 3) && !this.miniBossCreado) {
-          tiposDeEnemigos = ['tipo6'];
+          tiposDeEnemigos = ['tipo5'];
         }
         else if (asesinatos < 20) {
           tiposDeEnemigos = ['tipo1'];
@@ -278,6 +280,9 @@ class Juego {
       this.balasEnemigos.forEach((bala) => {
         bala.update();
       })
+      this.powerUps.forEach((powerUp) => {
+        powerUp.update();
+      })
 
       this.moverCamara();
     }
@@ -328,7 +333,7 @@ class Juego {
 
     if (this.enemigos.length > 0) {
 
-      const enemigoTipo4 = this.enemigos.find(enemigo => enemigo.tipo === 'tipo4');
+      const enemigoTipo4 = this.enemigos.find(enemigo => enemigo.tipo === 'tipo4' || enemigo.tipo === 'tipo5' || enemigo.tipo === 'tipo6');
       if (!enemigoTipo4) {
         this.indicador.container.visible = false;
         return;
@@ -366,7 +371,7 @@ class Juego {
 
         // Actualiza la posición del indicador
         this.indicador.container.x = indicadorX + this.app.stage.position.x;
-        this.indicador.container.y = indicadorY + this.app.stage.position.y - 40;
+        this.indicador.container.y = indicadorY + this.app.stage.position.y - 100;
 
         // Rotación del indicador
         const angle = Math.atan2(dy, dx);

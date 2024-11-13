@@ -49,8 +49,8 @@ const configuracionEnemigos = {
     vida: 6,
     velocidad: 0.9,
     velocidadSprite: 1,
-    spriteX: 32,
-    spriteY: 56,
+    spriteX: 64,
+    spriteY: 112,
     scale: (1, 1),
     sprites: {
       idle: "./img/miniboss2_run.png",
@@ -66,8 +66,8 @@ const configuracionEnemigos = {
     vida: 5,
     velocidad: 1,
     velocidadSprite: 1,
-    spriteX: 32,
-    spriteY: 56,
+    spriteX: 64,
+    spriteY: 112,
     scale: (1, 1),
     sprites: {
       idle: "./img/miniboss2_run.png",
@@ -83,8 +83,8 @@ const configuracionEnemigos = {
     vida: 5,
     velocidad: 1,
     velocidadSprite: 1,
-    spriteX: 32,
-    spriteY: 56,
+    spriteX: 64,
+    spriteY: 112,
     scale: (1, 1),
     sprites: {
       idle: "./img/miniboss2_run.png",
@@ -469,6 +469,15 @@ class Enemigo extends Objeto {
 
     return fuerza;
   }
+  crearPowerUp(){
+    this.juego.powerUps.push(
+      new CapturedCompanion(
+        this.container.x,
+        this.container.y,
+        this.juego
+      )
+    );
+  }
 }
 
 class MiniBossSprinter extends Enemigo {
@@ -496,7 +505,40 @@ class MiniBossSprinter extends Enemigo {
       }, 2000);
     }
   }
+  recibirTiro() {
+    this.vida -= 1;
+    if (this.vida <= 0) {
+      this.juego.enemigos = this.juego.enemigos.filter((k) => k != this);
+      //this.juego.hud.actualizarHud();
+      this.grid.remove(this);
+      let sprite = this.cambiarSprite("morir", 0, false);
+      this.velocidad.x = 0;
+      this.velocidad.y = 0;
+      this.juego.player.asesinatos += 1;
+      this.juego.player.puntaje += 2;
+      this.juego.hud.actualizarHud();
+      console.log("el miniboss es " + this.juego.miniBossCreado)
+      if (this.juego.miniBossCreado) {
+        this.juego.ponerEnemigos(1);
+      } else {
+        this.juego.ponerEnemigos(Math.floor(Math.random() * 3) + 1);
+      }
+      if (this.tipo === 'tipo4' || this.tipo === 'tipo5' || this.tipo === 'tipo6') {
+        this.juego.miniBossCreado = false;
+      }
+      //this.juego.hud.actualizarBalas();
+      setTimeout(() => {
+        this.desaparecer();
+      }, this.tiempoPostMorten);
 
+      this.crearPowerUp();
+      // sprite.animationSpeed=0.001
+
+    } else {
+      //let sprite = this.cambiarSprite("recibeTiro", 0, false);
+    }
+    
+  }
 }
 
 class MiniBossShooter extends Enemigo {
@@ -548,6 +590,40 @@ class MiniBossShooter extends Enemigo {
       const bala = new BalaEnemigo(this.container.x, this.container.y, this.juego, velocidadX, velocidadY, rango);
       this.juego.balasEnemigos.push(bala);
     }
+  }
+  recibirTiro() {
+    this.vida -= 1;
+    if (this.vida <= 0) {
+      this.juego.enemigos = this.juego.enemigos.filter((k) => k != this);
+      //this.juego.hud.actualizarHud();
+      this.grid.remove(this);
+      let sprite = this.cambiarSprite("morir", 0, false);
+      this.velocidad.x = 0;
+      this.velocidad.y = 0;
+      this.juego.player.asesinatos += 1;
+      this.juego.player.puntaje += 2;
+      this.juego.hud.actualizarHud();
+      console.log("el miniboss es " + this.juego.miniBossCreado)
+      if (this.juego.miniBossCreado) {
+        this.juego.ponerEnemigos(1);
+      } else {
+        this.juego.ponerEnemigos(Math.floor(Math.random() * 3) + 1);
+      }
+      if (this.tipo === 'tipo4' || this.tipo === 'tipo5' || this.tipo === 'tipo6') {
+        this.juego.miniBossCreado = false;
+      }
+      //this.juego.hud.actualizarBalas();
+      setTimeout(() => {
+        this.desaparecer();
+      }, this.tiempoPostMorten);
+
+      this.crearPowerUp();
+      // sprite.animationSpeed=0.001
+
+    } else {
+      //let sprite = this.cambiarSprite("recibeTiro", 0, false);
+    }
+    
   }
 }
 class MiniBossShooterX extends Enemigo {
@@ -606,5 +682,39 @@ class MiniBossShooterX extends Enemigo {
       const bala = new BalaEnemigo(this.container.x, this.container.y, this.juego, velocidadX, velocidadY, rango);
       this.juego.balasEnemigos.push(bala);
     }
+  }
+  recibirTiro() {
+    this.vida -= 1;
+    if (this.vida <= 0) {
+      this.juego.enemigos = this.juego.enemigos.filter((k) => k != this);
+      //this.juego.hud.actualizarHud();
+      this.grid.remove(this);
+      let sprite = this.cambiarSprite("morir", 0, false);
+      this.velocidad.x = 0;
+      this.velocidad.y = 0;
+      this.juego.player.asesinatos += 1;
+      this.juego.player.puntaje += 2;
+      this.juego.hud.actualizarHud();
+      console.log("el miniboss es " + this.juego.miniBossCreado)
+      if (this.juego.miniBossCreado) {
+        this.juego.ponerEnemigos(1);
+      } else {
+        this.juego.ponerEnemigos(Math.floor(Math.random() * 3) + 1);
+      }
+      if (this.tipo === 'tipo4' || this.tipo === 'tipo5' || this.tipo === 'tipo6') {
+        this.juego.miniBossCreado = false;
+      }
+      //this.juego.hud.actualizarBalas();
+      setTimeout(() => {
+        this.desaparecer();
+      }, this.tiempoPostMorten);
+
+      this.crearPowerUp();
+      // sprite.animationSpeed=0.001
+
+    } else {
+      //let sprite = this.cambiarSprite("recibeTiro", 0, false);
+    }
+    
   }
 }
