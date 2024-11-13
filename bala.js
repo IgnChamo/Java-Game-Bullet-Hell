@@ -22,6 +22,7 @@ class Bala extends Objeto {
     this.debug = 0;
     this.perforacion = false;
     this.perforados = 0;
+    this.maxPerforaciones = 1;
 
     this.juego.app.stage.addChild(this.container);
   }
@@ -65,7 +66,7 @@ class Bala extends Objeto {
         console.log(objs[cual]);
         objs[cual].recibirTiro();
         this.perforados ++;
-        if(this.perforados > 1 && this.perforacion){
+        if(this.perforados > this.maxPerforaciones && this.perforacion){
         this.borrar();
         }else if(!this.perforacion){
           this.borrar();
