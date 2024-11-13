@@ -133,6 +133,17 @@ class Player extends Objeto {
       this.velocidadMax = this.velocidadMaximaOriginal;
     }
 
+    let fuerzas = new PIXI.Point(0, 0);
+    const repulsionDeObstaculos = this.repelerObstaculos(this.vecinos)
+
+    if(repulsionDeObstaculos.x != 0 || repulsionDeObstaculos.y != 0){
+      fuerzas.x += repulsionDeObstaculos.x;
+      fuerzas.y += repulsionDeObstaculos.y;
+      console.log("activando repulsion de obstaculo" + repulsionDeObstaculos )
+    }
+
+    this.aplicarFuerza(fuerzas)
+
 
     //actualizar escudo invencibilidad
     if (this.status instanceof Invincible) {

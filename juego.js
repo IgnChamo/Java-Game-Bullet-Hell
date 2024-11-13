@@ -29,6 +29,8 @@ class Juego {
 
     this.companions = [];
 
+    this.obstaculos = [];
+
     this.powerUps = [];
     this.start = true;
     this.nivel = 1;
@@ -44,6 +46,7 @@ class Juego {
     this.ponerFondo();
     this.ponerProtagonista();
     this.ponerIndicador();
+    this.ponerObstaculos(1000);
 
     //this.iniciarEnemigos();
     this.ponerListeners();
@@ -99,6 +102,33 @@ class Juego {
     }
 
   }
+
+  ponerObstaculos(cantidad){
+    const distanciaMinima = 10; 
+    const maxIntentos = 999;
+
+    for(let i=0; i<cantidad; i++){
+      let intentos = 0;
+      let distanciaAlJugador = 0;
+
+    }
+
+    // Generar una posición aleatoria
+    const posX = 50 + Math.random() * (this.canvasWidth - 300);
+    const posY = 200 + Math.random() * (this.canvasHeight - 500);
+
+    // Calcular la distancia entre la posición aleatoria y la posición del jugador
+    let distanciaAlJugador = Math.hypot(
+      posX - this.player.container.x,
+      posY - this.player.container.y
+    );
+    if(distanciaMinima < distanciaAlJugador){
+      let obstaculo = new Obstaculos(posX, posY,this);
+      this.obstaculos.push(obstaculo);
+      this.grid.add(obstaculo);
+    }
+  }
+
   ponerEnemigos(cant) {
     if (!this.boss) {
       console.log("Se crearon " + cant + " enemigos");

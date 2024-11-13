@@ -183,6 +183,45 @@ class Objeto {
     this.grid.update(this);
   }
 
+  repelerObstaculos(vecinos) {
+    const vecFuerza = new PIXI.Point(0, 0);
+    let cant = 0;
+    vecinos.forEach((obstaculo) => {
+      if (obstaculo instanceof Obstaculos) {
+        const distCuadrada = distanciaAlCuadrado(
+          this.container.x,
+          this.container.y,
+          obstaculo.container.x,
+          obstaculo.container.y,
+          
+        );
+        console.log(distCuadrada);
+        console.log(obstaculo.radio**2);
+        if (distCuadrada < obstaculo.radio ** 2) {
+          //SI ESTA A MENOS DE UNA CELDA DE DIST
+          const dif = new PIXI.Point(
+            this.container.x - obstaculo.container.x,
+            this.container.y - obstaculo.container.y
+          );
+          dif.x /= distCuadrada;
+          dif.y /= distCuadrada;
+          vecFuerza.x += dif.x;
+          vecFuerza.y += dif.y;
+          cant++;
+        }
+
+      }
+    });
+    if (cant) {
+      vecFuerza.x *= 40;
+      vecFuerza.y *= 40;
+      // vecFuerza.x += -this.velocidad.x;
+      // vecFuerza.y += -this.velocidad.y;
+    }
+    console.log()
+    return vecFuerza;
+  }
+
   aplicarFuerza(fuerza) {
     if (!fuerza) return;
     this.velocidad.x += fuerza.x;
