@@ -469,6 +469,16 @@ class Enemigo extends Objeto {
 
     return fuerza;
   }
+
+  crearPowerUp(){
+    this.juego.powerUps.push(
+      new CapturedCompanion(
+        this.container.x,
+        this.container.y,
+        this.juego
+      )
+    );
+  }
 }
 
 class MiniBossSprinter extends Enemigo {
@@ -521,7 +531,8 @@ class MiniBossSprinter extends Enemigo {
         this.desaparecer();
       }, this.tiempoPostMorten);
 
-      this.juego.player.ponerCompanion();
+      //this.juego.player.ponerCompanion();
+      this.crearPowerUp();
       // sprite.animationSpeed=0.001
 
     } else {
@@ -609,7 +620,8 @@ class MiniBossShooter extends Enemigo {
         this.desaparecer();
       }, this.tiempoPostMorten);
 
-      this.juego.player.ponerCompanion();
+      //this.juego.player.ponerCompanion();
+      this.crearPowerUp();
       // sprite.animationSpeed=0.001
 
     } else {
@@ -702,7 +714,8 @@ class MiniBossShooterX extends Enemigo {
         this.desaparecer();
       }, this.tiempoPostMorten);
 
-      this.juego.ponerCompanion();
+      //this.juego.ponerCompanion();
+      this.crearPowerUp();
       // sprite.animationSpeed=0.001
 
     } else {

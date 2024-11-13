@@ -28,6 +28,8 @@ class Juego {
     this.balasEnemigos = [];
 
     this.companions = [];
+
+    this.powerUps = [];
     this.start = true;
     this.nivel = 1;
     this.miniBossCreado = false;
@@ -277,6 +279,9 @@ class Juego {
       });
       this.balasEnemigos.forEach((bala) => {
         bala.update();
+      })
+      this.powerUps.forEach((powerUp) => {
+        powerUp.update();
       })
 
       this.moverCamara();
