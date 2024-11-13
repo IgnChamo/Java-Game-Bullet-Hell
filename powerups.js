@@ -19,14 +19,18 @@ class CapturedCompanion extends Objeto{
                 this.borrar();
                 this.juego.ponerCompanion();
             }
+            this.hover(this.juego.contadorDeFrames)
         }
+        
     }
     borrar(){
         this.juego.app.stage.removeChild(this.container);
         this.grid.remove(this);
     }
     
-
+    hover(valor){
+        this.sprite.y+=Math.sin(valor/15)*2;
+    }
 
     
 }
