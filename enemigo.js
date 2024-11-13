@@ -48,7 +48,7 @@ const configuracionEnemigos = {
   tipo4: { // sprinter
     vida: 6,
     velocidad: 0.9,
-    velocidadSprite: 1,
+    velocidadSprite: 0.7,
     spriteX: 64,
     spriteY: 112,
     scale: (1, 1),
@@ -65,13 +65,13 @@ const configuracionEnemigos = {
   tipo5: { // shooter
     vida: 5,
     velocidad: 1,
-    velocidadSprite: 1,
-    spriteX: 64,
-    spriteY: 112,
+    velocidadSprite: 0.7,
+    spriteX: 96,
+    spriteY: 104,
     scale: (1, 1),
     sprites: {
-      idle: "./img/miniboss2_run.png",
-      morir: "./img/miniboss2_habilidad.png",
+      idle: "./img/miniboss1_run.png",
+      morir: "./img/miniboss1_muerte.png",
     },
     habilidad: {
       cantidad: 8, // Número de balas a disparar
@@ -82,13 +82,13 @@ const configuracionEnemigos = {
   tipo6: { // shooter
     vida: 5,
     velocidad: 1,
-    velocidadSprite: 1,
-    spriteX: 64,
-    spriteY: 112,
+    velocidadSprite: 0.7,
+    spriteX: 48,
+    spriteY: 64,
     scale: (1, 1),
     sprites: {
-      idle: "./img/miniboss2_run.png",
-      morir: "./img/miniboss2_habilidad.png",
+      idle: "./img/miniboss3_run.png",
+      morir: "./img/miniboss3_muerte.png",
     },
     habilidad: {
       cantidad: 4, // Número de balas a disparar
