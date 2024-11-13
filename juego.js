@@ -2,8 +2,8 @@
 class Juego {
   constructor() {
     this.pausa = false;
-    this.canvasWidth = window.innerWidth * 4;
-    this.canvasHeight = window.innerHeight * 4;
+    this.canvasWidth = window.innerWidth * 2;
+    this.canvasHeight = window.innerHeight * 2;
     this.app = new PIXI.Application({
       width: this.canvasWidth,
       height: this.canvasHeight,

@@ -469,6 +469,7 @@ class Enemigo extends Objeto {
 
     return fuerza;
   }
+
   crearPowerUp(){
     this.juego.powerUps.push(
       new CapturedCompanion(
@@ -487,10 +488,8 @@ class MiniBossSprinter extends Enemigo {
     this.potenciaPowerUp = 2;
     this.timer = this.duracionPowerUp;
     this.habilidadActivo = false;
-
   }
-
-
+  
   habilidad() {
     if (!this.habilidadActivo) {
       const config = configuracionEnemigos[this.tipo].habilidad;
@@ -530,6 +529,37 @@ class MiniBossSprinter extends Enemigo {
       setTimeout(() => {
         this.desaparecer();
       }, this.tiempoPostMorten);
+    }
+  }
+
+
+  recibirTiro() {
+    this.vida -= 1;
+    if (this.vida <= 0) {
+      this.juego.enemigos = this.juego.enemigos.filter((k) => k != this);
+      //this.juego.hud.actualizarHud();
+      this.grid.remove(this);
+      let sprite = this.cambiarSprite("morir", 0, false);
+      this.velocidad.x = 0;
+      this.velocidad.y = 0;
+      this.juego.player.asesinatos += 1;
+      this.juego.player.puntaje += 2;
+      this.juego.hud.actualizarHud();
+      console.log("el miniboss es " + this.juego.miniBossCreado)
+      if (this.juego.miniBossCreado) {
+        this.juego.ponerEnemigos(1);
+      } else {
+        this.juego.ponerEnemigos(Math.floor(Math.random() * 3) + 1);
+      }
+      if (this.tipo === 'tipo4' || this.tipo === 'tipo5' || this.tipo === 'tipo6') {
+        this.juego.miniBossCreado = false;
+      }
+      //this.juego.hud.actualizarBalas();
+      setTimeout(() => {
+        this.desaparecer();
+      }, this.tiempoPostMorten);
+
+      //this.juego.player.ponerCompanion();
 
       this.crearPowerUp();
       // sprite.animationSpeed=0.001
@@ -537,8 +567,9 @@ class MiniBossSprinter extends Enemigo {
     } else {
       //let sprite = this.cambiarSprite("recibeTiro", 0, false);
     }
-    
+  
   }
+
 }
 
 class MiniBossShooter extends Enemigo {
@@ -591,6 +622,7 @@ class MiniBossShooter extends Enemigo {
       this.juego.balasEnemigos.push(bala);
     }
   }
+
   recibirTiro() {
     this.vida -= 1;
     if (this.vida <= 0) {
@@ -616,6 +648,8 @@ class MiniBossShooter extends Enemigo {
       setTimeout(() => {
         this.desaparecer();
       }, this.tiempoPostMorten);
+
+      //this.juego.player.ponerCompanion();
 
       this.crearPowerUp();
       // sprite.animationSpeed=0.001
@@ -683,6 +717,7 @@ class MiniBossShooterX extends Enemigo {
       this.juego.balasEnemigos.push(bala);
     }
   }
+
   recibirTiro() {
     this.vida -= 1;
     if (this.vida <= 0) {
