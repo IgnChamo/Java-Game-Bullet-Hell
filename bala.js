@@ -63,7 +63,6 @@ class Bala extends Objeto {
       } //for
 
       if (cual != null) {
-        console.log(objs[cual]);
         objs[cual].recibirTiro();
         this.perforados ++;
         if(this.perforados > this.maxPerforaciones && this.perforacion){
@@ -134,7 +133,6 @@ class BalaEnemigo extends Objeto {
       } //for
 
       if (cual != null && this.juego.player.status != this.juego.player.invincible) {
-        console.log("entro daño bala");
         objs[cual].status.damage(1);
         this.juego.hud.actualizarHudVida();
         this.borrar();

@@ -131,7 +131,6 @@ class Juego {
 
   ponerEnemigos(cant) {
     if (!this.boss) {
-      console.log("Se crearon " + cant + " enemigos");
       const distanciaMinima = 600; // Ajusta este valor según lo lejos que quieras que estén los enemigos del jugador
       const maxIntentos = 999; // Máximo número de intentos para evitar loops infinitos
 
@@ -143,7 +142,7 @@ class Juego {
         var tiposDeEnemigos = [];
         var asesinatos = this.player.asesinatos;
         if ((asesinatos == 3) && !this.miniBossCreado) {
-          tiposDeEnemigos = ['tipo6'];
+          tiposDeEnemigos = ['tipo7'];
         }
         else if (asesinatos < 20) {
           tiposDeEnemigos = ['tipo1'];
@@ -187,11 +186,14 @@ class Juego {
               case 'tipo6':
                 enemigo = new MiniBossShooterX(posX, posY, 1, this, `enemigo_${i}`, tipoAleatorio);
                 break;
+              case 'tipo7':
+                enemigo = new Boss(posX, posY, 1, this, `enemigo_${i}`, tipoAleatorio);
+                break;
               default:
                 enemigo = new Enemigo(posX, posY, 1, this, `enemigo_${i}`, tipoAleatorio);
                 break;
             }
-            if (tipoAleatorio === 'tipo4'|| tipoAleatorio === 'tipo5'|| tipoAleatorio === 'tipo6') {
+            if (tipoAleatorio === 'tipo4'|| tipoAleatorio === 'tipo5'|| tipoAleatorio === 'tipo6' || tipoAleatorio === 'tipo7') {
               this.miniBossCreado = true;
             }
             //let velocidad = Math.random() * 0.2 + 0.5;
@@ -363,7 +365,7 @@ class Juego {
 
     if (this.enemigos.length > 0) {
 
-      const enemigoTipo4 = this.enemigos.find(enemigo => enemigo.tipo === 'tipo4' || enemigo.tipo === 'tipo5' || enemigo.tipo === 'tipo6');
+      const enemigoTipo4 = this.enemigos.find(enemigo => enemigo.tipo === 'tipo4' || enemigo.tipo === 'tipo5' || enemigo.tipo === 'tipo6' || enemigo.tipo === 'tipo7');
       if (!enemigoTipo4) {
         this.indicador.container.visible = false;
         return;

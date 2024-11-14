@@ -92,11 +92,11 @@ const configuracionEnemigos = {
       /*idle: "./img/miniboss3_run.png",
       morir: "./img/miniboss3_muerte.png",*/
       idle: "./img/boss_run.png",
-      morir:"./img/boss_habilidad.png",
+      morir: "./img/boss_habilidad.png",
     },
     habilidad: {
       cantidad: 4, // Número de balas a disparar
-      rango: 400,  // Distancia máxima de disparo
+      rango: 800,  // Distancia máxima de disparo
       velocidad: 1  // Velocidad de las balas
     },
   },
@@ -104,16 +104,17 @@ const configuracionEnemigos = {
     vida: 5,
     velocidad: 1,
     velocidadSprite: 0.7,
-    spriteX: 48,
-    spriteY: 64,
+    spriteX: 147,
+    spriteY: 140,
     scale: (1, 1),
     sprites: {
-      idle: "./img/miniboss3_run.png",
-      morir: "./img/miniboss3_muerte.png",
+      idle: "./img/boss_run.png",
+      morir: "./img/boss_habilidad.png",
     },
     habilidad: {
-      cantidad: 4, // Número de balas a disparar
-      rango: 400,  // Distancia máxima de disparo
+      cantidadDisparo1: 4,
+      cantidadDisparo2: 8, // Número de balas a disparar
+      rango: 1000,  // Distancia máxima de disparo
       velocidad: 1  // Velocidad de las balas
     },
   }
@@ -142,7 +143,7 @@ class Enemigo extends Objeto {
 
     //disparo
     this.timerDisparo = 0;
-    this.duracionDisparo = 1750;
+    this.duracionDisparo = 500;
 
 
 
@@ -171,7 +172,7 @@ class Enemigo extends Objeto {
   habilitarHabilidad() {
     setTimeout(() => {
       this.habilidadActivo = false;
-    }, 1000);
+    }, 2000);
   }
   recibirTiro() {
     this.vida -= 1;
@@ -185,13 +186,12 @@ class Enemigo extends Objeto {
       this.juego.player.asesinatos += 1;
       this.juego.player.puntaje += 2;
       this.juego.hud.actualizarHud();
-      console.log("el miniboss es " + this.juego.miniBossCreado)
       if (this.juego.miniBossCreado) {
         this.juego.ponerEnemigos(1);
       } else {
         this.juego.ponerEnemigos(Math.floor(Math.random() * 3) + 1);
       }
-      if (this.tipo === 'tipo4' || this.tipo === 'tipo5' || this.tipo === 'tipo6') {
+      if (this.tipo === 'tipo4' || this.tipo === 'tipo5' || this.tipo === 'tipo6' || this.tipo === 'tipo7') {
         this.juego.miniBossCreado = false;
       }
       //this.juego.hud.actualizarBalas();
@@ -268,13 +268,11 @@ class Enemigo extends Objeto {
     } else if (this.estado === this.estados.SPRINTANDO) {
       this.velocidadMax = this.potenciaPowerUp;
       this.timer--;
-      console.log(this.timer);
       // Si se acaba el timer, cambiamos el estado a NORMAL.
       if (this.timer == 0) {
         this.timer = this.duracionPowerUp;
         this.estado = this.estado.IDLE;
         this.velocidadMax = this.velocidadConfig;
-        console.log("Se acabo power up!");
         return;
       }
 
@@ -491,7 +489,7 @@ class Enemigo extends Objeto {
     return fuerza;
   }
 
-  crearPowerUp(){
+  crearPowerUp() {
     this.juego.powerUps.push(
       new CapturedCompanion(
         this.container.x,
@@ -510,7 +508,7 @@ class MiniBossSprinter extends Enemigo {
     this.timer = this.duracionPowerUp;
     this.habilidadActivo = false;
   }
-  
+
   habilidad() {
     if (!this.habilidadActivo) {
       const config = configuracionEnemigos[this.tipo].habilidad;
@@ -519,10 +517,7 @@ class MiniBossSprinter extends Enemigo {
       this.velocidadSprint = config.velocidadSprint;
       this.estado = this.estados.SPRINTANDO;
       this.sprintStartTime = Date.now();
-      setTimeout(() => {
-        this.habilidadActivo = false;
-        console.log("habilidadActiva " + this.habilidadActivo);
-      }, 2000);
+      this.habilitarHabilidad();
     }
   }
   recibirTiro() {
@@ -543,52 +538,12 @@ class MiniBossSprinter extends Enemigo {
       } else {
         this.juego.ponerEnemigos(Math.floor(Math.random() * 3) + 1);
       }
-      if (this.tipo === 'tipo4' || this.tipo === 'tipo5' || this.tipo === 'tipo6') {
-        this.juego.miniBossCreado = false;
-      }
+      this.juego.miniBossCreado = false;
       //this.juego.hud.actualizarBalas();
       setTimeout(() => {
         this.desaparecer();
       }, this.tiempoPostMorten);
     }
-  }
-
-
-  recibirTiro() {
-    this.vida -= 1;
-    if (this.vida <= 0) {
-      this.juego.enemigos = this.juego.enemigos.filter((k) => k != this);
-      //this.juego.hud.actualizarHud();
-      this.grid.remove(this);
-      let sprite = this.cambiarSprite("morir", 0, false);
-      this.velocidad.x = 0;
-      this.velocidad.y = 0;
-      this.juego.player.asesinatos += 1;
-      this.juego.player.puntaje += 2;
-      this.juego.hud.actualizarHud();
-      console.log("el miniboss es " + this.juego.miniBossCreado)
-      if (this.juego.miniBossCreado) {
-        this.juego.ponerEnemigos(1);
-      } else {
-        this.juego.ponerEnemigos(Math.floor(Math.random() * 3) + 1);
-      }
-      if (this.tipo === 'tipo4' || this.tipo === 'tipo5' || this.tipo === 'tipo6') {
-        this.juego.miniBossCreado = false;
-      }
-      //this.juego.hud.actualizarBalas();
-      setTimeout(() => {
-        this.desaparecer();
-      }, this.tiempoPostMorten);
-
-      //this.juego.player.ponerCompanion();
-
-      this.crearPowerUp();
-      // sprite.animationSpeed=0.001
-
-    } else {
-      //let sprite = this.cambiarSprite("recibeTiro", 0, false);
-    }
-  
   }
 
 }
@@ -662,9 +617,7 @@ class MiniBossShooter extends Enemigo {
       } else {
         this.juego.ponerEnemigos(Math.floor(Math.random() * 3) + 1);
       }
-      if (this.tipo === 'tipo4' || this.tipo === 'tipo5' || this.tipo === 'tipo6') {
-        this.juego.miniBossCreado = false;
-      }
+      this.juego.miniBossCreado = false;
       //this.juego.hud.actualizarBalas();
       setTimeout(() => {
         this.desaparecer();
@@ -678,7 +631,7 @@ class MiniBossShooter extends Enemigo {
     } else {
       //let sprite = this.cambiarSprite("recibeTiro", 0, false);
     }
-    
+
   }
 }
 class MiniBossShooterX extends Enemigo {
@@ -757,9 +710,8 @@ class MiniBossShooterX extends Enemigo {
       } else {
         this.juego.ponerEnemigos(Math.floor(Math.random() * 3) + 1);
       }
-      if (this.tipo === 'tipo4' || this.tipo === 'tipo5' || this.tipo === 'tipo6') {
-        this.juego.miniBossCreado = false;
-      }
+      this.juego.miniBossCreado = false;
+
       //this.juego.hud.actualizarBalas();
       setTimeout(() => {
         this.desaparecer();
@@ -771,6 +723,155 @@ class MiniBossShooterX extends Enemigo {
     } else {
       //let sprite = this.cambiarSprite("recibeTiro", 0, false);
     }
-    
+
   }
+}
+
+class Boss extends Enemigo {
+  constructor(x, y, velocidad, juego, id, tipo) {
+    super(x, y, velocidad, juego, id, tipo);
+    this.duracionPowerUp = 2; //FRAMES
+    this.potenciaPowerUp = 2;
+    this.timer = this.duracionPowerUp;
+    this.habilidadActivo = false;
+    this.contadorDisparos = 0;
+  }
+
+  habilidad() {
+    const valor = Math.round(Math.random());
+    if (!this.habilidadActivo) {
+      switch (valor) {
+        case 0:
+          console.log("habilidad1");
+          this.habilidadSprint();
+          break;
+        case 1:
+          console.log("habilidad2");
+          this.habilidadDisparo();
+          break;
+      }
+    }
+  }
+
+  habilidadSprint() {
+    if (!this.habilidadActivo) {
+      const config = configuracionEnemigos[this.tipo].habilidad;
+      this.habilidadActivo = true;
+      console.log("habilidadActiva " + this.habilidadActivo);
+      this.velocidadSprint = config.velocidadSprint;
+      this.estado = this.estados.SPRINTANDO;
+      this.sprintStartTime = Date.now();
+      setTimeout(() => {
+        this.habilidadActivo = false;
+        console.log("habilidadActiva " + this.habilidadActivo);
+      }, 2000);
+    }
+  }
+
+  habilidadDisparo() {
+    if (!this.habilidadActivo) {
+      this.habilidadActivo = true;
+      this.estado = this.estados.DISPARANDO;
+
+      this.disparar();
+      this.contadorDisparos++;
+      setTimeout(() => {
+        this.habilidadDisparo();
+        this.estado = this.estados.IDLE;
+        console.log("Habilidad de disparo desactivada");
+
+      }, this.duracionDisparo);
+    }
+  }
+
+  disparar() {
+    const config = configuracionEnemigos[this.tipo].habilidad;
+    const cantidadDisparo1 = config.cantidadDisparo1;
+    const cantidadDisparo2 = config.cantidadDisparo2;
+    const rango = config.rango;
+    const velocidad = config.velocidad;
+
+    if (!this.juego) {
+      console.error("Error: this.juego no está definido.");
+      return;
+    }
+
+    // Disparar balas en 6 direcciones
+    const valor = Math.round(Math.random());
+    switch (valor) {
+      case 0:
+        this.disparaBala(0, cantidadDisparo1, rango, velocidad);
+        setTimeout(() => {
+          this.disparaBala(0, cantidadDisparo1, rango, velocidad);
+          setTimeout(() => {
+            this.disparaBala(0, cantidadDisparo1, rango, velocidad);
+            setTimeout(() => {
+              this.disparaBala(40, cantidadDisparo1, rango, velocidad);
+              setTimeout(() => {
+                this.disparaBala(40, cantidadDisparo1, rango, velocidad);
+                setTimeout(() => {
+                  this.disparaBala(40, cantidadDisparo1, rango, velocidad);
+                  this.habilitarHabilidad();
+                  console.log("Termino Habilidades");
+                }, 200);
+              }, 200);
+            }, 1000);
+          }, 200);
+        }, 200);
+        break;
+      case 1:
+        this.disparaBala(0, cantidadDisparo2, rango, velocidad);
+        setTimeout(() => {
+          this.disparaBala(0, cantidadDisparo2, rango, velocidad);
+          setTimeout(() => {
+            this.disparaBala(0, cantidadDisparo2, rango, velocidad);
+            this.habilitarHabilidad();
+            console.log("Termino Habilidades");
+          }, 300);
+        }, 300);
+        break;
+    }
+  }
+
+  disparaBala(x, cantidad, rango, velocidad) {
+    for (let i = 0; i < cantidad; i++) {
+      const angulo = (Math.PI * 2 / cantidad) * i;
+      //angulo + 40 = x , angulo sin sumar = +
+      const velocidadX = Math.cos(angulo + x) * velocidad;
+      const velocidadY = Math.sin(angulo + x) * velocidad;
+
+      const bala = new BalaEnemigo(this.container.x, this.container.y, this.juego, velocidadX, velocidadY, rango);
+      this.juego.balasEnemigos.push(bala);
+    }
+  }
+
+
+  recibirTiro() {
+    this.vida -= 1;
+    if (this.vida <= 0) {
+      this.juego.enemigos = this.juego.enemigos.filter((k) => k != this);
+      //this.juego.hud.actualizarHud();
+      this.grid.remove(this);
+      let sprite = this.cambiarSprite("morir", 0, false);
+      this.velocidad.x = 0;
+      this.velocidad.y = 0;
+      this.juego.player.asesinatos += 1;
+      this.juego.player.puntaje += 2;
+      this.juego.hud.actualizarHud();
+      console.log("el miniboss es " + this.juego.miniBossCreado)
+      if (this.juego.miniBossCreado) {
+        this.juego.ponerEnemigos(1);
+      } else {
+        this.juego.ponerEnemigos(Math.floor(Math.random() * 3) + 1);
+      }
+
+      this.juego.miniBossCreado = false;
+
+      //this.juego.hud.actualizarBalas();
+      setTimeout(() => {
+        this.desaparecer();
+      }, this.tiempoPostMorten);
+    }
+  }
+
 }
