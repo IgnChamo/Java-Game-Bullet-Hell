@@ -83,16 +83,12 @@ const configuracionEnemigos = {
     vida: 5,
     velocidad: 1,
     velocidadSprite: 0.7,
-    /*spriteX: 48,
-    spriteY: 64,*/
-    spriteX: 147,
-    spriteY: 140,
+    spriteX: 48,
+    spriteY: 64,
     scale: (1, 1),
     sprites: {
-      /*idle: "./img/miniboss3_run.png",
-      morir: "./img/miniboss3_muerte.png",*/
-      idle: "./img/boss_run.png",
-      morir: "./img/boss_habilidad.png",
+      idle: "./img/miniboss3_run.png",
+      morir: "./img/miniboss3_muerte.png",
     },
     habilidad: {
       cantidad: 4, // Número de balas a disparar
@@ -183,8 +179,6 @@ class Enemigo extends Objeto {
       let sprite = this.cambiarSprite("morir", 0, false);
       this.velocidad.x = 0;
       this.velocidad.y = 0;
-      this.juego.player.asesinatos += 1;
-      this.juego.player.puntaje += 2;
       this.juego.hud.actualizarHud();
       if (this.juego.miniBossCreado) {
         this.juego.ponerEnemigos(1);
@@ -195,9 +189,7 @@ class Enemigo extends Objeto {
         this.juego.miniBossCreado = false;
       }
       //this.juego.hud.actualizarBalas();
-      setTimeout(() => {
-        this.desaparecer();
-      }, this.tiempoPostMorten);
+      this.desaparecer();
       // sprite.animationSpeed=0.001
 
     } else {
@@ -347,9 +339,13 @@ class Enemigo extends Objeto {
   }
 
   desaparecer() {
-    if (this.container && this.container.parent) {
-      this.container.parent.removeChild(this.container);
-    }
+    this.juego.player.asesinatos += 1;
+    this.juego.player.puntaje += 2;
+    setTimeout(() => {
+      if (this.container && this.container.parent) {
+        this.container.parent.removeChild(this.container);
+      }
+    }, this.tiempoPostMorten);
   }
 
 
@@ -529,8 +525,6 @@ class MiniBossSprinter extends Enemigo {
       let sprite = this.cambiarSprite("morir", 0, false);
       this.velocidad.x = 0;
       this.velocidad.y = 0;
-      this.juego.player.asesinatos += 1;
-      this.juego.player.puntaje += 2;
       this.juego.hud.actualizarHud();
       console.log("el miniboss es " + this.juego.miniBossCreado)
       if (this.juego.miniBossCreado) {
@@ -540,9 +534,7 @@ class MiniBossSprinter extends Enemigo {
       }
       this.juego.miniBossCreado = false;
       //this.juego.hud.actualizarBalas();
-      setTimeout(() => {
-        this.desaparecer();
-      }, this.tiempoPostMorten);
+      this.desaparecer();
     }
   }
 
@@ -608,8 +600,6 @@ class MiniBossShooter extends Enemigo {
       let sprite = this.cambiarSprite("morir", 0, false);
       this.velocidad.x = 0;
       this.velocidad.y = 0;
-      this.juego.player.asesinatos += 1;
-      this.juego.player.puntaje += 2;
       this.juego.hud.actualizarHud();
       console.log("el miniboss es " + this.juego.miniBossCreado)
       if (this.juego.miniBossCreado) {
@@ -619,9 +609,8 @@ class MiniBossShooter extends Enemigo {
       }
       this.juego.miniBossCreado = false;
       //this.juego.hud.actualizarBalas();
-      setTimeout(() => {
         this.desaparecer();
-      }, this.tiempoPostMorten);
+
 
       //this.juego.player.ponerCompanion();
 
@@ -701,8 +690,6 @@ class MiniBossShooterX extends Enemigo {
       let sprite = this.cambiarSprite("morir", 0, false);
       this.velocidad.x = 0;
       this.velocidad.y = 0;
-      this.juego.player.asesinatos += 1;
-      this.juego.player.puntaje += 2;
       this.juego.hud.actualizarHud();
       console.log("el miniboss es " + this.juego.miniBossCreado)
       if (this.juego.miniBossCreado) {
@@ -713,10 +700,7 @@ class MiniBossShooterX extends Enemigo {
       this.juego.miniBossCreado = false;
 
       //this.juego.hud.actualizarBalas();
-      setTimeout(() => {
-        this.desaparecer();
-      }, this.tiempoPostMorten);
-
+      this.desaparecer();
       this.crearPowerUp();
       // sprite.animationSpeed=0.001
 
@@ -735,6 +719,7 @@ class Boss extends Enemigo {
     this.timer = this.duracionPowerUp;
     this.habilidadActivo = false;
     this.contadorDisparos = 0;
+
   }
 
   habilidad() {
@@ -855,8 +840,6 @@ class Boss extends Enemigo {
       let sprite = this.cambiarSprite("morir", 0, false);
       this.velocidad.x = 0;
       this.velocidad.y = 0;
-      this.juego.player.asesinatos += 1;
-      this.juego.player.puntaje += 2;
       this.juego.hud.actualizarHud();
       console.log("el miniboss es " + this.juego.miniBossCreado)
       if (this.juego.miniBossCreado) {
@@ -868,9 +851,7 @@ class Boss extends Enemigo {
       this.juego.miniBossCreado = false;
 
       //this.juego.hud.actualizarBalas();
-      setTimeout(() => {
-        this.desaparecer();
-      }, this.tiempoPostMorten);
+      this.desaparecer();
     }
   }
 

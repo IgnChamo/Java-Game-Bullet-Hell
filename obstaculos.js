@@ -10,7 +10,7 @@ class Obstaculos extends Objeto{
         this.radio = this.sprite.width * this.grid.cellSize * 1.2;
         this.sprite.anchor.set(0.5,0.50);
 
-        this.juego.app.stage.addChild(this.container);
+        this.juego.gameContainer.addChild(this.container);
 
        
     }

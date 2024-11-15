@@ -34,7 +34,9 @@ class Juego {
     this.powerUps = [];
     this.start = true;
     this.nivel = 1;
-    this.miniBossCreado = false;
+    this.miniBoss1Creado = false;
+    this.miniBoss2Creado = false;
+    this.miniBoss3Creado = false;
     this.boss = false; // Se pondra en True cuando aparezca el boss, esto no dejara que se sigan creando enemigos en esa etapa.
     this.perdiste = false;
 
@@ -46,8 +48,8 @@ class Juego {
     this.ponerFondo();
     this.ponerProtagonista();
     this.ponerIndicador();
-    this.ponerObstaculos(1000);
-
+    this.ponerObstaculos(15);
+    
     //this.iniciarEnemigos();
     this.ponerListeners();
 
@@ -109,9 +111,8 @@ class Juego {
 
     for(let i=0; i<cantidad; i++){
       let intentos = 0;
-      let distanciaAlJugador = 0;
 
-    }
+    
 
     // Generar una posición aleatoria
     const posX = 50 + Math.random() * (this.canvasWidth - 300);
@@ -128,6 +129,7 @@ class Juego {
       this.grid.add(obstaculo);
     }
   }
+  }
 
   ponerEnemigos(cant) {
     if (!this.boss) {
@@ -141,8 +143,18 @@ class Juego {
         let distanciaAlJugador = 0;
         var tiposDeEnemigos = [];
         var asesinatos = this.player.asesinatos;
-        if ((asesinatos == 3) && !this.miniBossCreado) {
+        if ((asesinatos == 5) && !this.miniBoss1Creado) {
+          tiposDeEnemigos = ['tipo4'];
+        }else
+        if ((asesinatos == 10) && !this.miniBoss2Creado) {
+          tiposDeEnemigos = ['tipo5'];
+        }else
+        if ((asesinatos == 20) && !this.miniBoss3Creado) {
+          tiposDeEnemigos = ['tipo6'];
+        }else
+        if ((asesinatos == 30) && !this.boss) {
           tiposDeEnemigos = ['tipo7'];
+          this.boss = true;
         }
         else if (asesinatos < 20) {
           tiposDeEnemigos = ['tipo1'];
@@ -179,37 +191,34 @@ class Juego {
             switch(tipoAleatorio){
               case 'tipo4':
                 enemigo = new MiniBossSprinter(posX, posY, 1, this, `enemigo_${i}`, tipoAleatorio);
+                this.miniBoss1Creado = true;
                 break;
               case 'tipo5':
                 enemigo = new MiniBossShooter(posX, posY, 1, this, `enemigo_${i}`, tipoAleatorio);
+                this.miniBoss2Creado = true;
                 break;
               case 'tipo6':
                 enemigo = new MiniBossShooterX(posX, posY, 1, this, `enemigo_${i}`, tipoAleatorio);
+                this.miniBoss3Creado = true;
                 break;
               case 'tipo7':
                 enemigo = new Boss(posX, posY, 1, this, `enemigo_${i}`, tipoAleatorio);
+                this.boss = true;
                 break;
               default:
                 enemigo = new Enemigo(posX, posY, 1, this, `enemigo_${i}`, tipoAleatorio);
                 break;
-            }
-            if (tipoAleatorio === 'tipo4'|| tipoAleatorio === 'tipo5'|| tipoAleatorio === 'tipo6' || tipoAleatorio === 'tipo7') {
-              this.miniBossCreado = true;
             }
             //let velocidad = Math.random() * 0.2 + 0.5;
             this.enemigos.push(enemigo);
             this.grid.add(enemigo);
             break;
           }
-
           intentos++;
         } while (intentos < maxIntentos);
-
-
       }
     }
   }
-
   crearEnemigo(tipo,i){
     // Generar una posición aleatoria
     const posX = 50 + Math.random() * (this.canvasWidth - 300);

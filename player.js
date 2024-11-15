@@ -4,7 +4,6 @@ class Player extends Objeto {
     this.velocidadMaximaOriginal = 2;
     this.juego = juego;
     this.grid = juego.grid;
-
     this.asesinatos = 0;
     this.puntaje = 0;
     this.balas = 6;
