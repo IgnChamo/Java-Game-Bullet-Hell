@@ -137,7 +137,12 @@ class HUD {
             this.balasSprites.push(bala);
         }
     }
-
+    borrarBalas() {
+        this.balasSprites.forEach(bala => {
+            this.container.removeChild(bala);
+        });
+        this.balasSprites = [];
+    }
     disparar() {
         // Encuentra la primera bala cargada y cámbiala a descargada
         for (let i = this.balasSprites.length - 1; i >= 0; i--) {
@@ -157,7 +162,9 @@ class HUD {
 
     actualizarBalasTotales(nuevasBalasTotales) {
         this.balasTotales = nuevasBalasTotales;
+        this.borrarBalas()
         this.crearBalas();
+        this.actualizarPosicion();
     }
     actualizarBalas(){
         this.juego.player.balasTotales += 1;

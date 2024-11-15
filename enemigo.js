@@ -7,6 +7,7 @@ const configuracionEnemigos = {
     spriteX: 32,
     spriteY: 32,
     scale: (1, 1),
+    puntos: 2,
     sprites: {
       idle: "./img/isacc_idle.png",
       morir: "./img/isacc_muerte.png",
@@ -22,6 +23,7 @@ const configuracionEnemigos = {
     spriteX: 64,
     spriteY: 64,
     scale: (0.1, 0.8),
+    puntos: 1,
     sprites: {
       idle: "./img/perrito_run.png",
       morir: "./img/perrito_muerte.png",
@@ -36,6 +38,7 @@ const configuracionEnemigos = {
     velocidadSprite: 1,
     spriteX: 64,
     spriteY: 64,
+    puntos: 6,
     scale: (1, 1),
     sprites: {
       idle: "./img/cabezon_run.png",
@@ -46,12 +49,13 @@ const configuracionEnemigos = {
     },
   },
   tipo4: { // sprinter
-    vida: 6,
+    vida: 1,
     velocidad: 0.9,
     velocidadSprite: 0.7,
     spriteX: 64,
     spriteY: 112,
     scale: (1, 1),
+    puntos: 100,
     sprites: {
       idle: "./img/miniboss2_run.png",
       morir: "./img/miniboss2_habilidad.png",
@@ -63,12 +67,13 @@ const configuracionEnemigos = {
     },
   },
   tipo5: { // shooter
-    vida: 5,
+    vida: 1,
     velocidad: 1,
     velocidadSprite: 0.7,
     spriteX: 96,
     spriteY: 104,
     scale: (1, 1),
+    puntos: 100,
     sprites: {
       idle: "./img/miniboss1_run.png",
       morir: "./img/miniboss1_muerte.png",
@@ -80,12 +85,13 @@ const configuracionEnemigos = {
     },
   },
   tipo6: { // shooter
-    vida: 5,
+    vida: 1,
     velocidad: 1,
     velocidadSprite: 0.7,
     spriteX: 48,
     spriteY: 64,
     scale: (1, 1),
+    puntos: 100,
     sprites: {
       idle: "./img/miniboss3_run.png",
       morir: "./img/miniboss3_muerte.png",
@@ -103,6 +109,7 @@ const configuracionEnemigos = {
     spriteX: 147,
     spriteY: 140,
     scale: (1, 1),
+    puntos: 300,
     sprites: {
       idle: "./img/boss_run.png",
       morir: "./img/boss_habilidad.png",
@@ -130,6 +137,7 @@ class Enemigo extends Objeto {
     this.tiempoPostMorten = 3000;
     this.nombre = id;
     this.tipo = tipo;
+    this.puntos = config.puntos;
     this.container.scale.set(config.scale);
     //variables miniboss
     this.duracionPowerUp = 2; //FRAMES
@@ -173,10 +181,7 @@ class Enemigo extends Objeto {
   recibirTiro() {
     this.vida -= 1;
     if (this.vida <= 0) {
-      this.juego.enemigos = this.juego.enemigos.filter((k) => k != this);
-      //this.juego.hud.actualizarHud();
-      this.grid.remove(this);
-      let sprite = this.cambiarSprite("morir", 0, false);
+      this.borrar();
       this.velocidad.x = 0;
       this.velocidad.y = 0;
       this.juego.hud.actualizarHud();
@@ -188,13 +193,19 @@ class Enemigo extends Objeto {
       if (this.tipo === 'tipo4' || this.tipo === 'tipo5' || this.tipo === 'tipo6' || this.tipo === 'tipo7') {
         this.juego.miniBossCreado = false;
       }
-      //this.juego.hud.actualizarBalas();
-      this.desaparecer();
+
+      
       // sprite.animationSpeed=0.001
 
     } else {
       //let sprite = this.cambiarSprite("recibeTiro", 0, false);
     }
+  }
+  borrar(){
+    this.juego.enemigos = this.juego.enemigos.filter((k) => k != this);
+    this.grid.remove(this);
+    let sprite = this.cambiarSprite("morir", 0, false);
+    this.desaparecer();
   }
 
   mirarAlrededor() {
@@ -340,7 +351,8 @@ class Enemigo extends Objeto {
 
   desaparecer() {
     this.juego.player.asesinatos += 1;
-    this.juego.player.puntaje += 2;
+    this.juego.player.puntaje += this.puntos;
+    this.juego.hud.actualizarHud();
     setTimeout(() => {
       if (this.container && this.container.parent) {
         this.container.parent.removeChild(this.container);
@@ -484,8 +496,48 @@ class Enemigo extends Objeto {
 
     return fuerza;
   }
-
-  crearPowerUp() {
+  crearPowerUps(){
+    const valor = Math.floor(Math.random() * 4) 
+    switch(valor){
+      case 0:
+        this.juego.powerUps.push(
+          new BajarCadencia(
+            this.container.x,
+            this.container.y,
+            this.juego
+          )
+        );
+        break;
+      case 1:
+        this.juego.powerUps.push(
+          new AumentarBalas(
+            this.container.x,
+            this.container.y,
+            this.juego
+          )
+        );
+        break;
+      case 2:
+        this.juego.powerUps.push(
+          new Perforacion(
+            this.container.x,
+            this.container.y,
+            this.juego
+          )
+        );
+        break;
+      case 3:
+        this.juego.powerUps.push(
+          new BombaEnemigos(
+            this.container.x,
+            this.container.y,
+            this.juego
+          )
+        );
+        break;
+    }
+  }
+  crearPowerUpCompanion() {
     this.juego.powerUps.push(
       new CapturedCompanion(
         this.container.x,
@@ -535,6 +587,7 @@ class MiniBossSprinter extends Enemigo {
       this.juego.miniBossCreado = false;
       //this.juego.hud.actualizarBalas();
       this.desaparecer();
+      this.crearPowerUpCompanion();
     }
   }
 
@@ -614,7 +667,7 @@ class MiniBossShooter extends Enemigo {
 
       //this.juego.player.ponerCompanion();
 
-      this.crearPowerUp();
+      this.crearPowerUpCompanion();
       // sprite.animationSpeed=0.001
 
     } else {
@@ -701,7 +754,8 @@ class MiniBossShooterX extends Enemigo {
 
       //this.juego.hud.actualizarBalas();
       this.desaparecer();
-      this.crearPowerUp();
+      this.crearPowerUpCompanion();
+      
       // sprite.animationSpeed=0.001
 
     } else {

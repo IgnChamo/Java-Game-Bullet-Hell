@@ -34,6 +34,7 @@ class Juego {
     this.powerUps = [];
     this.start = true;
     this.nivel = 1;
+    this.miniBossCreado = false;
     this.miniBoss1Creado = false;
     this.miniBoss2Creado = false;
     this.miniBoss3Creado = false;
@@ -237,6 +238,12 @@ class Juego {
       this.enemigos.push(enemigo);
       this.grid.add(enemigo);
     }
+  }
+  borrarEnemigos(){
+    this.enemigos.forEach((enemigo) => {
+      enemigo.borrar();
+    });
+    this.ponerEnemigos(5);
   }
   mouseDownEvent() {
     this.companions.forEach((compa) => {

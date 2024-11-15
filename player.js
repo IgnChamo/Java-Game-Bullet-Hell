@@ -14,6 +14,9 @@ class Player extends Objeto {
     this.delayDisparo = false;
     this.delayEntreBalas = 500;
 
+    this.perforacion = false;
+    this.maxPerforaciones = 0;
+
     this.normal = new Normal(this);
 
     this.invincible = new Invincible(this, 3000);
@@ -25,7 +28,7 @@ class Player extends Objeto {
     this.escudo = new Escudo(this.container.x, this.container.y, this.juego);
     this.recarga = new Recarga(this.container.x, this.container.y, this.juego);
     this.juego.gameContainer.addChild(this.container);
-    
+
     this.cargarVariosSpritesAnimados(
       {
         idle: "./img/player_idle.png",
@@ -55,7 +58,9 @@ class Player extends Objeto {
           this.container.y + 10,
           this.juego,
           Math.sin(angulo),
-          Math.cos(angulo)
+          Math.cos(angulo),
+          this.perforacion,
+          this.maxPerforaciones
         )
       );
 
@@ -86,15 +91,15 @@ class Player extends Objeto {
     this.vecinos = this.obtenerVecinos();
 
     if (this.juego.keyboard.a && this.container.x > 50) {
-      if(this.juego.keyboard.w || this.juego.keyboard.s){
-        this.velocidad.x=-0.5;
+      if (this.juego.keyboard.w || this.juego.keyboard.s) {
+        this.velocidad.x = -0.5;
       }
       else {
         this.velocidad.x = -1;
       }
     } else if (this.juego.keyboard.d && this.container.x < this.juego.canvasWidth - 50) {
-      if(this.juego.keyboard.w || this.juego.keyboard.s){
-        this.velocidad.x=0.5;
+      if (this.juego.keyboard.w || this.juego.keyboard.s) {
+        this.velocidad.x = 0.5;
       }
       else {
         this.velocidad.x = 1;
@@ -104,15 +109,15 @@ class Player extends Objeto {
     }
 
     if (this.juego.keyboard.w && this.container.y > 200) {
-      if(this.juego.keyboard.a || this.juego.keyboard.d){
-        this.velocidad.y=-0.5;
+      if (this.juego.keyboard.a || this.juego.keyboard.d) {
+        this.velocidad.y = -0.5;
       }
       else {
         this.velocidad.y = -1;
       }
     } else if (this.juego.keyboard.s && this.container.y < this.juego.canvasHeight - 50) {
-      if(this.juego.keyboard.a || this.juego.keyboard.d){
-        this.velocidad.y=0.5;
+      if (this.juego.keyboard.a || this.juego.keyboard.d) {
+        this.velocidad.y = 0.5;
       }
       else {
         this.velocidad.y = 1;
@@ -135,10 +140,10 @@ class Player extends Objeto {
     let fuerzas = new PIXI.Point(0, 0);
     const repulsionDeObstaculos = this.repelerObstaculos(this.vecinos)
 
-    if(repulsionDeObstaculos.x != 0 || repulsionDeObstaculos.y != 0){
+    if (repulsionDeObstaculos.x != 0 || repulsionDeObstaculos.y != 0) {
       fuerzas.x += repulsionDeObstaculos.x;
       fuerzas.y += repulsionDeObstaculos.y;
-      console.log("activando repulsion de obstaculo" + repulsionDeObstaculos )
+      console.log("activando repulsion de obstaculo" + repulsionDeObstaculos)
     }
 
     this.aplicarFuerza(fuerzas)
@@ -149,7 +154,7 @@ class Player extends Objeto {
       this.escudo.container.visible = true;
 
       this.escudo.actualizarPosicion();
-      
+
       this.escudo.cambiarSprite("Activo");
     } else {
       this.escudo.container.visible = false;
@@ -157,7 +162,7 @@ class Player extends Objeto {
 
     //recarga
 
-    if(this.balas < 2){
+    if (this.balas < 2) {
       this.recarga.container.visible = true;
     }
     //cambio de animaciones
@@ -173,16 +178,24 @@ class Player extends Objeto {
     } else {
       this.cambiarSprite("idle");
     }
-    if(this.vidas === 0){
+    if (this.vidas === 0) {
       this.juego.perdiste = true;
       this.juego.hud.derrota.visible = true;
     }
-  
+
     this.recarga.actualizarPosicion();
 
     super.update();
   }
-
+  bajarCadencia() {
+    if (this.delayEntreBalas > 50){
+      this.delayEntreBalas -= 50;
+    }
+  }
+  aumentarPerforacion(){
+    this.perforacion = true;
+    this.maxPerforaciones += 1;
+  }
   atraccionAlMouse(mouse) {
     if (!mouse) return null;
     const vecMouse = new PIXI.Point(

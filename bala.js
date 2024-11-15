@@ -3,7 +3,7 @@
 // Asegúrate de que el archivo utils.js esté incluido en tu index.html antes de este script
 
 class Bala extends Objeto {
-  constructor(x, y, juego, velX, velY) {
+  constructor(x, y, juego, velX, velY,perforacion,maxPerforaciones) {
     super(x, y, 20, juego);
     this.velocidad.x = velX;
     this.velocidad.y = velY;
@@ -20,9 +20,9 @@ class Bala extends Objeto {
     this.sprite.width = 10;
     this.sprite.height = 10;
     this.debug = 0;
-    this.perforacion = false;
+    this.perforacion = perforacion;
     this.perforados = 0;
-    this.maxPerforaciones = 1;
+    this.maxPerforaciones = maxPerforaciones;
 
     this.juego.app.stage.addChild(this.container);
   }
