@@ -50,7 +50,7 @@ class Juego {
     this.ponerProtagonista();
     this.ponerIndicador();
     this.ponerObstaculos(15);
-    
+
     //this.iniciarEnemigos();
     this.ponerListeners();
 
@@ -106,30 +106,30 @@ class Juego {
 
   }
 
-  ponerObstaculos(cantidad){
-    const distanciaMinima = 10; 
+  ponerObstaculos(cantidad) {
+    const distanciaMinima = 10;
     const maxIntentos = 999;
 
-    for(let i=0; i<cantidad; i++){
+    for (let i = 0; i < cantidad; i++) {
       let intentos = 0;
 
-    
 
-    // Generar una posición aleatoria
-    const posX = 50 + Math.random() * (this.canvasWidth - 300);
-    const posY = 200 + Math.random() * (this.canvasHeight - 500);
 
-    // Calcular la distancia entre la posición aleatoria y la posición del jugador
-    let distanciaAlJugador = Math.hypot(
-      posX - this.player.container.x,
-      posY - this.player.container.y
-    );
-    if(distanciaMinima < distanciaAlJugador){
-      let obstaculo = new Obstaculos(posX, posY,this);
-      this.obstaculos.push(obstaculo);
-      this.grid.add(obstaculo);
+      // Generar una posición aleatoria
+      const posX = 50 + Math.random() * (this.canvasWidth - 300);
+      const posY = 200 + Math.random() * (this.canvasHeight - 500);
+
+      // Calcular la distancia entre la posición aleatoria y la posición del jugador
+      let distanciaAlJugador = Math.hypot(
+        posX - this.player.container.x,
+        posY - this.player.container.y
+      );
+      if (distanciaMinima < distanciaAlJugador) {
+        let obstaculo = new Obstaculos(posX, posY, this);
+        this.obstaculos.push(obstaculo);
+        this.grid.add(obstaculo);
+      }
     }
-  }
   }
 
   ponerEnemigos(cant) {
@@ -144,34 +144,33 @@ class Juego {
         let distanciaAlJugador = 0;
         var tiposDeEnemigos = [];
         var asesinatos = this.player.asesinatos;
-        if ((asesinatos == 5) && !this.miniBoss1Creado) {
+        if (asesinatos == 1) {
+          tiposDeEnemigos = ['tipo2'];
+          cant = 1;
+        } else if (asesinatos == 2) {
+          tiposDeEnemigos = ['tipo2'];
+          cant = 1;
+        }
+        else if (asesinatos == 3) {
+          tiposDeEnemigos = ['tipo3'];
+          cant = 1;
+        } else if ((asesinatos == 5) && !this.miniBoss1Creado) {
           tiposDeEnemigos = ['tipo4'];
-        }else
-        if ((asesinatos == 10) && !this.miniBoss2Creado) {
+        } else if ((asesinatos == 10) && !this.miniBoss2Creado) {
           tiposDeEnemigos = ['tipo5'];
-        }else
-        if ((asesinatos == 20) && !this.miniBoss3Creado) {
+        } else if ((asesinatos == 20) && !this.miniBoss3Creado) {
           tiposDeEnemigos = ['tipo6'];
-        }else
-        if ((asesinatos == 30) && !this.boss) {
+        } else if ((asesinatos == 30) && !this.boss) {
           tiposDeEnemigos = ['tipo7'];
           this.boss = true;
         }
-        else if (asesinatos < 20) {
+        else if (asesinatos <= 20) {
           tiposDeEnemigos = ['tipo1'];
-        } else if (asesinatos == 20) {
-          tiposDeEnemigos = ['tipo2'];
-          cant = 1;
-        } else if (asesinatos > 20 && asesinatos < 30) {
+        } else if (asesinatos > 20 && asesinatos <= 30) {
           tiposDeEnemigos = ['tipo1', 'tipo2'];
-        } else if (asesinatos == 30) {
-          tiposDeEnemigos = ['tipo3'];
-          cant = 1;
         } else if (asesinatos > 30) {
           tiposDeEnemigos = ['tipo1', 'tipo2', 'tipo3'];
         }
-
-
 
         do {
           // Generar una posición aleatoria
@@ -189,7 +188,7 @@ class Juego {
             const tipoAleatorio = tiposDeEnemigos[Math.floor(Math.random() * tiposDeEnemigos.length)];
             console.log(tipoAleatorio);
 
-            switch(tipoAleatorio){
+            switch (tipoAleatorio) {
               case 'tipo4':
                 enemigo = new MiniBossSprinter(posX, posY, 1, this, `enemigo_${i}`, tipoAleatorio);
                 this.miniBoss1Creado = true;
@@ -220,7 +219,8 @@ class Juego {
       }
     }
   }
-  crearEnemigo(tipo,i){
+  
+  /*crearEnemigo(tipo, i) {
     // Generar una posición aleatoria
     const posX = 50 + Math.random() * (this.canvasWidth - 300);
     const posY = 200 + Math.random() * (this.canvasHeight - 500);
@@ -238,12 +238,17 @@ class Juego {
       this.enemigos.push(enemigo);
       this.grid.add(enemigo);
     }
-  }
-  borrarEnemigos(){
+  }*/
+  borrarEnemigos() {
     this.enemigos.forEach((enemigo) => {
       enemigo.borrar();
+      const random = Math.floor(Math.random() * 2);
+      if(random === 0){
+      this.ponerEnemigos(1);
+      console.log("crea los bichos papa");
+      }
     });
-    this.ponerEnemigos(5);
+    //this.ponerEnemigos(5);
   }
   mouseDownEvent() {
     this.companions.forEach((compa) => {

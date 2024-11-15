@@ -182,21 +182,23 @@ class Enemigo extends Objeto {
     this.vida -= 1;
     if (this.vida <= 0) {
       this.borrar();
+      
       this.velocidad.x = 0;
       this.velocidad.y = 0;
       this.juego.hud.actualizarHud();
       if (this.juego.miniBossCreado) {
         this.juego.ponerEnemigos(1);
       } else {
-        this.juego.ponerEnemigos(Math.floor(Math.random() * 3) + 1);
+        this.juego.ponerEnemigos(Math.floor(Math.random() * 2) + 1);
       }
       if (this.tipo === 'tipo4' || this.tipo === 'tipo5' || this.tipo === 'tipo6' || this.tipo === 'tipo7') {
         this.juego.miniBossCreado = false;
       }
-
-      
-      // sprite.animationSpeed=0.001
-
+      this.juego.player.contadorDisparos ++;
+      if(this.juego.player.contadorDisparos > 50){
+        this.crearPowerUps();
+        this.juego.player.contadorDisparos = 0;
+      }
     } else {
       //let sprite = this.cambiarSprite("recibeTiro", 0, false);
     }
@@ -496,6 +498,7 @@ class Enemigo extends Objeto {
 
     return fuerza;
   }
+
   crearPowerUps(){
     const valor = Math.floor(Math.random() * 4) 
     switch(valor){
@@ -582,7 +585,7 @@ class MiniBossSprinter extends Enemigo {
       if (this.juego.miniBossCreado) {
         this.juego.ponerEnemigos(1);
       } else {
-        this.juego.ponerEnemigos(Math.floor(Math.random() * 3) + 1);
+        this.juego.ponerEnemigos(Math.floor(Math.random() * 2) + 1);
       }
       this.juego.miniBossCreado = false;
       //this.juego.hud.actualizarBalas();
@@ -658,7 +661,7 @@ class MiniBossShooter extends Enemigo {
       if (this.juego.miniBossCreado) {
         this.juego.ponerEnemigos(1);
       } else {
-        this.juego.ponerEnemigos(Math.floor(Math.random() * 3) + 1);
+        this.juego.ponerEnemigos(Math.floor(Math.random() * 2) + 1);
       }
       this.juego.miniBossCreado = false;
       //this.juego.hud.actualizarBalas();
@@ -748,7 +751,7 @@ class MiniBossShooterX extends Enemigo {
       if (this.juego.miniBossCreado) {
         this.juego.ponerEnemigos(1);
       } else {
-        this.juego.ponerEnemigos(Math.floor(Math.random() * 3) + 1);
+        this.juego.ponerEnemigos(Math.floor(Math.random() * 2) + 1);
       }
       this.juego.miniBossCreado = false;
 
@@ -895,17 +898,12 @@ class Boss extends Enemigo {
       this.velocidad.x = 0;
       this.velocidad.y = 0;
       this.juego.hud.actualizarHud();
-      console.log("el miniboss es " + this.juego.miniBossCreado)
-      if (this.juego.miniBossCreado) {
-        this.juego.ponerEnemigos(1);
-      } else {
-        this.juego.ponerEnemigos(Math.floor(Math.random() * 3) + 1);
-      }
 
-      this.juego.miniBossCreado = false;
+      this.juego.boss = false;
 
       //this.juego.hud.actualizarBalas();
       this.desaparecer();
+      this.juego.ponerEnemigos(5);
     }
   }
 

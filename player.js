@@ -5,6 +5,7 @@ class Player extends Objeto {
     this.juego = juego;
     this.grid = juego.grid;
     this.asesinatos = 0;
+    this.contadorAsesinatos = 0;
     this.puntaje = 0;
     this.balas = 6;
     this.balasTotales = 6;
@@ -186,6 +187,10 @@ class Player extends Objeto {
     this.recarga.actualizarPosicion();
 
     super.update();
+  }
+  curar(){
+    this.vidas = 5;
+    this.juego.hud.actualizarHudVida();
   }
   bajarCadencia() {
     if (this.delayEntreBalas > 50){
