@@ -1,3 +1,5 @@
+
+
 // Clase Juego
 class Juego {
   constructor() {
@@ -24,6 +26,7 @@ class Juego {
     this.enemigos = [];
     this.balas = [];
     this.balasTotales = 6;
+    this.asesinatosPorNivel = 0;
 
     this.balasEnemigos = [];
 
@@ -143,24 +146,26 @@ class Juego {
         let intentos = 0;
         let distanciaAlJugador = 0;
         var tiposDeEnemigos = [];
-        var asesinatos = this.player.asesinatos;
+        var asesinatos = this.asesinatosPorNivel;//this.player.asesinatos;
+        console.log("Asesinatos: " + asesinatos);
         if (asesinatos == 1) {
           tiposDeEnemigos = ['tipo2'];
           cant = 1;
         } else if (asesinatos == 2) {
-          tiposDeEnemigos = ['tipo2'];
+          tiposDeEnemigos = ['tipo3'];
           cant = 1;
         }
         else if (asesinatos == 3) {
           tiposDeEnemigos = ['tipo3'];
           cant = 1;
-        } else if ((asesinatos == 5) && !this.miniBoss1Creado) {
+        } else if ((asesinatos > 5) && !this.miniBoss1Creado) {
+          console.log("creating miniboss1")
           tiposDeEnemigos = ['tipo4'];
-        } else if ((asesinatos == 10) && !this.miniBoss2Creado) {
+        } else if ((asesinatos > 10) && !this.miniBoss2Creado) {
           tiposDeEnemigos = ['tipo5'];
-        } else if ((asesinatos == 20) && !this.miniBoss3Creado) {
+        } else if ((asesinatos > 20) && !this.miniBoss3Creado) {
           tiposDeEnemigos = ['tipo6'];
-        } else if ((asesinatos == 30) && !this.boss) {
+        } else if ((asesinatos > 30) && !this.boss) {
           tiposDeEnemigos = ['tipo7'];
           this.boss = true;
         }

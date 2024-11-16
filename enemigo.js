@@ -186,10 +186,11 @@ class Enemigo extends Objeto {
       this.velocidad.x = 0;
       this.velocidad.y = 0;
       this.juego.hud.actualizarHud();
+      this.juego.asesinatosPorNivel+=1;
       if (this.juego.miniBossCreado) {
         this.juego.ponerEnemigos(1);
       } else {
-        this.juego.ponerEnemigos(Math.floor(Math.random() * 2) + 1);
+        this.juego.ponerEnemigos(Math.floor(Math.random() * 2) + this.juego.nivel);
       }
       if (this.tipo === 'tipo4' || this.tipo === 'tipo5' || this.tipo === 'tipo6' || this.tipo === 'tipo7') {
         this.juego.miniBossCreado = false;
@@ -899,11 +900,19 @@ class Boss extends Enemigo {
       this.velocidad.y = 0;
       this.juego.hud.actualizarHud();
 
+      this.juego.nivel += 1
+      console.log("Asesinatos este nivel: " + this.juego.asesinatosPorNivel);
+      this.juego.asesinatosPorNivel=0;
       this.juego.boss = false;
-
+      this.juego.miniBoss1Creado = false;
+      this.juego.miniBoss2Creado = false;
+      this.juego.miniBoss3Creado = false;
+      this.juego.miniBossCreado = false;
+      
       //this.juego.hud.actualizarBalas();
       this.desaparecer();
       this.juego.ponerEnemigos(5);
+      console.log("miniboses en: " + this.miniBossCreado + "; " + this.miniBoss1Creado + "; " + this.miniBoss2Creado + "; " + this. miniBoss3Creado);
     }
   }
 
