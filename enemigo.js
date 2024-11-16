@@ -196,10 +196,10 @@ class Enemigo extends Objeto {
         this.juego.miniBossCreado = false;
       }
       this.juego.player.contadorDisparos ++;
-      if(this.juego.player.contadorDisparos > 50){
+      /*if(this.juego.player.contadorDisparos > 50){
         this.crearPowerUps();
         this.juego.player.contadorDisparos = 0;
-      }
+      }*/
     } else {
       //let sprite = this.cambiarSprite("recibeTiro", 0, false);
     }
@@ -501,7 +501,7 @@ class Enemigo extends Objeto {
   }
 
   crearPowerUps(){
-    const valor = Math.floor(Math.random() * 4) 
+    const valor = Math.floor(Math.random() * 6) 
     switch(valor){
       case 0:
         this.juego.powerUps.push(
@@ -539,16 +539,25 @@ class Enemigo extends Objeto {
           )
         );
         break;
+      case 4:
+        this.juego.powerUps.push(
+          new CapturedCompanion(
+            this.container.x,
+            this.container.y,
+            this.juego
+          )
+        );
+        break;
+      case 5:
+        this.juego.powerUps.push(
+          new Cura(
+            this.container.x,
+            this.container.y,
+            this.juego
+          )
+        );
+        break;
     }
-  }
-  crearPowerUpCompanion() {
-    this.juego.powerUps.push(
-      new CapturedCompanion(
-        this.container.x,
-        this.container.y,
-        this.juego
-      )
-    );
   }
 }
 
@@ -575,7 +584,7 @@ class MiniBossSprinter extends Enemigo {
   recibirTiro() {
     this.vida -= 1;
     if (this.vida <= 0) {
-      this.juego.enemigos = this.juego.enemigos.filter((k) => k != this);
+      this.juego.bosses = this.juego.bosses.filter((k) => k != this);
       //this.juego.hud.actualizarHud();
       this.grid.remove(this);
       let sprite = this.cambiarSprite("morir", 0, false);
@@ -589,9 +598,10 @@ class MiniBossSprinter extends Enemigo {
         this.juego.ponerEnemigos(Math.floor(Math.random() * 2) + 1);
       }
       this.juego.miniBossCreado = false;
+      this.crearPowerUps();
       //this.juego.hud.actualizarBalas();
       this.desaparecer();
-      this.crearPowerUpCompanion();
+      
     }
   }
 
@@ -651,7 +661,7 @@ class MiniBossShooter extends Enemigo {
   recibirTiro() {
     this.vida -= 1;
     if (this.vida <= 0) {
-      this.juego.enemigos = this.juego.enemigos.filter((k) => k != this);
+      this.juego.bosses = this.juego.bosses.filter((k) => k != this);
       //this.juego.hud.actualizarHud();
       this.grid.remove(this);
       let sprite = this.cambiarSprite("morir", 0, false);
@@ -671,7 +681,7 @@ class MiniBossShooter extends Enemigo {
 
       //this.juego.player.ponerCompanion();
 
-      this.crearPowerUpCompanion();
+      this.crearPowerUps();
       // sprite.animationSpeed=0.001
 
     } else {
@@ -741,7 +751,7 @@ class MiniBossShooterX extends Enemigo {
   recibirTiro() {
     this.vida -= 1;
     if (this.vida <= 0) {
-      this.juego.enemigos = this.juego.enemigos.filter((k) => k != this);
+      this.juego.bosses = this.juego.bosses.filter((k) => k != this);
       //this.juego.hud.actualizarHud();
       this.grid.remove(this);
       let sprite = this.cambiarSprite("morir", 0, false);
@@ -758,7 +768,7 @@ class MiniBossShooterX extends Enemigo {
 
       //this.juego.hud.actualizarBalas();
       this.desaparecer();
-      this.crearPowerUpCompanion();
+      this.crearPowerUps();
       
       // sprite.animationSpeed=0.001
 
@@ -892,7 +902,7 @@ class Boss extends Enemigo {
   recibirTiro() {
     this.vida -= 1;
     if (this.vida <= 0) {
-      this.juego.enemigos = this.juego.enemigos.filter((k) => k != this);
+      this.juego.bosses = this.juego.bosses.filter((k) => k != this);
       //this.juego.hud.actualizarHud();
       this.grid.remove(this);
       let sprite = this.cambiarSprite("morir", 0, false);
@@ -900,7 +910,10 @@ class Boss extends Enemigo {
       this.velocidad.y = 0;
       this.juego.hud.actualizarHud();
 
+      this.crearPowerUps();
+
       this.juego.nivel += 1
+      
       console.log("Asesinatos este nivel: " + this.juego.asesinatosPorNivel);
       this.juego.asesinatosPorNivel=0;
       this.juego.boss = false;

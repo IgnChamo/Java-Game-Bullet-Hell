@@ -6,7 +6,7 @@ class BajarCadencia extends Objeto {
         this.equipoParaUpdate = Math.floor(Math.random() * 9) + 1;
         this.grid = juego.grid;
         this.sprite = new PIXI.Sprite();
-        this.sprite.texture = PIXI.Texture.from("img/Asesinatos.png");
+        this.sprite.texture = PIXI.Texture.from("img/puCandencia.png");
         this.container.addChild(this.sprite);
 
         this.juego.app.stage.addChild(this.container);
@@ -41,7 +41,7 @@ class AumentarBalas extends Objeto {
         this.equipoParaUpdate = Math.floor(Math.random() * 9) + 1;
         this.grid = juego.grid;
         this.sprite = new PIXI.Sprite();
-        this.sprite.texture = PIXI.Texture.from("img/Asesinatos.png");
+        this.sprite.texture = PIXI.Texture.from("img/puBalas.png");
         this.container.addChild(this.sprite);
 
         this.juego.app.stage.addChild(this.container);
@@ -76,7 +76,7 @@ class Cura extends Objeto {
         this.equipoParaUpdate = Math.floor(Math.random() * 9) + 1;
         this.grid = juego.grid;
         this.sprite = new PIXI.Sprite();
-        this.sprite.texture = PIXI.Texture.from("img/Asesinatos.png");
+        this.sprite.texture = PIXI.Texture.from("img/puCura.png");
         this.container.addChild(this.sprite);
 
         this.juego.app.stage.addChild(this.container);
@@ -111,7 +111,7 @@ class Perforacion extends Objeto {
         this.equipoParaUpdate = Math.floor(Math.random() * 9) + 1;
         this.grid = juego.grid;
         this.sprite = new PIXI.Sprite();
-        this.sprite.texture = PIXI.Texture.from("img/Asesinatos.png");
+        this.sprite.texture = PIXI.Texture.from("img/puPerforacion.png");
         this.container.addChild(this.sprite);
 
         this.juego.app.stage.addChild(this.container);
@@ -146,7 +146,7 @@ class BombaEnemigos extends Objeto {
         this.equipoParaUpdate = Math.floor(Math.random() * 9) + 1;
         this.grid = juego.grid;
         this.sprite = new PIXI.Sprite();
-        this.sprite.texture = PIXI.Texture.from("img/Asesinatos.png");
+        this.sprite.texture = PIXI.Texture.from("img/puBomba.png");
         this.container.addChild(this.sprite);
 
         this.juego.app.stage.addChild(this.container);

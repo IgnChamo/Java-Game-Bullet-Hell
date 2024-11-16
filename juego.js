@@ -24,6 +24,7 @@ class Juego {
     this.contadorDeFrames = 0;
     this.grid = new Grid(50, this); // Tamaño de celda 50
     this.enemigos = [];
+    this.bosses = [];
     this.balas = [];
     this.balasTotales = 6;
     this.asesinatosPorNivel = 0;
@@ -191,31 +192,41 @@ class Juego {
           // Si la distancia es suficiente, crea el enemigo en esa posición
           if (distanciaAlJugador >= distanciaMinima) {
             const tipoAleatorio = tiposDeEnemigos[Math.floor(Math.random() * tiposDeEnemigos.length)];
-            console.log(tipoAleatorio);
-
+            let flag = true
             switch (tipoAleatorio) {
               case 'tipo4':
                 enemigo = new MiniBossSprinter(posX, posY, 1, this, `enemigo_${i}`, tipoAleatorio);
                 this.miniBoss1Creado = true;
+                flag=false;
                 break;
               case 'tipo5':
                 enemigo = new MiniBossShooter(posX, posY, 1, this, `enemigo_${i}`, tipoAleatorio);
                 this.miniBoss2Creado = true;
+                flag=false;
                 break;
               case 'tipo6':
                 enemigo = new MiniBossShooterX(posX, posY, 1, this, `enemigo_${i}`, tipoAleatorio);
                 this.miniBoss3Creado = true;
+                flag=false;
                 break;
               case 'tipo7':
                 enemigo = new Boss(posX, posY, 1, this, `enemigo_${i}`, tipoAleatorio);
                 this.boss = true;
+                flag=false;
                 break;
               default:
                 enemigo = new Enemigo(posX, posY, 1, this, `enemigo_${i}`, tipoAleatorio);
                 break;
             }
             //let velocidad = Math.random() * 0.2 + 0.5;
-            this.enemigos.push(enemigo);
+            if(flag){
+              this.enemigos.push(enemigo);
+            }
+            else{
+              this.bosses.push(enemigo);
+              console.log("Added to bosses: " + enemigo);
+            }
+            
             this.grid.add(enemigo);
             break;
           }
@@ -341,7 +352,10 @@ class Juego {
       this.powerUps.forEach((powerUp) => {
         powerUp.update();
       })
-
+      this.bosses.forEach((boss) =>{
+        boss.update();
+      }
+      )
       this.moverCamara();
     }
     this.moverHUD();
