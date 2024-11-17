@@ -26,14 +26,14 @@ class HUD {
         this.balasTotales = 6;
 
         this.puntaje = new PIXI.Text("", { fontFamily: 'Press Start 2P', fontSize: 50,padding: 20, fill: 0xFF0000 });
-        this.puntaje.position.set(this.juego.app.screen.width * 0.92, 95)
+        this.puntaje.position.set(this.juego.app.screen.width * 0.841, 95)
         this.puntaje.scale.set(0.5,0.5);
         this.container.addChild(this.puntaje);
 
-        this.punt = PIXI.Sprite.from('./img/Puntaje.png');
+        /*this.punt = PIXI.Sprite.from('./img/Puntaje.png');
         this.punt.position.set(this.juego.app.screen.width * 0.892, 85);
         this.punt.scale.set(0.7,0.7);
-        this.container.addChild(this.punt);
+        this.container.addChild(this.punt);*/
 
         this.asesinatos = new PIXI.Text("", { fontFamily: 'Press Start 2P', fontSize: 50 ,padding: 20 , fill: 0xFF0000 });
         this.asesinatos.position.set(this.juego.app.screen.width * 0.92, 26);
@@ -56,7 +56,7 @@ class HUD {
 
         this.crearBalas();
         this.pistolaTexture = PIXI.Sprite.from('./img/Pistola.png');
-        this.pistolaTexture.position.set(this.juego.app.screen.width * 0.05, 100);
+        this.pistolaTexture.position.set(this.juego.app.screen.width * 0.04, 80);
         this.pistolaTexture.scale.set(0.7,0.7);
         this.container.addChild(this.pistolaTexture);
 
@@ -75,7 +75,7 @@ class HUD {
 
 
     actualizarHud() {
-        this.puntaje.text = this.juego.player.puntaje;
+        this.puntaje.text = "Score " + this.juego.player.puntaje;
         this.nivel.text = "Nivel " + this.juego.nivel;
         this.asesinatos.text = this.juego.player.asesinatos;
     }
@@ -102,7 +102,7 @@ class HUD {
 
     actualizarPosicion() {
         this.puntaje.position.set(this.juego.app.screen.width * 0.92, 88);
-        this.punt.position.set(this.juego.app.screen.width * 0.9, 85);
+        //this.punt.position.set(this.juego.app.screen.width * 0.9, 85);
         this.asesinatos.position.set(this.juego.app.screen.width * 0.92, 25);
         this.asesinato.position.set(this.juego.app.screen.width * 0.9, 10);
         this.nivel.position.set(this.juego.app.screen.width * 0.46, 25);

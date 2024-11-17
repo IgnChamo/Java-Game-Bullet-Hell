@@ -15,7 +15,7 @@ class Bala extends Objeto {
     this.cargarVariosSpritesAnimados(
       {
         idle: "./img/bala.png",
-        explotar: "./img/bala.png"
+        explotar: "./img/balaExplosion.png"
       },
       10,
       10,
@@ -31,6 +31,7 @@ class Bala extends Objeto {
     this.perforacion = perforacion;
     this.perforados = 0;
     this.maxPerforaciones = maxPerforaciones;
+    
 
     this.juego.gameContainer.addChild(this.container);
   }
@@ -75,15 +76,23 @@ class Bala extends Objeto {
         objs[cual].recibirTiro();
         this.perforados ++;
         if(this.perforados > this.maxPerforaciones && this.perforacion){
-        this.borrar();
-        this.juego.gameContainer.removeChild(this.container);
+          this.activarAnimacionExplotar();
         }else if(!this.perforacion){
-          this.borrar();
-          this.juego.gameContainer.removeChild(this.container);
+          this.activarAnimacionExplotar();
         }
       }
     } 
   }
+  activarAnimacionExplotar() {
+    //this.cambiarSprite("explotar"); 
+    //const duracionAnimacion = 500;
+    this.velocidad.x = 0;
+    this.velocidad.y = 0;
+    this.borrar();
+    this.juego.gameContainer.removeChild(this.container);
+    //setTimeout(() => {
+    //}, duracionAnimacion);
+}
 }
 
 
@@ -99,8 +108,7 @@ class BalaEnemigo extends Objeto {
     // Cargar la textura del sprite desde el <img>
     this.cargarVariosSpritesAnimados(
       {
-        idle: "./img/bala.png",
-        explotar: "./img/bala.png"
+        idle: "./img/bala.png"
       },
       10,
       10,
