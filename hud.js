@@ -25,7 +25,7 @@ class HUD {
         this.balasSprites = [];
         this.balasTotales = 6;
 
-        this.puntaje = new PIXI.Text("", { fontFamily: 'Press Start 2P', fontSize: 50,padding: 20, fill: 0x000000 });
+        this.puntaje = new PIXI.Text("", { fontFamily: 'Press Start 2P', fontSize: 50,padding: 20, fill: 0xFF0000 });
         this.puntaje.position.set(this.juego.app.screen.width * 0.92, 95)
         this.puntaje.scale.set(0.5,0.5);
         this.container.addChild(this.puntaje);
@@ -35,7 +35,7 @@ class HUD {
         this.punt.scale.set(0.7,0.7);
         this.container.addChild(this.punt);
 
-        this.asesinatos = new PIXI.Text("", { fontFamily: 'Press Start 2P', fontSize: 50 ,padding: 20 , fill: 0x000000 });
+        this.asesinatos = new PIXI.Text("", { fontFamily: 'Press Start 2P', fontSize: 50 ,padding: 20 , fill: 0xFF0000 });
         this.asesinatos.position.set(this.juego.app.screen.width * 0.92, 26);
         this.asesinatos.scale.set(0.5,0.5);
         this.container.addChild(this.asesinatos);
@@ -45,7 +45,7 @@ class HUD {
         this.asesinato.scale.set(0.7,0.7);
         this.container.addChild(this.asesinato);
 
-        this.nivel = new PIXI.Text("Level ", { fontFamily: 'Press Start 2P', fontSize: 20, fill: 0x000000 });
+        this.nivel = new PIXI.Text("Level ", { fontFamily: 'Press Start 2P', fontSize: 20, fill: 0xFF0000 });
         this.nivel.position.set(this.juego.app.screen.width * 0.46, 26);
         this.container.addChild(this.nivel);
 
@@ -64,7 +64,7 @@ class HUD {
         this.pressStart.position.set(this.juego.app.screen.width * 0.25, 750);
         this.container.addChild(this.pressStart);
 
-        this.derrota = new PIXI.Text("YOU DIED", { fontFamily: 'Press Start 2P', fontSize: 50, fill: 0x000000 });
+        this.derrota = new PIXI.Text("YOU DIED", { fontFamily: 'Press Start 2P', fontSize: 50, fill: 0xFF0000 });
         this.derrota.position.set(this.juego.app.screen.width * 0.4, this.juego.app.screen.height * 0.5);
         this.derrota.visible = false;
         this.container.addChild(this.derrota);

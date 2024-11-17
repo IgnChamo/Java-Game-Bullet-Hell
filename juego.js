@@ -20,6 +20,9 @@ class Juego {
     this.app.stage.addChild(this.hudContainer);
     this.hud = new HUD(this);
 
+    this.currentBackground = 0;
+    this.backgroundTextures = [];
+
     this.gridActualizacionIntervalo = 10; // Cada 10 frames
     this.contadorDeFrames = 0;
     this.grid = new Grid(50, this); // Tamaño de celda 50
@@ -49,8 +52,8 @@ class Juego {
     this.keyboard = {};
 
     this.app.stage.sortableChildren = true;
-
-    this.ponerFondo();
+    this.cargarFondos();
+    //this.ponerFondo();
     this.ponerProtagonista();
     this.ponerIndicador();
     this.ponerObstaculos(15);
@@ -63,7 +66,37 @@ class Juego {
       window.__PIXI_APP__ = this.app;
     }, 100);
   }
+  cargarFondos() {
+    PIXI.Texture.fromURL("./img/bg2.png").then((texture1) => {
+      this.backgroundTextures[0] = texture1;
+      PIXI.Texture.fromURL("./img/bg.png").then((texture2) => {
+        this.backgroundTextures[1] = texture2;
+        this.ponerFondo(); // Inicia el fondo al cargar
+      });
+    });
+  }
+
   ponerFondo() {
+    // Elimina el sprite de fondo anterior si existe
+    if (this.backgroundSprite) {
+      this.gameContainer.removeChild(this.backgroundSprite);
+    }
+
+    // Cambiar al siguiente fondo
+    this.currentBackground = 1 - this.currentBackground; // Alterna entre 0 y 1
+
+    // Crear un nuevo sprite con la textura del fondo actual
+    this.backgroundSprite = new PIXI.TilingSprite(
+      this.backgroundTextures[this.currentBackground],
+      5000,
+      5000
+    );
+
+    // Añadir el sprite al stage
+    this.gameContainer.addChildAt(this.backgroundSprite, 0);
+  }
+
+  /*ponerFondo() {
     // Crear un patrón a partir de una imagen
     PIXI.Texture.fromURL("./img/bg.png").then((patternTexture) => {
       // Crear un sprite con la textura del patrón
@@ -73,7 +106,7 @@ class Juego {
       // Añadir el sprite al stage
       this.gameContainer.addChildAt(this.backgroundSprite, 0);
     });
-  }
+  }*/
   ponerProtagonista() {
     this.player = new Player(
       window.innerWidth / 2,

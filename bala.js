@@ -12,19 +12,27 @@ class Bala extends Objeto {
     this.grid = juego.grid; // Referencia a la grid
     this.vision = 2;
     // Cargar la textura del sprite desde el <img>
-    this.sprite = new PIXI.Sprite();
-    this.sprite.texture = PIXI.Texture.from("./bala.png");
-    this.container.addChild(this.sprite);
+    this.cargarVariosSpritesAnimados(
+      {
+        idle: "./img/bala.png",
+        explotar: "./img/bala.png"
+      },
+      10,
+      10,
+      0.1,
+      (e) => {
+        this.listo = true;
+        this.cambiarSprite("idle");
+      }
+    );
+    //this.container.addChild(this.sprite);
 
-    // Asegurarse de que el tamaño sea 25x25
-    this.sprite.width = 10;
-    this.sprite.height = 10;
-    this.debug = 0;
+
     this.perforacion = perforacion;
     this.perforados = 0;
     this.maxPerforaciones = maxPerforaciones;
 
-    this.juego.app.stage.addChild(this.container);
+    this.juego.gameContainer.addChild(this.container);
   }
 
   update() {
@@ -37,6 +45,7 @@ class Bala extends Objeto {
       this.container.x > this.juego.canvasWidth 
     ) {
       this.borrar();
+      this.juego.gameContainer.removeChild(this.container);
     }
       this.colision();
     
@@ -67,8 +76,10 @@ class Bala extends Objeto {
         this.perforados ++;
         if(this.perforados > this.maxPerforaciones && this.perforacion){
         this.borrar();
+        this.juego.gameContainer.removeChild(this.container);
         }else if(!this.perforacion){
           this.borrar();
+          this.juego.gameContainer.removeChild(this.container);
         }
       }
     } 
@@ -77,30 +88,39 @@ class Bala extends Objeto {
 
 
 class BalaEnemigo extends Objeto {
-  constructor(x, y, juego, velX, velY) {
-    super(x, y, 5, juego);
+  constructor(x, y, juego, velX, velY,perforacion,maxPerforaciones) {
+    super(x, y, 20, juego);
     this.velocidad.x = velX;
     this.velocidad.y = velY;
-    
+
     this.juego = juego;
     this.grid = juego.grid; // Referencia a la grid
     this.vision = 2;
     // Cargar la textura del sprite desde el <img>
-    this.sprite = new PIXI.Sprite();
-    this.sprite.texture = PIXI.Texture.from("./bala.png");
-    this.container.addChild(this.sprite);
-    
-    // Asegurarse de que el tamaño sea 25x25
-    this.sprite.width = 10;
-    this.sprite.height = 10;
-    this.debug = 0;
-    
-    this.juego.app.stage.addChild(this.container);
+    this.cargarVariosSpritesAnimados(
+      {
+        idle: "./img/bala.png",
+        explotar: "./img/bala.png"
+      },
+      10,
+      10,
+      0.1,
+      (e) => {
+        this.listo = true;
+        this.cambiarSprite("idle");
+      }
+    );
+    //this.container.addChild(this.sprite);
+
+
+    this.perforacion = perforacion;
+    this.perforados = 0;
+    this.maxPerforaciones = maxPerforaciones;
+
+    this.juego.gameContainer.addChild(this.container);
   }
 
   update() {
-    this.velocidad.x *= 0.5;
-    this.velocidad.y *= 0.5;
     super.update();
 
     if (
@@ -110,8 +130,12 @@ class BalaEnemigo extends Objeto {
       this.container.x > this.juego.canvasWidth 
     ) {
       this.borrar();
+      this.juego.gameContainer.removeChild(this.container);
     }
-
+      this.colision();
+    
+  } 
+  colision(){
     let objs = Object.values(
       (this.miCeldaActual || {}).objetosAca || {}
     ).filter((k) => k instanceof Player);
@@ -136,7 +160,8 @@ class BalaEnemigo extends Objeto {
         objs[cual].status.damage(1);
         this.juego.hud.actualizarHudVida();
         this.borrar();
+        this.juego.gameContainer.removeChild(this.container);
       }
     } 
-  } 
+  }
 }
