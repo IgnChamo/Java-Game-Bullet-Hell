@@ -8,7 +8,9 @@ const configuracionEnemigos = {
     spriteY: 32,
     scale: (1, 1),
     puntos: 2,
+    duracionShow: 500,
     sprites: {
+      show: "./img/isacc_show.png",
       idle: "./img/isacc_idle.png",
       morir: "./img/isacc_muerte.png",
     },
@@ -24,7 +26,9 @@ const configuracionEnemigos = {
     spriteY: 64,
     scale: (0.1, 0.8),
     puntos: 1,
+    duracionShow: 500,
     sprites: {
+      show: "./img/perrito_show.png",
       idle: "./img/perrito_run.png",
       morir: "./img/perrito_muerte.png",
     },
@@ -40,7 +44,9 @@ const configuracionEnemigos = {
     spriteY: 64,
     puntos: 6,
     scale: (1, 1),
+    duracionShow: 500,
     sprites: {
+      show: "./img/cabezon_show.png",
       idle: "./img/cabezon_run.png",
       morir: "./img/cabezon_muerte.png",
     },
@@ -56,9 +62,11 @@ const configuracionEnemigos = {
     spriteY: 112,
     scale: (1, 1),
     puntos: 100,
+    duracionShow: 600,
     sprites: {
+      show: "./img/miniboss2_show.png",
       idle: "./img/miniboss2_run.png",
-      morir: "./img/miniboss2_habilidad.png",
+      morir: "./img/miniboss2_muerte.png",
     },
     habilidad: {
       duracion: 0,
@@ -74,7 +82,9 @@ const configuracionEnemigos = {
     spriteY: 104,
     scale: (1, 1),
     puntos: 100,
+    duracionShow: 650,
     sprites: {
+      show: "./img/miniboss1_show.png",
       idle: "./img/miniboss1_run.png",
       morir: "./img/miniboss1_muerte.png",
     },
@@ -87,12 +97,14 @@ const configuracionEnemigos = {
   tipo6: { // shooter
     vida: 1,
     velocidad: 1,
-    velocidadSprite: 0.7,
+    velocidadSprite: 1,
     spriteX: 48,
     spriteY: 64,
     scale: (1, 1),
     puntos: 100,
+    duracionShow: 600,
     sprites: {
+      show: "./img/miniboss3_show.png",
       idle: "./img/miniboss3_run.png",
       morir: "./img/miniboss3_muerte.png",
     },
@@ -110,9 +122,11 @@ const configuracionEnemigos = {
     spriteY: 140,
     scale: (1, 1),
     puntos: 300,
+    duracionShow: 2000,
     sprites: {
+      show: "./img/boss_show.png",
       idle: "./img/boss_run.png",
-      morir: "./img/boss_habilidad.png",
+      morir: "./img/boss_muerte.png",
     },
     habilidad: {
       cantidadDisparo1: 4,
@@ -145,30 +159,42 @@ class Enemigo extends Objeto {
     this.timer = this.duracionPowerUp;
     this.habilidadActivo = false;
 
+    this.show = true;
+
     //disparo
     this.timerDisparo = 0;
     this.duracionDisparo = 500;
 
 
-
+    this.estados = { SHOW: 0, IDLE: 1, YENDO_AL_PLAYER: 2, ATACANDO: 3, SPRINTANDO: 4 };
+    this.estado = this.estados.SHOW;
+    
     this.cargarVariosSpritesAnimados(
       {
+        show: config.sprites.show,
         idle: config.sprites.idle,
         morir: config.sprites.morir,
       },
       config.spriteX,
       config.spriteY,
       config.velocidadSprite * 0.1,
-
+      
+      
       (e) => {
         this.listo = true;
-        this.cambiarSprite("idle");
+        this.cambiarSprite("show");
+        this.velocidad.x = 0;
+        this.velocidad.y = 0;
+        
+        setTimeout(() => {
+          this.cambiarSprite("idle"),
+          this.show = false
+          this.estado = this.estados.IDLE;
+        }, config.duracionShow);
       }
-
+      
     );
-    this.estados = { IDLE: 0, YENDO_AL_PLAYER: 1, ATACANDO: 2, SPRINTANDO: 3 };
-    this.estado = this.estados.IDLE;
-
+    
     this.juego.gameContainer.addChild(this.container);
   }
 
@@ -229,7 +255,7 @@ class Enemigo extends Objeto {
         this.juego.player.container.x,
         this.juego.player.container.y
       );
-      if (this.distanciaAlPlayer < this.juego.grid.cellSize) {
+      if (this.distanciaAlPlayer < this.juego.grid.cellSize && !this.show) {
         this.estoyTocandoAlPlayer = true;
       }
     } else {
@@ -334,11 +360,11 @@ class Enemigo extends Objeto {
   segunDatosCambiarDeEstado() {
     if (this.estoyTocandoAlPlayer) {
       this.estado = this.estados.ATACANDO;
-    } else if (this.estoyViendoAlPlayer) {
+    } else if (this.estoyViendoAlPlayer && !this.show) {
       this.estado = this.estados.YENDO_AL_PLAYER;
-    } else {
+    } /*else {
       this.estado = this.estados.IDLE;
-    }
+    }*/
   }
 
   habilidad() {
