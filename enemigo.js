@@ -951,6 +951,7 @@ class Boss extends Enemigo {
       //this.juego.hud.actualizarBalas();
       this.desaparecer();
       this.juego.ponerEnemigos(5);
+      this.juego.cargarFondos();
       console.log("miniboses en: " + this.miniBossCreado + "; " + this.miniBoss1Creado + "; " + this.miniBoss2Creado + "; " + this. miniBoss3Creado);
     }
   }
