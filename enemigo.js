@@ -309,6 +309,15 @@ class Enemigo extends Objeto {
       }
 
     }
+    let fuerzas = new PIXI.Point(0, 0);
+    const repulsionDeObstaculos = this.repelerObstaculos(this.vecinos)
+
+    if (repulsionDeObstaculos.x != 0 || repulsionDeObstaculos.y != 0) {
+      fuerzas.x += repulsionDeObstaculos.x;
+      fuerzas.y += repulsionDeObstaculos.y;
+    }
+
+    //this.aplicarFuerza(fuerzas)
     if (
       this.estado == this.estados.IDLE ||
       this.estado == this.estados.YENDO_AL_PLAYER ||
@@ -321,7 +330,7 @@ class Enemigo extends Objeto {
       sumaDeVectores.x += (vecCohesion || {}).x || 0;
       sumaDeVectores.x += (vecAtraccionAlPlayer || {}).x || 0;
       sumaDeVectores.x += (bordes || {}).x || 0;
-
+      sumaDeVectores.x += (repulsionDeObstaculos || {}).x||0;
 
       sumaDeVectores.y += (vecSeparacion || {}).y || 0;
       sumaDeVectores.y += (vecAlineacion || {}).y || 0;
@@ -329,6 +338,7 @@ class Enemigo extends Objeto {
       sumaDeVectores.y += (vecAtraccionAlPlayer || {}).y || 0;
       sumaDeVectores.x += (bordes || {}).x || 0;
       sumaDeVectores.y += (bordes || {}).y || 0;
+      sumaDeVectores.y += (repulsionDeObstaculos || {}).y||0;
 
       this.aplicarFuerza(sumaDeVectores);
     }
@@ -345,6 +355,15 @@ class Enemigo extends Objeto {
       }, 4000);
       //this.atacar();
     }
+    let obstaculo = this.vecinos.find((vecino) => vecino instanceof Obstaculos)
+    if(obstaculo !== undefined){
+      if(obstaculo.y > this.container.y){
+        this.container.zIndex = obstaculo.container.zIndex - 1000
+      }
+      else{
+        this.container.zIndex = obstaculo.container.zIndex + 1000
+      }
+    }
   }
 
   update() {
@@ -353,6 +372,7 @@ class Enemigo extends Objeto {
       this.mirarAlrededor();
       this.segunDatosCambiarDeEstado();
       this.hacerCosasSegunEstado();
+      
     }
     super.update();
   }
