@@ -14,7 +14,7 @@ class Indicador extends Objeto {
         idle: "./img/indicador.png",
       },
       16,
-      16,
+      18,
       0.2,
       (e) => {
         this.cambiarSprite("idle");

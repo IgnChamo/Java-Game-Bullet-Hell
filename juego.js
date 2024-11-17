@@ -403,16 +403,16 @@ class Juego {
 
   updateIndicator() {
 
-    if (this.enemigos.length > 0) {
+    if (this.bosses.length > 0) {
 
-      const enemigoTipo4 = this.enemigos.find(enemigo => enemigo.tipo === 'tipo4' || enemigo.tipo === 'tipo5' || enemigo.tipo === 'tipo6' || enemigo.tipo === 'tipo7');
-      if (!enemigoTipo4) {
+      const enemigo = this.bosses.find(enemigo => enemigo.tipo === 'tipo4' || enemigo.tipo === 'tipo5' || enemigo.tipo === 'tipo6' || enemigo.tipo === 'tipo7');
+      if (!enemigo) {
         this.indicador.container.visible = false;
         return;
       }
 
       const { x: playerX, y: playerY } = this.player.container;
-      const { x: enemyX, y: enemyY } = enemigoTipo4.container;
+      const { x: enemyX, y: enemyY } = enemigo.container;
 
       // Verifica si el enemigo está fuera de la vista de la cámara
       const enemyInView =
