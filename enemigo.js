@@ -168,7 +168,9 @@ class Enemigo extends Objeto {
 
     this.estados = { SHOW: 0, IDLE: 1, YENDO_AL_PLAYER: 2, ATACANDO: 3, SPRINTANDO: 4 };
     this.estado = this.estados.SHOW;
-    
+
+    this.invencible = false;
+
     this.cargarVariosSpritesAnimados(
       {
         show: config.sprites.show,
@@ -178,23 +180,23 @@ class Enemigo extends Objeto {
       config.spriteX,
       config.spriteY,
       config.velocidadSprite * 0.1,
-      
-      
+
+
       (e) => {
         this.listo = true;
         this.cambiarSprite("show");
         this.velocidad.x = 0;
         this.velocidad.y = 0;
-        
+
         setTimeout(() => {
           this.cambiarSprite("idle"),
-          this.show = false
+            this.show = false
           this.estado = this.estados.IDLE;
         }, config.duracionShow);
       }
-      
+
     );
-    
+
     this.juego.gameContainer.addChild(this.container);
   }
 
@@ -208,11 +210,11 @@ class Enemigo extends Objeto {
     this.vida -= 1;
     if (this.vida <= 0) {
       this.borrar();
-      
+
       this.velocidad.x = 0;
       this.velocidad.y = 0;
       this.juego.hud.actualizarHud();
-      this.juego.asesinatosPorNivel+=1;
+      this.juego.asesinatosPorNivel += 1;
       if (this.juego.miniBossCreado) {
         this.juego.ponerEnemigos(1);
       } else {
@@ -221,7 +223,7 @@ class Enemigo extends Objeto {
       if (this.tipo === 'tipo4' || this.tipo === 'tipo5' || this.tipo === 'tipo6' || this.tipo === 'tipo7') {
         this.juego.miniBossCreado = false;
       }
-      this.juego.player.contadorDisparos ++;
+      this.juego.player.contadorDisparos++;
       /*if(this.juego.player.contadorDisparos > 50){
         this.crearPowerUps();
         this.juego.player.contadorDisparos = 0;
@@ -230,7 +232,7 @@ class Enemigo extends Objeto {
       //let sprite = this.cambiarSprite("recibeTiro", 0, false);
     }
   }
-  borrar(){
+  borrar() {
     this.juego.enemigos = this.juego.enemigos.filter((k) => k != this);
     this.grid.remove(this);
     let sprite = this.cambiarSprite("morir", 0, false);
@@ -372,7 +374,7 @@ class Enemigo extends Objeto {
       this.mirarAlrededor();
       this.segunDatosCambiarDeEstado();
       this.hacerCosasSegunEstado();
-      
+      this.invencible = this.juego.indicador.container.visible
     }
     super.update();
   }
@@ -546,9 +548,9 @@ class Enemigo extends Objeto {
     return fuerza;
   }
 
-  crearPowerUps(){
-    const valor = Math.floor(Math.random() * 6) 
-    switch(valor){
+  crearPowerUps() {
+    const valor = Math.floor(Math.random() * 6)
+    switch (valor) {
       case 0:
         this.juego.powerUps.push(
           new BajarCadencia(
@@ -628,26 +630,28 @@ class MiniBossSprinter extends Enemigo {
     }
   }
   recibirTiro() {
-    this.vida -= 1;
-    if (this.vida <= 0) {
-      this.juego.bosses = this.juego.bosses.filter((k) => k != this);
-      //this.juego.hud.actualizarHud();
-      this.grid.remove(this);
-      let sprite = this.cambiarSprite("morir", 0, false);
-      this.velocidad.x = 0;
-      this.velocidad.y = 0;
-      this.juego.hud.actualizarHud();
-      console.log("el miniboss es " + this.juego.miniBossCreado)
-      if (this.juego.miniBossCreado) {
-        this.juego.ponerEnemigos(1);
-      } else {
-        this.juego.ponerEnemigos(Math.floor(Math.random() * 2) + 1);
+    if (!this.invencible) {
+      this.vida -= 1;
+      if (this.vida <= 0) {
+        this.juego.bosses = this.juego.bosses.filter((k) => k != this);
+        //this.juego.hud.actualizarHud();
+        this.grid.remove(this);
+        let sprite = this.cambiarSprite("morir", 0, false);
+        this.velocidad.x = 0;
+        this.velocidad.y = 0;
+        this.juego.hud.actualizarHud();
+        console.log("el miniboss es " + this.juego.miniBossCreado)
+        if (this.juego.miniBossCreado) {
+          this.juego.ponerEnemigos(1);
+        } else {
+          this.juego.ponerEnemigos(Math.floor(Math.random() * 2) + 1);
+        }
+        this.juego.miniBossCreado = false;
+        this.crearPowerUps();
+        //this.juego.hud.actualizarBalas();
+        this.desaparecer();
+
       }
-      this.juego.miniBossCreado = false;
-      this.crearPowerUps();
-      //this.juego.hud.actualizarBalas();
-      this.desaparecer();
-      
     }
   }
 
@@ -705,33 +709,35 @@ class MiniBossShooter extends Enemigo {
   }
 
   recibirTiro() {
-    this.vida -= 1;
-    if (this.vida <= 0) {
-      this.juego.bosses = this.juego.bosses.filter((k) => k != this);
-      //this.juego.hud.actualizarHud();
-      this.grid.remove(this);
-      let sprite = this.cambiarSprite("morir", 0, false);
-      this.velocidad.x = 0;
-      this.velocidad.y = 0;
-      this.juego.hud.actualizarHud();
-      console.log("el miniboss es " + this.juego.miniBossCreado)
-      if (this.juego.miniBossCreado) {
-        this.juego.ponerEnemigos(1);
-      } else {
-        this.juego.ponerEnemigos(Math.floor(Math.random() * 2) + 1);
-      }
-      this.juego.miniBossCreado = false;
-      //this.juego.hud.actualizarBalas();
+    if (!this.invencible) {
+      this.vida -= 1;
+      if (this.vida <= 0) {
+        this.juego.bosses = this.juego.bosses.filter((k) => k != this);
+        //this.juego.hud.actualizarHud();
+        this.grid.remove(this);
+        let sprite = this.cambiarSprite("morir", 0, false);
+        this.velocidad.x = 0;
+        this.velocidad.y = 0;
+        this.juego.hud.actualizarHud();
+        console.log("el miniboss es " + this.juego.miniBossCreado)
+        if (this.juego.miniBossCreado) {
+          this.juego.ponerEnemigos(1);
+        } else {
+          this.juego.ponerEnemigos(Math.floor(Math.random() * 2) + 1);
+        }
+        this.juego.miniBossCreado = false;
+        //this.juego.hud.actualizarBalas();
         this.desaparecer();
 
 
-      //this.juego.player.ponerCompanion();
+        //this.juego.player.ponerCompanion();
 
-      this.crearPowerUps();
-      // sprite.animationSpeed=0.001
+        this.crearPowerUps();
+        // sprite.animationSpeed=0.001
 
-    } else {
-      //let sprite = this.cambiarSprite("recibeTiro", 0, false);
+      } else {
+        //let sprite = this.cambiarSprite("recibeTiro", 0, false);
+      }
     }
 
   }
@@ -795,31 +801,33 @@ class MiniBossShooterX extends Enemigo {
   }
 
   recibirTiro() {
-    this.vida -= 1;
-    if (this.vida <= 0) {
-      this.juego.bosses = this.juego.bosses.filter((k) => k != this);
-      //this.juego.hud.actualizarHud();
-      this.grid.remove(this);
-      let sprite = this.cambiarSprite("morir", 0, false);
-      this.velocidad.x = 0;
-      this.velocidad.y = 0;
-      this.juego.hud.actualizarHud();
-      console.log("el miniboss es " + this.juego.miniBossCreado)
-      if (this.juego.miniBossCreado) {
-        this.juego.ponerEnemigos(1);
+    if (!this.invencible) {
+      this.vida -= 1;
+      if (this.vida <= 0) {
+        this.juego.bosses = this.juego.bosses.filter((k) => k != this);
+        //this.juego.hud.actualizarHud();
+        this.grid.remove(this);
+        let sprite = this.cambiarSprite("morir", 0, false);
+        this.velocidad.x = 0;
+        this.velocidad.y = 0;
+        this.juego.hud.actualizarHud();
+        console.log("el miniboss es " + this.juego.miniBossCreado)
+        if (this.juego.miniBossCreado) {
+          this.juego.ponerEnemigos(1);
+        } else {
+          this.juego.ponerEnemigos(Math.floor(Math.random() * 2) + 1);
+        }
+        this.juego.miniBossCreado = false;
+
+        //this.juego.hud.actualizarBalas();
+        this.desaparecer();
+        this.crearPowerUps();
+
+        // sprite.animationSpeed=0.001
+
       } else {
-        this.juego.ponerEnemigos(Math.floor(Math.random() * 2) + 1);
+        //let sprite = this.cambiarSprite("recibeTiro", 0, false);
       }
-      this.juego.miniBossCreado = false;
-
-      //this.juego.hud.actualizarBalas();
-      this.desaparecer();
-      this.crearPowerUps();
-      
-      // sprite.animationSpeed=0.001
-
-    } else {
-      //let sprite = this.cambiarSprite("recibeTiro", 0, false);
     }
 
   }
@@ -946,33 +954,35 @@ class Boss extends Enemigo {
 
 
   recibirTiro() {
-    this.vida -= 1;
-    if (this.vida <= 0) {
-      this.juego.bosses = this.juego.bosses.filter((k) => k != this);
-      //this.juego.hud.actualizarHud();
-      this.grid.remove(this);
-      let sprite = this.cambiarSprite("morir", 0, false);
-      this.velocidad.x = 0;
-      this.velocidad.y = 0;
-      this.juego.hud.actualizarHud();
+    if (!this.invencible) {
+      this.vida -= 1;
+      if (this.vida <= 0) {
+        this.juego.bosses = this.juego.bosses.filter((k) => k != this);
+        //this.juego.hud.actualizarHud();
+        this.grid.remove(this);
+        let sprite = this.cambiarSprite("morir", 0, false);
+        this.velocidad.x = 0;
+        this.velocidad.y = 0;
+        this.juego.hud.actualizarHud();
 
-      this.crearPowerUps();
+        this.crearPowerUps();
 
-      this.juego.nivel += 1
-      
-      console.log("Asesinatos este nivel: " + this.juego.asesinatosPorNivel);
-      this.juego.asesinatosPorNivel=0;
-      this.juego.boss = false;
-      this.juego.miniBoss1Creado = false;
-      this.juego.miniBoss2Creado = false;
-      this.juego.miniBoss3Creado = false;
-      this.juego.miniBossCreado = false;
-      
-      //this.juego.hud.actualizarBalas();
-      this.desaparecer();
-      this.juego.ponerEnemigos(5);
-      this.juego.cargarFondos();
-      console.log("miniboses en: " + this.miniBossCreado + "; " + this.miniBoss1Creado + "; " + this.miniBoss2Creado + "; " + this. miniBoss3Creado);
+        this.juego.nivel += 1
+
+        console.log("Asesinatos este nivel: " + this.juego.asesinatosPorNivel);
+        this.juego.asesinatosPorNivel = 0;
+        this.juego.boss = false;
+        this.juego.miniBoss1Creado = false;
+        this.juego.miniBoss2Creado = false;
+        this.juego.miniBoss3Creado = false;
+        this.juego.miniBossCreado = false;
+
+        //this.juego.hud.actualizarBalas();
+        this.desaparecer();
+        this.juego.ponerEnemigos(5);
+        this.juego.cargarFondos();
+        console.log("miniboses en: " + this.miniBossCreado + "; " + this.miniBoss1Creado + "; " + this.miniBoss2Creado + "; " + this.miniBoss3Creado);
+      }
     }
   }
 
