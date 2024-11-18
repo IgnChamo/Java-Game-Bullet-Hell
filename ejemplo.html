@@ -13,6 +13,18 @@
             overflow: hidden;
         }
     </style>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+    <script>
+        WebFont.load({//Arreglo para que cargue la fuente correcta en el primer intento
+            google: {
+                families: ['Press Start 2P']
+            },
+            active:e=>{
+                console.log("font loaded!");
+            }
+        });
+    </script>
 </head>
 
 <body>
