@@ -11,6 +11,8 @@ class Objeto {
     this.listo = false;
     this.container.x = x;
     this.container.y = y;
+    this.container.zIndex = y;
+    this.container.sortableChildren = true;
 
     this.velocidad = new PIXI.Point(0, 0);
     this.velocidadMax = velocidadMax;
@@ -178,6 +180,7 @@ class Objeto {
     this.actualizarZIndex();
     this.actualizarLado();
     this.actualizarPosicionEnGrid();
+    
   }
   actualizarPosicionEnGrid() {
     this.grid.update(this);
@@ -249,7 +252,7 @@ class Objeto {
     }
   }
   actualizarZIndex() {
-    this.container.zIndex = this.container.y;
+    this.container.zIndex = Math.floor(this.container.y);
   }
 
   actualizarRotacion() {
