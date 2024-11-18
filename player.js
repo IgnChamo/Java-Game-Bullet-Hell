@@ -53,6 +53,7 @@ class Player extends Objeto {
         this.juego.mouse.x - this.app.stage.x - this.container.x,
         this.juego.mouse.y - this.app.stage.y - this.container.y
       );
+      playSFX(sfx.GUNSHOT, 0.05);
       this.juego.balas.push(
         new Bala(
           this.container.x,
@@ -64,7 +65,6 @@ class Player extends Objeto {
           this.maxPerforaciones
         )
       );
-
       this.velocidad.x = 0;
       this.velocidad.y = 0;
       this.balas -= 1;

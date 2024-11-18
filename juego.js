@@ -110,7 +110,7 @@ class Juego {
   ponerProtagonista() {
     this.player = new Player(
       window.innerWidth / 2,
-      window.innerHeight * 0.9,
+      window.innerHeight * 1,
       this
     );
     this.hud.actualizarHud();
