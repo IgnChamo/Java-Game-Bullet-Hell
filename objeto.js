@@ -181,6 +181,7 @@ class Objeto {
     this.actualizarZIndex();
     this.actualizarLado();
     this.actualizarPosicionEnGrid();
+    
   }
   actualizarPosicionEnGrid() {
     this.grid.update(this);
@@ -198,8 +199,8 @@ class Objeto {
           obstaculo.container.y,
           
         );
-        //console.log(distCuadrada);
-        //console.log(obstaculo.radio**2);
+        console.log(distCuadrada);
+        console.log(obstaculo.radio**2);
         if (distCuadrada < obstaculo.radio ** 2) {
           //SI ESTA A MENOS DE UNA CELDA DE DIST
           const dif = new PIXI.Point(

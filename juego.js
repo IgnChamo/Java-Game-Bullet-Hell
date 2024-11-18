@@ -20,8 +20,6 @@ class Juego {
     this.app.stage.addChild(this.hudContainer);
     this.hud = new HUD(this);
 
-    this.gameContainer.sortableChildren = true;
-
     this.currentBackground = 0;
     this.backgroundTextures = [];
 

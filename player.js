@@ -144,7 +144,6 @@ class Player extends Objeto {
     if (repulsionDeObstaculos.x != 0 || repulsionDeObstaculos.y != 0) {
       fuerzas.x += repulsionDeObstaculos.x;
       fuerzas.y += repulsionDeObstaculos.y;
-      console.log("activando repulsion de obstaculo" + repulsionDeObstaculos)
     }
 
     this.aplicarFuerza(fuerzas)

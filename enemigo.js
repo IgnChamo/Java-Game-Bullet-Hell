@@ -322,7 +322,6 @@ class Enemigo extends Objeto {
       fuerzas.x += repulsionDeObstaculos.x;
       fuerzas.y += repulsionDeObstaculos.y;
     }
-
     if (
       this.estado == this.estados.IDLE ||
       this.estado == this.estados.YENDO_AL_PLAYER ||
@@ -343,7 +342,7 @@ class Enemigo extends Objeto {
       sumaDeVectores.y += (vecAtraccionAlPlayer || {}).y || 0;
       sumaDeVectores.x += (bordes || {}).x || 0;
       sumaDeVectores.y += (bordes || {}).y || 0;
-      sumaDeVectores.y += (repulsionDeObstaculos || {}).y||0;
+
       this.aplicarFuerza(sumaDeVectores);
     }
 
