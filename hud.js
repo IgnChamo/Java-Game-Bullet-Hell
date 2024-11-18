@@ -29,7 +29,7 @@ class HUD {
         this.balasSprites = [];
         this.balasTotales = 6;
 
-        this.puntaje = new PIXI.Text("", { fontFamily: 'Press Start 2P', fontSize: 50, padding: 20, fill: 0x000000 });
+        this.puntaje = new PIXI.Text("", { fontFamily: 'Press Start 2P', fontSize: 50, padding: 20, fill: 0x000000, stroke: 0xffffff, strokeThickness: 8 });
         this.puntaje.position.set(this.juego.app.screen.width * 0.841, 95)
         this.puntaje.scale.set(0.5, 0.5);
         this.container.addChild(this.puntaje);
@@ -39,7 +39,7 @@ class HUD {
         this.punt.scale.set(0.7,0.7);
         this.container.addChild(this.punt);*/
 
-        this.asesinatos = new PIXI.Text("", { fontFamily: 'Press Start 2P', fontSize: 50, padding: 20, fill: 0x000000 });
+        this.asesinatos = new PIXI.Text("", { fontFamily: 'Press Start 2P', fontSize: 50, padding: 20, fill: 0x000000, stroke: 0xffffff, strokeThickness: 8 });
         this.asesinatos.position.set(this.juego.app.screen.width * 0.92, 26);
         this.asesinatos.scale.set(0.5, 0.5);
         this.container.addChild(this.asesinatos);
@@ -49,7 +49,7 @@ class HUD {
         this.asesinato.scale.set(0.8, 0.8);
         this.container.addChild(this.asesinato);
 
-        this.nivel = new PIXI.Text("Level ", { fontFamily: 'Press Start 2P', fontSize: 20, fill: 0x000000 });
+        this.nivel = new PIXI.Text("Level ", { fontFamily: 'Press Start 2P', fontSize: 20, fill: 0x000000, stroke: 0xffffff, strokeThickness: 8 });
         this.nivel.position.set(this.juego.app.screen.width * 0.46, 26);
         this.container.addChild(this.nivel);
 
@@ -67,11 +67,11 @@ class HUD {
 
         //hud menu
 
-        this.nameGame = new PIXI.Text("FAIRY WITH A GUN", { fontFamily: 'Press Start 2P', fontSize: 50, fill: 0x000000 });
+        this.nameGame = new PIXI.Text("FAIRY WITH A GUN", { fontFamily: 'Press Start 2P', fontSize: 50, fill: 0x000000, stroke: 0xffffff, strokeThickness: 8 });
         this.nameGame.position.set(this.juego.app.screen.width * 0.3, this.juego.app.screen.height * 0.75);
         this.container.addChild(this.nameGame);
         
-        this.pressStart = new PIXI.Text("Press 'ENTER' to Start ", { fontFamily: 'Press Start 2P', fontSize: 30, fill: 0x000000 });
+        this.pressStart = new PIXI.Text("Press 'ENTER' to Start ", { fontFamily: 'Press Start 2P', fontSize: 30, fill: 0x000000, stroke: 0xffffff, strokeThickness: 8 });
         this.pressStart.position.set(this.juego.app.screen.width * 0.34, this.juego.app.screen.height * 0.85);
         this.container.addChild(this.pressStart);
 
@@ -85,7 +85,7 @@ class HUD {
         this.hudRecargar.scale.set(0.7, 0.7);
         this.container.addChild(this.hudRecargar);
 
-        this.textRecargar = new PIXI.Text(" Press 'R' to reload", { fontFamily: 'Press Start 2P', fontSize: 12, fill: 0x000000 });
+        this.textRecargar = new PIXI.Text(" Press 'R' to reload", { fontFamily: 'Press Start 2P', fontSize: 12, fill: 0x000000, stroke: 0xffffff, strokeThickness: 8 });
         this.textRecargar.position.set(this.juego.app.screen.width * 0.033, this.juego.app.screen.height * 0.42);
         this.container.addChild(this.textRecargar);
 
@@ -94,11 +94,11 @@ class HUD {
         this.hudDisparo.scale.set(0.7, 0.7);
         this.container.addChild(this.hudDisparo);
 
-        this.textDisparo = new PIXI.Text(" Press 'Mouse Left Button' to shoot", { fontFamily: 'Press Start 2P', fontSize: 12, fill: 0x000000 });
+        this.textDisparo = new PIXI.Text(" Press 'Mouse Left Button' to shoot", { fontFamily: 'Press Start 2P', fontSize: 12, fill: 0x000000, stroke: 0xffffff, strokeThickness: 8 });
         this.textDisparo.position.set(this.juego.app.screen.width * 0.033, this.juego.app.screen.height * 0.32);
         this.container.addChild(this.textDisparo);
 
-        this.textEstadisticas = new PIXI.Text(" Press 'Q' to toggle statistics", { fontFamily: 'Press Start 2P', fontSize: 12, fill: 0x000000 });
+        this.textEstadisticas = new PIXI.Text(" Press 'Q' to toggle statistics", { fontFamily: 'Press Start 2P', fontSize: 12, fill: 0x000000, stroke: 0xffffff, strokeThickness: 8 });
         this.textEstadisticas.position.set(this.juego.app.screen.width * 0.033, this.juego.app.screen.height * 0.52);
         this.container.addChild(this.textEstadisticas);
 
@@ -109,13 +109,13 @@ class HUD {
         this.hudCompanion.scale.set(1, 1);
         this.container.addChild(this.hudCompanion);
 
-        this.cantCompanion = new PIXI.Text("", { fontFamily: 'Press Start 2P', fontSize: 50, padding: 20, fill: 0x000000 });
+        this.cantCompanion = new PIXI.Text("", { fontFamily: 'Press Start 2P', fontSize: 50, padding: 20, fill: 0x000000, stroke: 0xffffff, strokeThickness: 8 });
         this.cantCompanion.position.set(this.juego.app.screen.width * 0.43, 60);
         this.cantCompanion.scale.set(0.5, 0.5);
         this.container.addChild(this.cantCompanion);
 
 
-        this.companion = new PIXI.Text("", { fontFamily: 'Press Start 2P', fontSize: 40, padding: 20, fill: 0x000000 });
+        this.companion = new PIXI.Text("", { fontFamily: 'Press Start 2P', fontSize: 40, padding: 20, fill: 0x000000, stroke: 0xffffff, strokeThickness: 8 });
         this.companion.position.set(this.juego.app.screen.width * 0.39, 95);
         this.companion.scale.set(0.5, 0.5);
         this.container.addChild(this.companion);
@@ -125,12 +125,12 @@ class HUD {
         this.hudPerforar.scale.set(1, 1);
         this.container.addChild(this.hudPerforar);
 
-        this.cantPerforar = new PIXI.Text("", { fontFamily: 'Press Start 2P', fontSize: 50, padding: 20, fill: 0x000000 });
+        this.cantPerforar = new PIXI.Text("", { fontFamily: 'Press Start 2P', fontSize: 50, padding: 20, fill: 0x000000, stroke: 0xffffff, strokeThickness: 8 });
         this.cantPerforar.position.set(this.juego.app.screen.width * 0.53, 60);
         this.cantPerforar.scale.set(0.5, 0.5);
         this.container.addChild(this.cantPerforar);
 
-        this.perforar = new PIXI.Text("", { fontFamily: 'Press Start 2P', fontSize: 40, padding: 20, fill: 0x000000 });
+        this.perforar = new PIXI.Text("", { fontFamily: 'Press Start 2P', fontSize: 40, padding: 20, fill: 0x000000, stroke: 0xffffff, strokeThickness: 8 });
         this.perforar.position.set(this.juego.app.screen.width * 0.46, 95);
         this.perforar.scale.set(0.5, 0.5);
         this.container.addChild(this.perforar);
@@ -142,12 +142,12 @@ class HUD {
         this.hudCadencia.scale.set(1, 1);
         this.container.addChild(this.hudCadencia);
 
-        this.cantCadencia = new PIXI.Text("", { fontFamily: 'Press Start 2P', fontSize: 50, padding: 20, fill: 0x000000 });
+        this.cantCadencia = new PIXI.Text("", { fontFamily: 'Press Start 2P', fontSize: 50, padding: 20, fill: 0x000000, stroke: 0xffffff, strokeThickness: 8 });
         this.cantCadencia.position.set(this.juego.app.screen.width * 0.63, 60);
         this.cantCadencia.scale.set(0.5, 0.5);
         this.container.addChild(this.cantCadencia);
 
-        this.cadencia = new PIXI.Text("", { fontFamily: 'Press Start 2P', fontSize: 40, padding: 20, fill: 0x000000 });
+        this.cadencia = new PIXI.Text("", { fontFamily: 'Press Start 2P', fontSize: 40, padding: 20, fill: 0x000000, stroke: 0xffffff, strokeThickness: 8 });
         this.cadencia.position.set(this.juego.app.screen.width * 0.63, 95);
         this.cadencia.scale.set(0.5, 0.5);
         this.container.addChild(this.cadencia);
@@ -157,17 +157,17 @@ class HUD {
 
         //hud Perdiste
 
-        this.derrota = new PIXI.Text("YOU DIED", { fontFamily: 'Press Start 2P', fontSize: 50, fill: 0x000000 });
+        this.derrota = new PIXI.Text("YOU DIED", { fontFamily: 'Press Start 2P', fontSize: 50, fill: 0x000000, stroke: 0xffffff, strokeThickness: 5 });
         this.derrota.position.set(this.juego.app.screen.width * 0.4, this.juego.app.screen.height * 0.5);
         this.derrota.visible = false;
         this.container.addChild(this.derrota);
 
-        this.textScoreHadas = new PIXI.Text( "", { fontFamily: 'Press Start 2P', fontSize: 40, padding: 20, fill: 0x000000 });
+        this.textScoreHadas = new PIXI.Text( "", { fontFamily: 'Press Start 2P', fontSize: 40, padding: 20, fill: 0x000000, stroke: 0xffffff, strokeThickness: 5 });
         this.textScoreHadas.position.set(this.juego.app.screen.width * 0.15, this.juego.app.screen.height * 0.7);
         this.textScoreHadas.visible = false;
         this.container.addChild(this.textScoreHadas);
 
-        this.textScoreTotal = new PIXI.Text("Tu Score Total es", { fontFamily: 'Press Start 2P', fontSize: 40, padding: 20, fill: 0x000000 });
+        this.textScoreTotal = new PIXI.Text("Tu Score Total es", { fontFamily: 'Press Start 2P', fontSize: 40, padding: 20, fill: 0x000000, stroke: 0xffffff, strokeThickness: 5 });
         this.textScoreTotal.position.set(this.juego.app.screen.width * 0.7, this.juego.app.screen.height * 0.7);
         this.textScoreTotal.visible = false;
         this.container.addChild(this.textScoreTotal);
