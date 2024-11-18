@@ -12,7 +12,7 @@ let audioMenu = PIXI.sound.Sound.from({
     }
 });
 let audioInGame = PIXI.sound.Sound.from({
-    url: './music/Toxicity.mp3',
+    url: './music/BGM.mp3',
     preload: true,
     loaded: function(err, sound) {
         console.log("InGame Precargado.");
@@ -40,8 +40,16 @@ let dañoPlayer = PIXI.sound.Sound.from({
     }
 });
 
+let pickUp = PIXI.sound.Sound.from({
+    url: './music/pickup.mp3',
+    preload: true,
+    loaded: function(err, sound) {
+        console.log("SFX 3 Precargado.");
+    }
+});
+
 const canciones = { MENU : audioMenu, IN_GAME : audioInGame, GAME_OVER : audioGameOver};
-const sfx = { GUNSHOT : Gunshot, DAÑOPLAYER : dañoPlayer};
+const sfx = { GUNSHOT : Gunshot, DAÑOPLAYER : dañoPlayer, PICKUP : pickUp};
 
 let player = canciones.MENU;
 player.paused = false;

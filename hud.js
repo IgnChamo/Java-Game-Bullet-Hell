@@ -332,6 +332,8 @@ class HUD {
         this.borrarDelHud(this.hudDisparo);
         this.borrarDelHud(this.textEstadisticas);
         this.borrarDelHud(this.nameGame);
+        canciones.MENU.paused = true;
+        playMusic(canciones.IN_GAME,0.25);
     }
     crearBalas() {
         // Posicion inicial para las balas
