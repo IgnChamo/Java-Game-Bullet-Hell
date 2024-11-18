@@ -183,6 +183,7 @@ class Player extends Objeto {
       this.juego.borrarEnemigosDerrota();
       this.juego.hud.prenderDerrota();
       this.cambiarSprite("idle");
+      this.escudo.container.visible = false;
     }
 
     this.recarga.actualizarPosicion();
