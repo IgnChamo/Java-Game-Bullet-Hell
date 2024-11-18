@@ -37,7 +37,7 @@ const configuracionEnemigos = {
     },
   },
   tipo3: {
-    vida: 6,
+    vida: 3,
     velocidad: 0.4,
     velocidadSprite: 1,
     spriteX: 64,
@@ -55,7 +55,7 @@ const configuracionEnemigos = {
     },
   },
   tipo4: { // sprinter
-    vida: 1,
+    vida: 4,
     velocidad: 0.9,
     velocidadSprite: 0.7,
     spriteX: 64,
@@ -69,13 +69,13 @@ const configuracionEnemigos = {
       morir: "./img/miniboss2_muerte.png",
     },
     habilidad: {
-      duracion: 0,
-      velocidadSprint: 0,
+      duracion: 2,
+      velocidadSprint: 2,
       rango: 600,
     },
   },
   tipo5: { // shooter
-    vida: 1,
+    vida: 5,
     velocidad: 1,
     velocidadSprite: 0.7,
     spriteX: 96,
@@ -95,11 +95,11 @@ const configuracionEnemigos = {
     },
   },
   tipo6: { // shooter
-    vida: 1,
+    vida: 6,
     velocidad: 1,
     velocidadSprite: 1,
-    spriteX: 48,
-    spriteY: 64,
+    spriteX: 96,
+    spriteY: 128,
     scale: (1, 1),
     puntos: 100,
     duracionShow: 600,
@@ -115,11 +115,11 @@ const configuracionEnemigos = {
     },
   },
   tipo7: { // Boss
-    vida: 5,
+    vida: 10,
     velocidad: 1,
     velocidadSprite: 0.7,
-    spriteX: 147,
-    spriteY: 140,
+    spriteX: 294,
+    spriteY: 280,
     scale: (1, 1),
     puntos: 300,
     duracionShow: 2000,
@@ -187,6 +187,7 @@ class Enemigo extends Objeto {
         this.cambiarSprite("show");
         this.velocidad.x = 0;
         this.velocidad.y = 0;
+        this.estado = this.estados.SHOW;
 
         setTimeout(() => {
           this.cambiarSprite("idle"),
@@ -300,7 +301,10 @@ class Enemigo extends Objeto {
 
       this.cambiarSprite("idle");
     } else if (this.estado === this.estados.SPRINTANDO) {
-      this.velocidadMax = this.potenciaPowerUp;
+      this.velocidadMax = this.velocidadMax * 2;
+      vecAtraccionAlPlayer = this.sprintar();
+
+      /*this.velocidadMax = this.potenciaPowerUp;
       this.timer--;
       // Si se acaba el timer, cambiamos el estado a NORMAL.
       if (this.timer == 0) {
@@ -309,8 +313,16 @@ class Enemigo extends Objeto {
         this.velocidadMax = this.velocidadConfig;
         return;
       }
-
+      */
     }
+    let fuerzas = new PIXI.Point(0, 0);
+    const repulsionDeObstaculos = this.repelerObstaculos(this.vecinos)
+
+    if (repulsionDeObstaculos.x != 0 || repulsionDeObstaculos.y != 0) {
+      fuerzas.x += repulsionDeObstaculos.x;
+      fuerzas.y += repulsionDeObstaculos.y;
+    }
+
     if (
       this.estado == this.estados.IDLE ||
       this.estado == this.estados.YENDO_AL_PLAYER ||
@@ -323,7 +335,7 @@ class Enemigo extends Objeto {
       sumaDeVectores.x += (vecCohesion || {}).x || 0;
       sumaDeVectores.x += (vecAtraccionAlPlayer || {}).x || 0;
       sumaDeVectores.x += (bordes || {}).x || 0;
-
+      sumaDeVectores.x += (repulsionDeObstaculos || {}).x||0;
 
       sumaDeVectores.y += (vecSeparacion || {}).y || 0;
       sumaDeVectores.y += (vecAlineacion || {}).y || 0;
@@ -331,7 +343,7 @@ class Enemigo extends Objeto {
       sumaDeVectores.y += (vecAtraccionAlPlayer || {}).y || 0;
       sumaDeVectores.x += (bordes || {}).x || 0;
       sumaDeVectores.y += (bordes || {}).y || 0;
-
+      sumaDeVectores.y += (repulsionDeObstaculos || {}).y||0;
       this.aplicarFuerza(sumaDeVectores);
     }
 
@@ -346,6 +358,15 @@ class Enemigo extends Objeto {
         vecAtraccionAlPlayer = this.atraccionAlJugador()
       }, 4000);
       //this.atacar();
+    }
+    let obstaculo = this.vecinos.find((vecino) => vecino instanceof Obstaculos)
+    if(obstaculo !== undefined){
+      if(obstaculo.y > this.container.y){
+        this.container.zIndex = obstaculo.container.zIndex - 1000
+      }
+      else{
+        this.container.zIndex = obstaculo.container.zIndex + 1000
+      }
     }
   }
 
@@ -392,7 +413,6 @@ class Enemigo extends Objeto {
     }, this.tiempoPostMorten);
   }
 
-
   evaluarSiEstoyViendoAlPlayer() {
     const distanciaCuadrada = distanciaAlCuadrado(
       this.container.x,
@@ -405,6 +425,23 @@ class Enemigo extends Objeto {
       return true;
     }
     return false;
+  }
+  
+  sprintar() {
+    const posicionX = this.juego.player.container.x;
+    const posicionY = this.juego.player.container.y;
+
+    const vecDistancia = new PIXI.Point(
+      posicionX - this.container.x,
+      posicionY - this.container.y
+    );
+
+    let vecNormalizado = normalizarVector(vecDistancia.x, vecDistancia.y);
+
+    vecDistancia.x = vecNormalizado.x;
+    vecDistancia.y = vecNormalizado.y;
+    console.log("sprintar");  
+    return vecDistancia;
   }
 
   atraccionAlJugador() {
@@ -528,9 +565,17 @@ class Enemigo extends Objeto {
 
     return fuerza;
   }
-
+  crearCompanion(){
+    this.juego.powerUps.push(
+      new CapturedCompanion(
+        this.container.x,
+        this.container.y,
+        this.juego
+      )
+    );
+  }
   crearPowerUps() {
-    const valor = Math.floor(Math.random() * 6)
+    const valor = Math.floor(Math.random() * 5)
     switch (valor) {
       case 0:
         this.juego.powerUps.push(
@@ -569,15 +614,6 @@ class Enemigo extends Objeto {
         );
         break;
       case 4:
-        this.juego.powerUps.push(
-          new CapturedCompanion(
-            this.container.x,
-            this.container.y,
-            this.juego
-          )
-        );
-        break;
-      case 5:
         this.juego.powerUps.push(
           new Cura(
             this.container.x,
@@ -625,7 +661,7 @@ class MiniBossSprinter extends Enemigo {
         if (this.juego.miniBossCreado) {
           this.juego.ponerEnemigos(1);
         } else {
-          this.juego.ponerEnemigos(Math.floor(Math.random() * 2) + 1);
+          this.juego.ponerEnemigos(Math.floor(Math.random() * 2) + this.juego.nivel);
         }
         this.juego.miniBossCreado = false;
         this.crearPowerUps();
@@ -704,7 +740,7 @@ class MiniBossShooter extends Enemigo {
         if (this.juego.miniBossCreado) {
           this.juego.ponerEnemigos(1);
         } else {
-          this.juego.ponerEnemigos(Math.floor(Math.random() * 2) + 1);
+          this.juego.ponerEnemigos(Math.floor(Math.random() * 2) + this.juego.nivel);
         }
         this.juego.miniBossCreado = false;
         //this.juego.hud.actualizarBalas();
@@ -796,7 +832,7 @@ class MiniBossShooterX extends Enemigo {
         if (this.juego.miniBossCreado) {
           this.juego.ponerEnemigos(1);
         } else {
-          this.juego.ponerEnemigos(Math.floor(Math.random() * 2) + 1);
+          this.juego.ponerEnemigos(Math.floor(Math.random() * 2) + this.juego.nivel);
         }
         this.juego.miniBossCreado = false;
 
@@ -946,7 +982,7 @@ class Boss extends Enemigo {
         this.velocidad.y = 0;
         this.juego.hud.actualizarHud();
 
-        this.crearPowerUps();
+        this.crearCompanion();
 
         this.juego.nivel += 1
 
@@ -962,6 +998,7 @@ class Boss extends Enemigo {
         this.desaparecer();
         this.juego.ponerEnemigos(5);
         this.juego.cargarFondos();
+        this.juego.hud.alternarColoresTextos();
         console.log("miniboses en: " + this.miniBossCreado + "; " + this.miniBoss1Creado + "; " + this.miniBoss2Creado + "; " + this.miniBoss3Creado);
       }
     }

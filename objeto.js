@@ -11,11 +11,14 @@ class Objeto {
     this.listo = false;
     this.container.x = x;
     this.container.y = y;
+    this.container.zIndex = y;
+    this.container.sortableChildren = true;
 
     this.velocidad = new PIXI.Point(0, 0);
     this.velocidadMax = velocidadMax;
     this.velocidadMaxCuadrada = velocidadMax * velocidadMax;
 
+ 
     // this.container.anchor.set(0.5,1); // Pivote en el centro
 
     this.spritesAnimados = {};
@@ -195,8 +198,8 @@ class Objeto {
           obstaculo.container.y,
           
         );
-        console.log(distCuadrada);
-        console.log(obstaculo.radio**2);
+        //console.log(distCuadrada);
+        //console.log(obstaculo.radio**2);
         if (distCuadrada < obstaculo.radio ** 2) {
           //SI ESTA A MENOS DE UNA CELDA DE DIST
           const dif = new PIXI.Point(
@@ -250,7 +253,7 @@ class Objeto {
     }
   }
   actualizarZIndex() {
-    this.container.zIndex = this.container.y;
+    this.container.zIndex = Math.floor(this.container.y);
   }
 
   actualizarRotacion() {

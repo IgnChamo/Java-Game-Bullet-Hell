@@ -20,6 +20,8 @@ class Juego {
     this.app.stage.addChild(this.hudContainer);
     this.hud = new HUD(this);
 
+    this.gameContainer.sortableChildren = true;
+
     this.currentBackground = 0;
     this.backgroundTextures = [];
 
@@ -192,14 +194,14 @@ class Juego {
         else if (asesinatos == 3) {
           tiposDeEnemigos = ['tipo3'];
           cant = 1;
-        } else if ((asesinatos > 5) && !this.miniBoss1Creado) {
+        } else if ((asesinatos > 30) && !this.miniBoss1Creado) {
           console.log("creating miniboss1")
           tiposDeEnemigos = ['tipo4'];
-        } else if ((asesinatos > 10) && !this.miniBoss2Creado) {
+        } else if ((asesinatos > 60) && !this.miniBoss2Creado) {
           tiposDeEnemigos = ['tipo5'];
-        } else if ((asesinatos > 20) && !this.miniBoss3Creado) {
+        } else if ((asesinatos > 90) && !this.miniBoss3Creado) {
           tiposDeEnemigos = ['tipo6'];
-        } else if ((asesinatos > 30) && !this.boss) {
+        } else if ((asesinatos > 120) && !this.boss) {
           tiposDeEnemigos = ['tipo7'];
           this.boss = true;
         }
@@ -230,36 +232,36 @@ class Juego {
               case 'tipo4':
                 enemigo = new MiniBossSprinter(posX, posY, 1, this, `enemigo_${i}`, tipoAleatorio);
                 this.miniBoss1Creado = true;
-                flag=false;
+                flag = false;
                 break;
               case 'tipo5':
                 enemigo = new MiniBossShooter(posX, posY, 1, this, `enemigo_${i}`, tipoAleatorio);
                 this.miniBoss2Creado = true;
-                flag=false;
+                flag = false;
                 break;
               case 'tipo6':
                 enemigo = new MiniBossShooterX(posX, posY, 1, this, `enemigo_${i}`, tipoAleatorio);
                 this.miniBoss3Creado = true;
-                flag=false;
+                flag = false;
                 break;
               case 'tipo7':
                 enemigo = new Boss(posX, posY, 1, this, `enemigo_${i}`, tipoAleatorio);
                 this.boss = true;
-                flag=false;
+                flag = false;
                 break;
               default:
                 enemigo = new Enemigo(posX, posY, 1, this, `enemigo_${i}`, tipoAleatorio);
                 break;
             }
             //let velocidad = Math.random() * 0.2 + 0.5;
-            if(flag){
+            if (flag) {
               this.enemigos.push(enemigo);
             }
-            else{
+            else {
               this.bosses.push(enemigo);
               console.log("Added to bosses: " + enemigo);
             }
-            
+
             this.grid.add(enemigo);
             break;
           }
@@ -268,7 +270,7 @@ class Juego {
       }
     }
   }
-  
+
   /*crearEnemigo(tipo, i) {
     // Generar una posición aleatoria
     const posX = 50 + Math.random() * (this.canvasWidth - 300);
@@ -291,64 +293,80 @@ class Juego {
   borrarEnemigos() {
     this.enemigos.forEach((enemigo) => {
       enemigo.borrar();
-      const random = Math.floor(Math.random() * 2);
-      if(random === 0){
-      this.ponerEnemigos(1);
-      console.log("crea los bichos papa");
+      const random = Math.floor(Math.random() * 3);
+      if (random === 0) {
+        this.ponerEnemigos(1);
+        console.log("crea los bichos papa");
       }
     });
-    //this.ponerEnemigos(5);
+  }
+  borrarEnemigosDerrota() {
+    this.enemigos.forEach((enemigo) => {
+      enemigo.borrar();
+    });
+    this.balas.forEach((balas) => {
+      balas.borrar();
+    });
+    this.balasEnemigos.forEach((balas) => {
+      balas.borrar();
+    });
   }
   mouseDownEvent() {
+    if(!this.perdiste){
     this.companions.forEach((compa) => {
       compa.disparar();
     });
     this.player.disparar();
-
+  }
   }
 
   ponerListeners() {
-    // Manejar eventos del mouse
-    this.app.view.addEventListener("mousedown", () => {
-      (this.mouse || {}).click = true;
-      this.mouseDownEvent();
-    });
-    this.app.view.addEventListener("mouseup", () => {
-      (this.mouse || {}).click = false;
-    });
-    window.addEventListener("keydown", (e) => {
-      this.keyboard[e.key.toLowerCase()] = true;
+      // Manejar eventos del mouse
+      this.app.view.addEventListener("mousedown", () => {
+        (this.mouse || {}).click = true;
+        this.mouseDownEvent();
+      });
+      this.app.view.addEventListener("mouseup", () => {
+        (this.mouse || {}).click = false;
+      });
+      window.addEventListener("keydown", (e) => {
+        this.keyboard[e.key.toLowerCase()] = true;
 
-      // Verifica si se presionó la tecla "r"
-      if (e.key.toLowerCase() === 'r') {
-        this.player.recarga.container.visible = true;
-        this.player.recargar(); // Llama a la función que quieres ejecutar
-      }
-      if (e.key.toLowerCase() === 'enter') {
-        this.iniciarEnemigos();
-        this.hud.borrarDelHud(this.hud.pressStart);
-      }
-    });
+        // Verifica si se presionó la tecla "r"
+        if (e.key.toLowerCase() === 'r') {
+          if(!this.perdiste){
+          this.player.recarga.container.visible = true;
+          this.player.recargar(); 
+          }
+        }
+        if (e.key.toLowerCase() === 'enter') {
+          this.iniciarEnemigos();
+          this.hud.apagarMenu();
+        }
+        if (e.key.toLowerCase() === 'q') {
+          this.hud.apagarEstadisticas();
+        }
+      });
 
-    this.app.view.addEventListener("mousemove", this.onMouseMove.bind(this));
-    this.app.view.addEventListener("mouseleave", () => {
-      this.mouse = null;
-    });
-    window.addEventListener("resize", () => {
-      this.app.renderer.resize(window.innerWidth, window.innerHeight);
-      this.moverHUD();
-      this.hud.actualizarPosicion();
+      this.app.view.addEventListener("mousemove", this.onMouseMove.bind(this));
+      this.app.view.addEventListener("mouseleave", () => {
+        this.mouse = null;
+      });
+      window.addEventListener("resize", () => {
+        this.app.renderer.resize(window.innerWidth, window.innerHeight);
+        this.moverHUD();
+        this.hud.actualizarPosicion();
 
-    });
+      });
 
-    window.addEventListener("keydown", (e) => {
-      this.keyboard[e.key.toLowerCase()] = true;
-    });
+      window.addEventListener("keydown", (e) => {
+        this.keyboard[e.key.toLowerCase()] = true;
+      });
 
-    window.addEventListener("keyup", (e) => {
-      delete this.keyboard[e.key.toLowerCase()];
-    });
-  }
+      window.addEventListener("keyup", (e) => {
+        delete this.keyboard[e.key.toLowerCase()];
+      });
+    }
 
   // Actualizar la posición del mouse
   onMouseMove(event) {
@@ -385,7 +403,7 @@ class Juego {
       this.powerUps.forEach((powerUp) => {
         powerUp.update();
       })
-      this.bosses.forEach((boss) =>{
+      this.bosses.forEach((boss) => {
         boss.update();
       }
       )

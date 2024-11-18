@@ -181,7 +181,9 @@ class Player extends Objeto {
     }
     if (this.vidas === 0) {
       this.juego.perdiste = true;
-      this.juego.hud.derrota.visible = true;
+      this.juego.borrarEnemigosDerrota();
+      this.juego.hud.prenderDerrota();
+      this.cambiarSprite("idle");
     }
 
     this.recarga.actualizarPosicion();

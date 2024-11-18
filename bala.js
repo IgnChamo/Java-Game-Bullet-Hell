@@ -97,7 +97,7 @@ class Bala extends Objeto {
 
 
 class BalaEnemigo extends Objeto {
-  constructor(x, y, juego, velX, velY,perforacion,maxPerforaciones) {
+  constructor(x, y, juego, velX, velY) {
     super(x, y, 20, juego);
     this.velocidad.x = velX;
     this.velocidad.y = velY;
@@ -121,9 +121,7 @@ class BalaEnemigo extends Objeto {
     //this.container.addChild(this.sprite);
 
 
-    this.perforacion = perforacion;
-    this.perforados = 0;
-    this.maxPerforaciones = maxPerforaciones;
+
 
     this.juego.gameContainer.addChild(this.container);
   }
