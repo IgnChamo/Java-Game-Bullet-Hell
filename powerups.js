@@ -18,7 +18,7 @@ class BajarCadencia extends Objeto {
             if (this.vecinos.includes(this.juego.player)) {
                 this.juego.powerUps = this.juego.powerUps.filter((k) => k != this);
                 this.borrar();
-                playSFX(sfx.PICKUP, 5);
+                playSFX(sfx.PICKUP, 0.2);
                 this.juego.player.bajarCadencia();
             }
             this.hover(this.juego.contadorDeFrames)
@@ -54,7 +54,7 @@ class AumentarBalas extends Objeto {
             if (this.vecinos.includes(this.juego.player)) {
                 this.juego.powerUps = this.juego.powerUps.filter((k) => k != this);
                 this.borrar();
-                playSFX(sfx.PICKUP, 5);
+                playSFX(sfx.PICKUP, 0.2);
                 this.juego.hud.actualizarBalas()
             }
             this.hover(this.juego.contadorDeFrames)
@@ -90,7 +90,7 @@ class Cura extends Objeto {
             if (this.vecinos.includes(this.juego.player)) {
                 this.juego.powerUps = this.juego.powerUps.filter((k) => k != this);
                 this.borrar();
-                playSFX(sfx.PICKUP, 5);
+                playSFX(sfx.PICKUP, 0.2);
                 this.juego.player.curar();
             }
             this.hover(this.juego.contadorDeFrames)
@@ -126,7 +126,7 @@ class Perforacion extends Objeto {
             if (this.vecinos.includes(this.juego.player)) {
                 this.juego.powerUps = this.juego.powerUps.filter((k) => k != this);
                 this.borrar();
-                playSFX(sfx.PICKUP, 5);
+                playSFX(sfx.PICKUP, 0.2);
                 this.juego.player.aumentarPerforacion();
             }
             this.hover(this.juego.contadorDeFrames)
@@ -162,7 +162,7 @@ class BombaEnemigos extends Objeto {
             if (this.vecinos.includes(this.juego.player)) {
                 this.juego.powerUps = this.juego.powerUps.filter((k) => k != this);
                 this.borrar();
-                playSFX(sfx.PICKUP, 5);
+                playSFX(sfx.PICKUP, 0.2);
                 this.juego.borrarEnemigos();
             }
             this.hover(this.juego.contadorDeFrames)
@@ -197,7 +197,7 @@ class CapturedCompanion extends Objeto {
             if (this.vecinos.includes(this.juego.player)) {
                 this.juego.powerUps = this.juego.powerUps.filter((k) => k != this);
                 this.borrar();
-                playSFX(sfx.PICKUP, 5);
+                playSFX(sfx.PICKUP, 0.2);
                 this.juego.ponerCompanion();
             }
             this.hover(this.juego.contadorDeFrames)

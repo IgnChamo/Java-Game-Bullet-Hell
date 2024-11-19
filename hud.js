@@ -313,9 +313,9 @@ class HUD {
 
     }
     prenderDerrota(){
-        this.textScoreHadas.text = "Salvaste \n" + this.juego.companions.length + "\nHadas";
+        this.textScoreHadas.text = "You saved \n" + this.juego.companions.length + "\n Fairies";
         this.textScoreHadas.style.align = "center";
-        this.textScoreTotal.text = "Tu Score es \n" + this.juego.player.puntaje;
+        this.textScoreTotal.text = "Your Score is \n" + this.juego.player.puntaje;
         this.textScoreTotal.style.align = "center";
 
 
