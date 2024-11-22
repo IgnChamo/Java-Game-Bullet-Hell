@@ -192,14 +192,14 @@ class Juego {
         else if (asesinatos == 3) {
           tiposDeEnemigos = ['tipo3'];
           cant = 1;
-        } else if ((asesinatos > 30) && !this.miniBoss1Creado) {
+        } else if ((asesinatos > 3) && !this.miniBoss1Creado) {
           console.log("creating miniboss1")
           tiposDeEnemigos = ['tipo4'];
-        } else if ((asesinatos > 60) && !this.miniBoss2Creado) {
+        } else if ((asesinatos > 6) && !this.miniBoss2Creado) {
           tiposDeEnemigos = ['tipo5'];
-        } else if ((asesinatos > 90) && !this.miniBoss3Creado) {
+        } else if ((asesinatos > 9) && !this.miniBoss3Creado) {
           tiposDeEnemigos = ['tipo6'];
-        } else if ((asesinatos > 120) && !this.boss) {
+        } else if ((asesinatos >12) && !this.boss) {
           tiposDeEnemigos = ['tipo7'];
           this.boss = true;
         }
@@ -504,4 +504,3 @@ class Juego {
 
 
 // Inicializar el juego
-let juego = new Juego();

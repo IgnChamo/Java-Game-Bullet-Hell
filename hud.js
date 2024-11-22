@@ -19,6 +19,12 @@ class HUD {
         this.vidas1 = PIXI.Texture.from('./img/Life01.png');
         this.vidas0 = PIXI.Texture.from('./img/Life00.png');
 
+        this.rectangulo = new PIXI.Graphics();
+        this.rectangulo.beginFill(0xFF0000); 
+        this.rectangulo.drawRect(0, 0, 1920, 170); // Posición (x: 0, y: 0), tamaño (ancho: 300, alto: 150)
+        this.rectangulo.endFill();
+        this.rectangulo.alpha = 0.2;
+        this.container.addChild(this.rectangulo);
         //balas
         this.balaCargadaTexture = PIXI.Texture.from('./img/BalaCargada.png');
         this.balaDescargadaTexture = PIXI.Texture.from('./img/BalaDescargada.png');
@@ -54,13 +60,13 @@ class HUD {
         this.container.addChild(this.nivel);
 
         this.vida = new PIXI.Sprite(this.vidas5);
-        this.vida.position.set(this.juego.app.screen.width * 0.05, 25);
+        this.vida.position.set(this.juego.app.screen.width * 0.05, 15);
         this.vida.scale.set(0.7, 0.7);
         this.container.addChild(this.vida);
 
         this.crearBalas();
         this.pistolaTexture = PIXI.Sprite.from('./img/Pistola.png');
-        this.pistolaTexture.position.set(this.juego.app.screen.width * 0.04, 80);
+        this.pistolaTexture.position.set(this.juego.app.screen.width * 0.04, 70);
         this.pistolaTexture.scale.set(0.7, 0.7);
         this.container.addChild(this.pistolaTexture);
 
@@ -105,50 +111,50 @@ class HUD {
 
         //hud estadisticas
         this.hudCompanion = PIXI.Sprite.from('./img/HudCompanion.png');
-        this.hudCompanion.position.set(this.juego.app.screen.width * 0.4, 50);
+        this.hudCompanion.position.set(this.juego.app.screen.width * 0.4, 80);
         this.hudCompanion.scale.set(1, 1);
         this.container.addChild(this.hudCompanion);
 
         this.cantCompanion = new PIXI.Text("", { fontFamily: 'Press Start 2P', fontSize: 50, padding: 20, fill: 0x000000, stroke: 0xffffff, strokeThickness: 8 });
-        this.cantCompanion.position.set(this.juego.app.screen.width * 0.43, 60);
+        this.cantCompanion.position.set(this.juego.app.screen.width * 0.43, 85);
         this.cantCompanion.scale.set(0.5, 0.5);
         this.container.addChild(this.cantCompanion);
 
 
         this.companion = new PIXI.Text("", { fontFamily: 'Press Start 2P', fontSize: 40, padding: 20, fill: 0x000000, stroke: 0xffffff, strokeThickness: 8 });
-        this.companion.position.set(this.juego.app.screen.width * 0.39, 95);
+        this.companion.position.set(this.juego.app.screen.width * 0.39, 125);
         this.companion.scale.set(0.5, 0.5);
         this.container.addChild(this.companion);
         ////////////////////////////////////
         this.hudPerforar = PIXI.Sprite.from('./img/HudPerforar.png');
-        this.hudPerforar.position.set(this.juego.app.screen.width * 0.5, 50);
+        this.hudPerforar.position.set(this.juego.app.screen.width * 0.5, 80);
         this.hudPerforar.scale.set(1, 1);
         this.container.addChild(this.hudPerforar);
 
         this.cantPerforar = new PIXI.Text("", { fontFamily: 'Press Start 2P', fontSize: 50, padding: 20, fill: 0x000000, stroke: 0xffffff, strokeThickness: 8 });
-        this.cantPerforar.position.set(this.juego.app.screen.width * 0.53, 60);
+        this.cantPerforar.position.set(this.juego.app.screen.width * 0.53, 85);
         this.cantPerforar.scale.set(0.5, 0.5);
         this.container.addChild(this.cantPerforar);
 
         this.perforar = new PIXI.Text("", { fontFamily: 'Press Start 2P', fontSize: 40, padding: 20, fill: 0x000000, stroke: 0xffffff, strokeThickness: 8 });
-        this.perforar.position.set(this.juego.app.screen.width * 0.46, 95);
+        this.perforar.position.set(this.juego.app.screen.width * 0.46, 125);
         this.perforar.scale.set(0.5, 0.5);
         this.container.addChild(this.perforar);
 
         /////////////////////////////////////
 
         this.hudCadencia = PIXI.Sprite.from('./img/HudCadencia.png');
-        this.hudCadencia.position.set(this.juego.app.screen.width * 0.6, 50);
+        this.hudCadencia.position.set(this.juego.app.screen.width * 0.6, 80);
         this.hudCadencia.scale.set(1, 1);
         this.container.addChild(this.hudCadencia);
 
         this.cantCadencia = new PIXI.Text("", { fontFamily: 'Press Start 2P', fontSize: 50, padding: 20, fill: 0x000000, stroke: 0xffffff, strokeThickness: 8 });
-        this.cantCadencia.position.set(this.juego.app.screen.width * 0.63, 60);
+        this.cantCadencia.position.set(this.juego.app.screen.width * 0.63, 85);
         this.cantCadencia.scale.set(0.5, 0.5);
         this.container.addChild(this.cantCadencia);
 
         this.cadencia = new PIXI.Text("", { fontFamily: 'Press Start 2P', fontSize: 40, padding: 20, fill: 0x000000, stroke: 0xffffff, strokeThickness: 8 });
-        this.cadencia.position.set(this.juego.app.screen.width * 0.63, 95);
+        this.cadencia.position.set(this.juego.app.screen.width * 0.63, 125);
         this.cadencia.scale.set(0.5, 0.5);
         this.container.addChild(this.cadencia);
 
@@ -271,8 +277,8 @@ class HUD {
         this.asesinatos.position.set(this.juego.app.screen.width * 0.92, 25);
         this.asesinato.position.set(this.juego.app.screen.width * 0.892, 10);
         this.nivel.position.set(this.juego.app.screen.width * 0.46, 25);
-        this.vida.position.set(this.juego.app.screen.width * 0.05, 25);
-        this.pistolaTexture.position.set(this.juego.app.screen.width * 0.04, 80);
+        this.vida.position.set(this.juego.app.screen.width * 0.05, 15);
+        this.pistolaTexture.position.set(this.juego.app.screen.width * 0.04, 70);
         
         let xPos = this.juego.app.screen.width * 0.11;
         const yPos = 88;
@@ -287,15 +293,15 @@ class HUD {
         this.textScoreTotal.position.set(this.juego.app.screen.width * 0.7, this.juego.app.screen.height * 0.7);
 
         //posicion estadisticas
-        this.hudCompanion.position.set(this.juego.app.screen.width * 0.4, 50);
-        this.cantCompanion.position.set(this.juego.app.screen.width * 0.43, 60);
-        this.companion.position.set(this.juego.app.screen.width * 0.39, 95);
-        this.hudPerforar.position.set(this.juego.app.screen.width * 0.5, 50);
-        this.cantPerforar.position.set(this.juego.app.screen.width * 0.53, 60);
-        this.perforar.position.set(this.juego.app.screen.width * 0.46, 95);
-        this.hudCadencia.position.set(this.juego.app.screen.width * 0.6, 50);
-        this.cantCadencia.position.set(this.juego.app.screen.width * 0.63, 60);
-        this.cadencia.position.set(this.juego.app.screen.width * 0.63, 95);
+        this.hudCompanion.position.set(this.juego.app.screen.width * 0.4, 80);
+        this.cantCompanion.position.set(this.juego.app.screen.width * 0.43, 85);
+        this.companion.position.set(this.juego.app.screen.width * 0.39, 125);
+        this.hudPerforar.position.set(this.juego.app.screen.width * 0.5, 80);
+        this.cantPerforar.position.set(this.juego.app.screen.width * 0.53, 85);
+        this.perforar.position.set(this.juego.app.screen.width * 0.46, 125);
+        this.hudCadencia.position.set(this.juego.app.screen.width * 0.6, 80);
+        this.cantCadencia.position.set(this.juego.app.screen.width * 0.63, 85);
+        this.cadencia.position.set(this.juego.app.screen.width * 0.63, 125);
 
         //hud menu
         if (this.juego.start) {

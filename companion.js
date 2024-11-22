@@ -45,7 +45,7 @@ class Companion extends Objeto {
   update() {
     if (!this.listo) return;
     //this.cambiarSprite("idle");
-    this.companionBounce(juego.contadorDeFrames, { x: juego.player.container.x, y: juego.player.container.y });
+    this.companionBounce(this.juego.contadorDeFrames, { x: this.juego.player.container.x, y: this.juego.player.container.y });
     super.update();
   }
 
@@ -58,7 +58,7 @@ class Companion extends Objeto {
     var sequence 
 
     //cmabia el angulo de los compañeros dependiendo de su cantidad
-    currentCompanions=juego.companions.length;
+    currentCompanions= this.juego.companions.length;
     sequence=270/currentCompanions*(this.nro);
     
     // Calcular la nueva posición usando trigonometría (gracias chatgpt)
