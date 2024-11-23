@@ -74,6 +74,7 @@ class Juego {
         this.ponerFondo(); // Inicia el fondo al cargar
       });
     });
+    this.hud.cambiarColorFondoHud();
   }
 
   ponerFondo() {
@@ -96,17 +97,6 @@ class Juego {
     this.gameContainer.addChildAt(this.backgroundSprite, 0);
   }
 
-  /*ponerFondo() {
-    // Crear un patrón a partir de una imagen
-    PIXI.Texture.fromURL("./img/bg.png").then((patternTexture) => {
-      // Crear un sprite con la textura del patrón
-      this.backgroundSprite = new PIXI.TilingSprite(patternTexture, 5000, 5000);
-      // this.backgroundSprite.tileScale.set(0.5);
-
-      // Añadir el sprite al stage
-      this.gameContainer.addChildAt(this.backgroundSprite, 0);
-    });
-  }*/
   ponerProtagonista() {
     this.player = new Player(
       window.innerWidth / 2,
@@ -503,4 +493,3 @@ class Juego {
 }
 
 
-// Inicializar el juego

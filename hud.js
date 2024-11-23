@@ -20,10 +20,10 @@ class HUD {
         this.vidas0 = PIXI.Texture.from('./img/Life00.png');
 
         this.rectangulo = new PIXI.Graphics();
-        this.rectangulo.beginFill(0xFF0000); 
+        this.rectangulo.beginFill(0xFFFFFF); 
         this.rectangulo.drawRect(0, 0, 1920, 170); // Posición (x: 0, y: 0), tamaño (ancho: 300, alto: 150)
         this.rectangulo.endFill();
-        this.rectangulo.alpha = 0.2;
+        this.rectangulo.alpha = 0.9;
         this.container.addChild(this.rectangulo);
         //balas
         this.balaCargadaTexture = PIXI.Texture.from('./img/BalaCargada.png');
@@ -56,7 +56,7 @@ class HUD {
         this.container.addChild(this.asesinato);
 
         this.nivel = new PIXI.Text("Level ", { fontFamily: 'Press Start 2P', fontSize: 20, fill: 0x000000, stroke: 0xffffff, strokeThickness: 8 });
-        this.nivel.position.set(this.juego.app.screen.width * 0.46, 26);
+        this.nivel.position.set(this.juego.app.screen.width * 0.475, 26);
         this.container.addChild(this.nivel);
 
         this.vida = new PIXI.Sprite(this.vidas5);
@@ -179,6 +179,23 @@ class HUD {
         this.container.addChild(this.textScoreTotal);
 
     }
+    cambiarColorFondoHud(){
+        if(this.juego.currentBackground === 1){        
+            this.rectangulo.clear(); 
+            this.rectangulo.beginFill(0x000000); 
+            this.rectangulo.drawRect(0, 0, 1920, 170); 
+            this.rectangulo.endFill();   
+            }
+            else
+            {
+            this.rectangulo.clear(); // Limpia los gráficos actuales
+            this.rectangulo.beginFill(0xFFFFFF); 
+            this.rectangulo.drawRect(0, 0, 1920, 170); 
+            this.rectangulo.endFill();
+
+            }
+   
+    }
     alternarColoresTextos() {
         // Lista de todos los textos en el HUD
         const textos = [
@@ -276,7 +293,7 @@ class HUD {
         //this.punt.position.set(this.juego.app.screen.width * 0.9, 85);
         this.asesinatos.position.set(this.juego.app.screen.width * 0.92, 25);
         this.asesinato.position.set(this.juego.app.screen.width * 0.892, 10);
-        this.nivel.position.set(this.juego.app.screen.width * 0.46, 25);
+        this.nivel.position.set(this.juego.app.screen.width * 0.46, 26);
         this.vida.position.set(this.juego.app.screen.width * 0.05, 15);
         this.pistolaTexture.position.set(this.juego.app.screen.width * 0.04, 70);
         
